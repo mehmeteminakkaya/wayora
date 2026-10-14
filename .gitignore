@@ -19,7 +19,3 @@ api/src/generated/
 .idea/
 .DS_Store
 Thumbs.db
-
-# Yerel araç verisi
-.remember/
-.claude/settings.local.json

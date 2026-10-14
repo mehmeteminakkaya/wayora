@@ -1,0 +1,25 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+*.log
+coverage/
+
+# Gizli anahtarlar — sadece .env.example commit'lenir
+.env
+.env.*
+!.env.example
+
+# Prisma tarafından üretilen istemci (npm install sırasında yeniden üretilir)
+api/src/generated/
+
+# Editör / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Yerel araç verisi
+.remember/
+.claude/settings.local.json

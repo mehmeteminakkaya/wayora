@@ -1,0 +1,20 @@
+// Veri modeli taslağı: docs/ARCHITECTURE.md → "Veri modeli".
+// Sprint 0'da sadece User var; diğer tablolar ilgili story'lerle eklenecek.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

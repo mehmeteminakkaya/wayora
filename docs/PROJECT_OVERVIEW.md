@@ -41,11 +41,11 @@ AI/LLM API · Git · GitHub
 
 | Kişi | Rol (GrepThink) |
 | :--- | :--- |
-| Bayram Selim Yılmaz | Product Owner |
-| Mehmet Emin Akkaya | Scrum Master |
-| Ezgi Turan | Member |
-| Aykut Kayra Akkuş | Member |
-| Berfin Aksoy | Member |
+| Bayram Selim Yılmaz | Product Owner · Frontend Lead |
+| Mehmet Emin Akkaya | Scrum Master · Backend + AI Lead |
+| Ezgi Turan | Designer |
+| Aykut Kayra Akkuş | Database |
+| Berfin Aksoy | Frontend + Test |
 
 Proje 5/6 üye, 1 boş yer var. GrepThink'te ihtiyaç olarak görünen roller: **Designer, Frontend
-Developer, Backend Engineer, Database**. Önerilen rol dağılımı için bkz. [TEAM.md](TEAM.md).
+Developer, Backend Engineer, Database**. Rol ayrıntıları: [TEAM.md](TEAM.md).

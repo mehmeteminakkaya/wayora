@@ -26,13 +26,13 @@ Eki        Kas              Ara              Oca
 ## Bu hafta (hemen)
 
 - [ ] **TSR 1'i bugün 23:59'a kadar gönder** (katkı dağılımı + takım geri bildirimi)
-- [ ] İlk toplantı: teknik rolleri dağıt → [TEAM.md](TEAM.md) tablosunu doldur
+- [x] Teknik roller dağıtıldı → [TEAM.md](TEAM.md)
 - [x] GitHub reposu açıldı, `docs/` ve iskelet kod içinde
-- [x] Ekip üyeleri repoya davet edildi (Ezgi, Bayram, Berfin) — Aykut'un daveti eksik
+- [x] Ekip üyelerinin hepsi repoya davet edildi
 - [ ] Herkes daveti kabul etsin, `npm run setup` ile projeyi kendi bilgisayarında çalıştırsın
 - [ ] GrepThink'te **Sprint 0**'ı oluştur, [BACKLOG.md](BACKLOG.md)'deki S0 story'lerini gir
-- [ ] LLM sağlayıcısını seç (ücretsiz kota + JSON çıktı desteği)
-- [ ] Google Cloud projesi aç: Maps JavaScript API + Places API anahtarları (bütçe uyarısı kur!)
+- [ ] LLM sağlayıcısını seç (ücretsiz kota + JSON çıktı desteği) — Mehmet, Sprint 2 spike'ından önce
+- [ ] Google Cloud projesi aç: Maps JavaScript API + Places API anahtarları (bütçe uyarısı kur!) — Sprint 2'den önce
 
 ---
 

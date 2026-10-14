@@ -22,13 +22,14 @@ Etiketler: `FE` frontend · `BE` backend · `DB` veritabanı · `UX` tasarım ·
 
 ## Sprint 0 — Kurulum
 
-| No | Story | Etiket | Puan |
-| :--- | :--- | :--- | :--- |
-| W-01 | Geliştirici olarak tek komutla `web/` ve `api/`'yi çalıştırmak istiyorum | OPS | 3 |
-| W-02 | Geliştirici olarak her PR'da lint + test otomatik çalışsın istiyorum | OPS | 2 |
-| W-03 | Ekip olarak PostgreSQL + Prisma kurulu ve ilk migration'ı yapılmış olsun istiyoruz | DB | 3 |
-| W-04 | Ekip olarak web + api + db'nin internette yayında olmasını istiyoruz (`/api/health`) | OPS | 3 |
-| W-05 | Ekip olarak 4 ana ekranın wireframe'ini ve kullanıcı akışını görmek istiyoruz | UX | 5 |
+| No | Story | Etiket | Puan | Sorumlu | Durum |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| W-01 | Geliştirici olarak tek komutla `web/` ve `api/`'yi çalıştırmak istiyorum | OPS | 3 | Mehmet | ✅ `npm run setup` + `npm run dev` |
+| W-02 | Geliştirici olarak her PR'da lint + test otomatik çalışsın istiyorum | OPS | 2 | Mehmet | ✅ GitHub Actions |
+| W-03 | Ekip olarak PostgreSQL + Prisma kurulu ve ilk migration'ı yapılmış olsun istiyoruz | DB | 3 | Aykut | ✅ yerel `prisma dev`; Aykut şemayı devralır |
+| W-04 | Ekip olarak web + api + db'nin internette yayında olmasını istiyoruz (`/api/health`) | OPS | 3 | Mehmet | ⏳ bulut DB + hosting gerekli |
+| W-05 | Ekip olarak 4 ana ekranın wireframe'ini ve kullanıcı akışını görmek istiyoruz | UX | 5 | Ezgi (+Selim) | ⏳ |
+| W-06 | Ekip üyesi olarak projeyi kendi bilgisayarımda çalıştırabilmek istiyorum | OPS | 1 | Herkes | ⏳ daveti kabul et + `npm run setup` |
 
 **W-04 kabul kriterleri:** deploy linki açılıyor · `/api/health` → `{ "status": "ok", "db": "ok" }` ·
 anahtarlar repoda değil, platformun env ayarında.

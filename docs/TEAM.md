@@ -2,20 +2,18 @@
 
 ## Roller
 
-GrepThink'teki resmi roller sabit. Teknik roller (Designer / Frontend / Backend / Database) henüz
-atanmadı; aşağıdaki tablo **öneri**. İlk toplantıda herkes tercihini söylesin, sonra tabloyu güncelleyin.
+GrepThink'teki resmi roller sabit. Teknik roller 14 Ekim 2026'da Scrum Master tarafından dağıtıldı.
 
-| Kişi | Resmi rol | Teknik rol (öneri, doldurulacak) |
-| :--- | :--- | :--- |
-| Bayram Selim Yılmaz | Product Owner | Backlog sahibi + ___ |
-| Mehmet Emin Akkaya | Scrum Master | ___ |
-| Ezgi Turan | Member | ___ |
-| Aykut Kayra Akkuş | Member | ___ |
-| Berfin Aksoy | Member | ___ |
+| Kişi | GitHub | Resmi rol | Teknik rol | Sorumlu olduğu |
+| :--- | :--- | :--- | :--- | :--- |
+| Mehmet Emin Akkaya | `mehmeteminakkaya` | Scrum Master | **Backend + AI Lead** | `api/`, AI gezi planı üretimi, Places entegrasyonu, CI/deploy |
+| Bayram Selim Yılmaz | `bsyilmaz` | Product Owner | **Frontend Lead** | `web/` mimarisi, sayfalar, harita arayüzü; backlog önceliği |
+| Ezgi Turan | `Ezzgiturann` | Member | Designer (UI/UX) | Figma wireframe/mockup, renk-tipografi, bileşen tasarımı |
+| Aykut Kayra Akkuş | `aykuttakkus` | Member | Database | Prisma şeması, migration'lar, seed/demo verisi |
+| Berfin Aksoy | `berfinaksoyy` | Member | Frontend + Test | Formlar, Selim'le sayfalar, testler, demo senaryosu |
 
-İhtiyaç: **1 Designer** (Figma, UI kit), **1–2 Frontend**, **1–2 Backend**, **1 Database** (şema +
-migration; Backend ile aynı kişi olabilir). AI entegrasyonu Backend'in içinde ama 2. sprintte iki
-kişinin birlikte çalışması iyi olur. 6. üye katılırsa en mantıklısı Frontend.
+İkili çalışma (bus factor): AI/Backend → Mehmet + Aykut · Frontend → Selim + Berfin · Tasarım → Ezgi + Selim.
+6. üye katılırsa Frontend'e eklenir.
 
 **Bus factor:** Her alanda en az 2 kişi kodu bilsin. PR'ları başka alandan biri de incelesin.
 

@@ -36,7 +36,8 @@ GrepThink TSR'ında: katkı yüzdesi dağılımı (toplam %100), takım geri bil
 
 ## Git akışı
 
-- `main` her zaman çalışır; doğrudan push yok (GitHub branch protection açın).
+- `main` her zaman çalışır; **doğrudan push yok.** Repo private ve ücretsiz planda olduğu için GitHub
+  bunu zorlayamıyor; kural ekip anlaşmasıyla geçerli. Yanlışlıkla push edilirse revert edip PR açın.
 - Branch adı: `feat/<kısa-ad>`, `fix/<kısa-ad>`, `docs/<kısa-ad>`. Mümkünse story numarasıyla: `feat/W-12-trip-form`.
 - Her iş **Pull Request** ile gelir; en az **1 onay** + CI (lint + test) yeşil olmalı.
 - Commit mesajı: `feat: gezi formu eklendi`, `fix: ...`, `docs: ...` (Conventional Commits).

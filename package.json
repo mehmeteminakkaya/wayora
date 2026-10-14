@@ -8,11 +8,12 @@
     "api"
   ],
   "scripts": {
-    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev -w api\" \"npm run dev -w web\"",
+    "dev": "npm run db:start -w api && concurrently -n api,web -c cyan,magenta \"npm run dev -w api\" \"npm run dev -w web\"",
     "build": "npm run build --workspaces",
     "lint": "npm run lint --workspaces",
     "typecheck": "npm run typecheck --workspaces",
-    "test": "npm run test --workspaces"
+    "test": "npm run test --workspaces",
+    "setup": "npm install && node -e \"require('fs').existsSync('api/.env')||require('fs').copyFileSync('api/.env.example','api/.env')\" && npm run db:start -w api && npm run db:deploy -w api"
   },
   "engines": {
     "node": ">=22"

@@ -25,19 +25,17 @@ Bayram Selim Yılmaz (PO) · Mehmet Emin Akkaya (Scrum Master) · Ezgi Turan · 
 
 ## Kurulum
 
-Gerekenler: **Node.js 22+** (önerilen 24, bkz. `.nvmrc`) ve bir **PostgreSQL** veritabanı.
-En kolayı [Neon](https://neon.tech) veya [Supabase](https://supabase.com) üzerinde ücretsiz bir veritabanı açmak.
+Gerekenler: sadece **Node.js 22+** (önerilen 24, bkz. `.nvmrc`). Veritabanı için hesap açmanıza ya da
+Docker kurmanıza gerek yok: Prisma'nın yerel PostgreSQL sunucusu (`prisma dev`) bilgisayarınızda çalışır.
 
 ```bash
 git clone https://github.com/mehmeteminakkaya/wayora.git
 cd wayora
-npm install                       # web + api bağımlılıkları, Prisma istemcisi
-cp api/.env.example api/.env      # sonra DATABASE_URL'i kendi veritabanınla değiştir
-npm run db:migrate -w api         # tabloları oluşturur
-npm run dev                       # api → :4000, web → :5173
+npm run setup                     # bağımlılıklar + api/.env + yerel Postgres + tablolar
+npm run dev                       # veritabanı + api → :4000 + web → :5180
 ```
 
-Tarayıcıda http://localhost:5173 açılınca "API çalışıyor · Veritabanı: bağlı" görmelisin.
+Tarayıcıda http://localhost:5180 açılınca "API çalışıyor · Veritabanı: bağlı" görmelisin.
 
 ## Komutlar (kök dizinden)
 
@@ -49,6 +47,8 @@ Tarayıcıda http://localhost:5173 açılınca "API çalışıyor · Veritabanı
 | `npm test` | Vitest (api: Supertest, web: Testing Library) |
 | `npm run build` | Üretim derlemesi |
 | `npm run db:migrate -w api` | Şema değişikliğinden migration üretir ve uygular |
+| `npm run db:studio -w api` | Veritabanını tarayıcıda görüntüle/düzenle (Prisma Studio) |
+| `npm run db:stop -w api` | Yerel veritabanını durdurur (veriler kalır) |
 
 Her PR'da GitHub Actions aynı kontrolleri çalıştırır.
 

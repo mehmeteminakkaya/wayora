@@ -2,7 +2,7 @@ import request from 'supertest'
 import { describe, expect, it } from 'vitest'
 import { createApp } from './app.ts'
 
-const corsOrigin = 'http://localhost:5173'
+const corsOrigin = 'http://localhost:5180'
 
 describe('GET /api/health', () => {
   it('veritabanı erişilebilirken db: ok döner', async () => {

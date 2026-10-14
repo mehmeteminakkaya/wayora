@@ -124,6 +124,7 @@ Notlar:
 | 2026-10-14 | npm workspaces monorepo (`web/`, `api/`) | Ek araç gerektirmez |
 | 2026-10-14 | Lint: oxlint (Vite şablonunun varsayılanı) | Hızlı, ayarsız; gerekirse ESLint'e geçilebilir |
 | 2026-10-14 | Prisma 7.x sabitlendi | npm'deki `latest` 8.0 RC idi; RC kullanmıyoruz |
+| 2026-10-14 | Geliştirmede yerel `prisma dev` Postgres'i | Hesap/Docker gerekmez, herkes aynı komutla kurar; yayına alırken Neon/Supabase'e sadece `DATABASE_URL` değişir |
 | _bekliyor_ | LLM sağlayıcısı (Gemini / OpenAI / Claude…) | Ücretsiz kota + JSON çıktı desteğine bakın |
 | _bekliyor_ | Arayüz dili (TR / EN / ikisi) | |
 | _bekliyor_ | UI kütüphanesi (Tailwind / MUI) | Designer ile birlikte |

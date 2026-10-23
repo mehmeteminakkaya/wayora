@@ -1,6 +1,7 @@
 import { createApp } from './app.ts'
 import { loadConfig } from './config.ts'
 import { createPrisma } from './lib/prisma.ts'
+import { createPrismaStore } from './store/prisma.ts'
 
 const config = loadConfig()
 const prisma = createPrisma(config.DATABASE_URL)
@@ -10,6 +11,10 @@ const app = createApp({
   checkDb: async () => {
     await prisma.$queryRaw`SELECT 1`
   },
+  store: createPrismaStore(prisma),
+  jwtSecret: config.JWT_SECRET,
+  secureCookie: config.NODE_ENV === 'production',
+  bcryptRounds: 10,
 })
 
 const server = app.listen(config.PORT, () => {

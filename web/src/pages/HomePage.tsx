@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getHealth, type Health } from '../api'
+import { getHealth, type Health } from '../api/health'
 
 type ApiState = { kind: 'loading' } | { kind: 'ok'; health: Health } | { kind: 'down' }
 

@@ -7,7 +7,11 @@ export function Layout() {
         <Link to="/" className="logo">
           Wayora
         </Link>
-        <nav className="nav" aria-label="Ana menü" />
+        <nav className="nav" aria-label="Ana menü">
+          <Link to="/kayit" className="btn btn-primary">
+            Kayıt ol
+          </Link>
+        </nav>
       </header>
       <main className="content">
         <Outlet />

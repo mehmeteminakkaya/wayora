@@ -80,7 +80,11 @@ Place       id, googlePlaceId (unique), name, lat, lng, address, rating, types[]
 | GET | `/api/places/:googlePlaceId` | Yer detayı |
 | GET | `/api/recommendations/destinations` | Tercihe göre destinasyon önerisi |
 
-Hata formatı her yerde aynı: `{ "error": { "code": "...", "message": "..." } }`.
+Hata formatı her yerde aynı: `{ "error": { "code": "...", "message": "..." } }`. Doğrulama hatalarında
+(`400 VALIDATION`) alan bazında Türkçe mesajlar da gelir: `"fields": { "email": "..." }`.
+
+Oturum: giriş/kayıtta `wayora_session` adlı **httpOnly** çerezde 7 günlük JWT (`api/src/lib/session.ts`).
+Üretimde `JWT_SECRET` zorunlu.
 
 ## AI gezi planı akışı
 

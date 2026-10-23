@@ -17,7 +17,7 @@
     "hooks:install": "git config core.hooksPath .githooks"
   },
   "engines": {
-    "node": ">=22"
+    "node": "^22.22.2 || >=24.15.0"
   },
   "devDependencies": {
     "concurrently": "^10.0.6"

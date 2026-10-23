@@ -116,10 +116,15 @@ Ekran görüntüleri yerel geliştirme ortamından alınmıştır. Tam boy görs
 
 ### Gerekenler
 
-- **Node.js 22+** (önerilen 24; bkz. `.nvmrc`)
+- **Node.js 22.22.2+ veya 24.15+** (önerilen 24; bkz. `.nvmrc`)
 - npm
 - Docker veya harici PostgreSQL hesabı **gerekmez**: Prisma'nın yerel PostgreSQL sunucusu
   `prisma dev` ile bilgisayarında çalışır.
+
+> **Node sürümün eskiyse:** `npm install` / `npm run setup` en başta `EBADENGINE` ile durur
+> (`.npmrc` içinde `engine-strict=true`). Alt sınırı web testlerini çalıştıran `jsdom` belirliyor;
+> `jsdom@30`, `^22.22.2 || ^24.15.0 || >=26` istiyor. Node'u güncelle; sürüm yöneticisi
+> kullanıyorsan proje klasöründe `nvm use` ya da `fnm use` `.nvmrc`'deki 24'ü seçer.
 
 ### Kurulum
 

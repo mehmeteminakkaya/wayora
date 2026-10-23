@@ -273,3 +273,12 @@ h1 {
 .choice input {
   accent-color: var(--accent);
 }
+
+.row > .field {
+  flex: 1 1 12rem;
+}
+
+.day-title {
+  margin: 0;
+  font-size: 1.125rem;
+}

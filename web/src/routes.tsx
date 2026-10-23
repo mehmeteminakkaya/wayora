@@ -3,9 +3,11 @@ import { RequireAuth } from './auth'
 import { Layout } from './components/Layout'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
+import { NewTripPage } from './pages/NewTripPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { PreferencesPage } from './pages/PreferencesPage'
 import { RegisterPage } from './pages/RegisterPage'
+import { TripPage } from './pages/TripPage'
 
 // Uygulamanın tüm sayfaları. Testler aynı listeyi createMemoryRouter ile kullanır.
 export const routes: RouteObject[] = [
@@ -18,7 +20,11 @@ export const routes: RouteObject[] = [
       {
         // Oturum gerektiren sayfalar
         element: <RequireAuth />,
-        children: [{ path: 'tercihler', element: <PreferencesPage /> }],
+        children: [
+          { path: 'tercihler', element: <PreferencesPage /> },
+          { path: 'geziler/yeni', element: <NewTripPage /> },
+          { path: 'geziler/:tripId', element: <TripPage /> },
+        ],
       },
       { path: '*', element: <NotFoundPage /> },
     ],

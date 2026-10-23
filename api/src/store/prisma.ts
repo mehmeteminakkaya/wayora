@@ -1,5 +1,6 @@
 import { Prisma } from '../generated/prisma/client.ts'
 import type { Db } from '../lib/prisma.ts'
+import { createPrismaTripStore } from './prisma-trips.ts'
 import { EmailTakenError, type Store } from './types.ts'
 
 const isUniqueViolation = (err: unknown) =>
@@ -31,5 +32,6 @@ export function createPrismaStore(db: Db): Store {
           select: preferenceFields,
         }),
     },
+    trips: createPrismaTripStore(db),
   }
 }

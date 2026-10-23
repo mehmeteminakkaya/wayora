@@ -1,5 +1,5 @@
 // Veri modeli taslağı: docs/ARCHITECTURE.md → "Veri modeli".
-// Tablolar ilgili story'lerle ekleniyor (W-12: Preference).
+// Tablolar ilgili story'lerle ekleniyor (W-12: Preference, W-13: Trip + TripDay).
 
 generator client {
   provider = "prisma-client"
@@ -18,6 +18,7 @@ model User {
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
   preference   Preference?
+  trips        Trip[]
 }
 
 enum BudgetLevel {
@@ -49,4 +50,46 @@ model Preference {
   pace        Pace
   travelStyle TravelStyle?
   updatedAt   DateTime     @updatedAt
+}
+
+enum TripStatus {
+  DRAFT
+  PLANNED
+}
+
+enum Currency {
+  TRY
+  EUR
+  USD
+}
+
+// W-13. Tarihler saat olmadan (@db.Date) tutulur; saat dilimi kayması olmasın diye.
+model Trip {
+  id          String     @id @default(uuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  destination String
+  startDate   DateTime   @db.Date
+  endDate     DateTime   @db.Date
+  budget      Int?
+  currency    Currency   @default(TRY)
+  status      TripStatus @default(DRAFT)
+  days        TripDay[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([userId])
+}
+
+// Gezinin her günü için bir kayıt; dayIndex 1'den başlar
+model TripDay {
+  id       String   @id @default(uuid())
+  tripId   String
+  trip     Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  dayIndex Int
+  date     DateTime @db.Date
+  notes    String?
+
+  @@unique([tripId, dayIndex])
 }

@@ -1,10 +1,13 @@
 import { randomUUID } from 'node:crypto'
-import { EmailTakenError, type Preferences, type Store, type User } from './types.ts'
+import { EmailTakenError, type Preferences, type Store, type Trip, type User } from './types.ts'
+
+const withoutOwner = ({ userId: _owner, ...trip }: Trip & { userId: string }): Trip => trip
 
 // Testler için bellek içi depo. Prisma deposuyla aynı davranır (benzersiz e-posta dahil).
 export function createMemoryStore(): Store {
   const users: User[] = []
   const preferences = new Map<string, Preferences>()
+  const trips: (Trip & { userId: string })[] = []
 
   return {
     users: {
@@ -28,6 +31,24 @@ export function createMemoryStore(): Store {
       async save(userId, data) {
         preferences.set(userId, { ...data })
         return { ...data }
+      },
+    },
+    trips: {
+      async create(userId, data, days) {
+        const trip = {
+          ...data,
+          id: randomUUID(),
+          userId,
+          status: 'DRAFT' as const,
+          createdAt: new Date(),
+          days: days.map((d) => ({ ...d, id: randomUUID(), notes: null })),
+        }
+        trips.push(trip)
+        return structuredClone(withoutOwner(trip))
+      },
+      async findForUser(userId, tripId) {
+        const trip = trips.find((t) => t.id === tripId && t.userId === userId)
+        return trip ? structuredClone(withoutOwner(trip)) : null
       },
     },
   }

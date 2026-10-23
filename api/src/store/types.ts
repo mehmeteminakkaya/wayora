@@ -42,7 +42,35 @@ export type PreferenceStore = {
   save(userId: string, data: Preferences): Promise<Preferences>
 }
 
+// W-13. Tarihler 'YYYY-MM-DD'
+export type Currency = 'TRY' | 'EUR' | 'USD'
+
+export type TripDay = { id: string; dayIndex: number; date: string; notes: string | null }
+
+export type Trip = {
+  id: string
+  title: string
+  destination: string
+  startDate: string
+  endDate: string
+  budget: number | null
+  currency: Currency
+  status: 'DRAFT' | 'PLANNED'
+  createdAt: Date
+  days: TripDay[]
+}
+
+export type NewTrip = Pick<Trip, 'title' | 'destination' | 'startDate' | 'endDate' | 'budget' | 'currency'>
+
+export type TripStore = {
+  // Gezi ve günleri tek seferde oluşturur
+  create(userId: string, data: NewTrip, days: { dayIndex: number; date: string }[]): Promise<Trip>
+  // Gezi başka kullanıcınınsa da null döner (varlığı sızmasın)
+  findForUser(userId: string, tripId: string): Promise<Trip | null>
+}
+
 export type Store = {
   users: UserStore
   preferences: PreferenceStore
+  trips: TripStore
 }

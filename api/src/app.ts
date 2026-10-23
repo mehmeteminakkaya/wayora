@@ -7,6 +7,7 @@ import { errorHandler, notFound } from './middleware/error.ts'
 import { authRouter } from './routes/auth.ts'
 import { healthRouter } from './routes/health.ts'
 import { preferencesRouter } from './routes/preferences.ts'
+import { tripsRouter } from './routes/trips.ts'
 import type { Store } from './store/types.ts'
 
 export type AppDeps = {
@@ -32,6 +33,7 @@ export function createApp({ corsOrigin, checkDb, store, jwtSecret, secureCookie,
   // Buradan sonraki her şey oturum ister
   const auth = requireAuth(store, jwtSecret)
   app.use('/api/me/preferences', auth, preferencesRouter(store))
+  app.use('/api/trips', auth, tripsRouter(store))
 
   app.use(notFound)
   app.use(errorHandler)

@@ -127,4 +127,5 @@ Notlar:
 | 2026-10-14 | Geliştirmede yerel `prisma dev` Postgres'i | Hesap/Docker gerekmez, herkes aynı komutla kurar; yayına alırken Neon/Supabase'e sadece `DATABASE_URL` değişir |
 | _bekliyor_ | LLM sağlayıcısı (Gemini / OpenAI / Claude…) | Ücretsiz kota + JSON çıktı desteğine bakın |
 | _bekliyor_ | Arayüz dili (TR / EN / ikisi) | |
-| _bekliyor_ | UI kütüphanesi (Tailwind / MUI) | Designer ile birlikte |
+| 2026-10-23 | Sprint 1'de UI kütüphanesi yok: CSS değişkenleri + küçük bileşenler (`docs/DESIGN.md`) | Tailwind/MUI kararı Designer ile verilene kadar ek bağımlılık eklemiyoruz; bileşenler tek yerde olduğu için sonra geçmek kolay |
+| 2026-10-23 | Yönlendirme: React Router 8 | Mimari önerisi; `createBrowserRouter` + ortak `routes.tsx` (testler de aynısını kullanır) |

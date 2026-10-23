@@ -14,6 +14,7 @@ Tercihlerine, bütçene ve süreye göre gün gün gezi planı üreten web uygul
 | [docs/BACKLOG.md](docs/BACKLOG.md) | Scrum Board'a girilecek user story'ler |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Teknik mimari, veri modeli, API, AI akışı |
 | [docs/TEAM.md](docs/TEAM.md) | Roller, Scrum düzeni, Git akışı, Definition of Done |
+| [docs/DESIGN.md](docs/DESIGN.md) | Renkler, yazı tipi, ortak bileşenler |
 
 ## Teknoloji
 

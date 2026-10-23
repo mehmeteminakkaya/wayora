@@ -1,5 +1,5 @@
 // Veri modeli taslağı: docs/ARCHITECTURE.md → "Veri modeli".
-// Tablolar ilgili story'lerle ekleniyor (W-12: Preference, W-13: Trip + TripDay).
+// Tablolar ilgili story'lerle ekleniyor (W-12: Preference, W-13: Trip + TripDay, W-15: Activity).
 
 generator client {
   provider = "prisma-client"
@@ -84,12 +84,42 @@ model Trip {
 
 // Gezinin her günü için bir kayıt; dayIndex 1'den başlar
 model TripDay {
-  id       String   @id @default(uuid())
-  tripId   String
-  trip     Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  dayIndex Int
-  date     DateTime @db.Date
-  notes    String?
+  id         String     @id @default(uuid())
+  tripId     String
+  trip       Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  dayIndex   Int
+  date       DateTime   @db.Date
+  notes      String?
+  activities Activity[]
 
   @@unique([tripId, dayIndex])
+}
+
+enum ActivityCategory {
+  SIGHTSEEING
+  MUSEUM
+  FOOD
+  NATURE
+  SHOPPING
+  NIGHTLIFE
+  TRANSPORT
+  OTHER
+}
+
+// W-15: elle eklenen aktivite. order gün içindeki sıra (Sprint 4'te sürükle-bırak).
+// Saatler 'HH:MM' metni; tahmini maliyet gezinin para biriminde. placeId Sprint 2'de (W-22) eklenecek.
+model Activity {
+  id            String           @id @default(uuid())
+  tripDayId     String
+  tripDay       TripDay          @relation(fields: [tripDayId], references: [id], onDelete: Cascade)
+  order         Int
+  title         String
+  category      ActivityCategory @default(OTHER)
+  startTime     String?
+  endTime       String?
+  estimatedCost Int?
+  notes         String?
+  createdAt     DateTime         @default(now())
+
+  @@index([tripDayId])
 }

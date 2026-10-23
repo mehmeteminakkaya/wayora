@@ -16,8 +16,8 @@ const trip = {
   currency: 'TRY',
   status: 'DRAFT',
   days: [
-    { id: 'd1', dayIndex: 1, date: '2026-11-02', notes: null },
-    { id: 'd2', dayIndex: 2, date: '2026-11-03', notes: null },
+    { id: 'd1', dayIndex: 1, date: '2026-11-02', notes: null, activities: [] },
+    { id: 'd2', dayIndex: 2, date: '2026-11-03', notes: null, activities: [] },
   ],
 }
 

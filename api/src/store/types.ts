@@ -45,7 +45,37 @@ export type PreferenceStore = {
 // W-13. Tarihler 'YYYY-MM-DD'
 export type Currency = 'TRY' | 'EUR' | 'USD'
 
-export type TripDay = { id: string; dayIndex: number; date: string; notes: string | null }
+export type ActivityCategory =
+  | 'SIGHTSEEING'
+  | 'MUSEUM'
+  | 'FOOD'
+  | 'NATURE'
+  | 'SHOPPING'
+  | 'NIGHTLIFE'
+  | 'TRANSPORT'
+  | 'OTHER'
+
+// W-15. Saatler 'HH:MM'; maliyet gezinin para biriminde
+export type Activity = {
+  id: string
+  order: number
+  title: string
+  category: ActivityCategory
+  startTime: string | null
+  endTime: string | null
+  estimatedCost: number | null
+  notes: string | null
+}
+
+export type NewActivity = Omit<Activity, 'id' | 'order'>
+
+export type TripDay = {
+  id: string
+  dayIndex: number
+  date: string
+  notes: string | null
+  activities: Activity[]
+}
 
 export type Trip = {
   id: string
@@ -74,6 +104,10 @@ export type TripStore = {
   listForUser(userId: string): Promise<TripSummary[]>
   // Silindiyse true; gezi yoksa ya da başkasınınsa false
   deleteForUser(userId: string, tripId: string): Promise<boolean>
+  // Günün sonuna ekler. Gün bu geziye ya da gezi bu kullanıcıya ait değilse null
+  addActivity(userId: string, tripId: string, dayId: string, data: NewActivity): Promise<Activity | null>
+  // Silindiyse true
+  deleteActivity(userId: string, tripId: string, activityId: string): Promise<boolean>
 }
 
 export type Store = {

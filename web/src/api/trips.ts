@@ -1,7 +1,30 @@
 import { api } from './client'
 
 export type Currency = 'TRY' | 'EUR' | 'USD'
-export type TripDay = { id: string; dayIndex: number; date: string; notes: string | null }
+export type ActivityCategory =
+  | 'SIGHTSEEING'
+  | 'MUSEUM'
+  | 'FOOD'
+  | 'NATURE'
+  | 'SHOPPING'
+  | 'NIGHTLIFE'
+  | 'TRANSPORT'
+  | 'OTHER'
+
+export type Activity = {
+  id: string
+  order: number
+  title: string
+  category: ActivityCategory
+  startTime: string | null
+  endTime: string | null
+  estimatedCost: number | null
+  notes: string | null
+}
+
+export type NewActivity = Omit<Activity, 'id' | 'order'>
+
+export type TripDay = { id: string; dayIndex: number; date: string; notes: string | null; activities: Activity[] }
 
 export type Trip = {
   id: string
@@ -36,3 +59,12 @@ export const listTrips = () => api<{ trips: TripSummary[] }>('/api/trips').then(
 
 export const deleteTrip = (id: string) =>
   api<void>(`/api/trips/${encodeURIComponent(id)}`, { method: 'DELETE' })
+
+export const addActivity = (tripId: string, dayId: string, input: NewActivity) =>
+  api<{ activity: Activity }>(`/api/trips/${encodeURIComponent(tripId)}/days/${encodeURIComponent(dayId)}/activities`, {
+    method: 'POST',
+    body: input,
+  }).then((r) => r.activity)
+
+export const deleteActivity = (tripId: string, activityId: string) =>
+  api<void>(`/api/trips/${encodeURIComponent(tripId)}/activities/${encodeURIComponent(activityId)}`, { method: 'DELETE' })

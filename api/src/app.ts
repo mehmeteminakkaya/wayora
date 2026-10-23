@@ -4,6 +4,7 @@ import express from 'express'
 import helmet from 'helmet'
 import { requireAuth } from './middleware/auth.ts'
 import { errorHandler, notFound } from './middleware/error.ts'
+import { activitiesRouter } from './routes/activities.ts'
 import { authRouter } from './routes/auth.ts'
 import { healthRouter } from './routes/health.ts'
 import { preferencesRouter } from './routes/preferences.ts'
@@ -34,6 +35,7 @@ export function createApp({ corsOrigin, checkDb, store, jwtSecret, secureCookie,
   const auth = requireAuth(store, jwtSecret)
   app.use('/api/me/preferences', auth, preferencesRouter(store))
   app.use('/api/trips', auth, tripsRouter(store))
+  app.use('/api/trips/:tripId', auth, activitiesRouter(store))
 
   app.use(notFound)
   app.use(errorHandler)

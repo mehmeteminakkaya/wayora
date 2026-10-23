@@ -2,8 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { ApiError } from '../api/client'
 import { getTrip } from '../api/trips'
-import { Alert, Card } from '../components/ui'
-import { formatDateRange, formatMoney, formatWeekday } from '../format'
+import { DayCard } from '../components/DayCard'
+import { Alert } from '../components/ui'
+import { formatDateRange, formatMoney } from '../format'
 
 export function TripPage() {
   const { tripId = '' } = useParams()
@@ -25,11 +26,7 @@ export function TripPage() {
         </p>
       </div>
       {trip.days.map((day) => (
-        <Card key={day.id}>
-          <h2 className="day-title">
-            {day.dayIndex}. gün <span className="muted">· {formatWeekday(day.date)}</span>
-          </h2>
-        </Card>
+        <DayCard key={day.id} trip={trip} day={day} />
       ))}
     </div>
   )

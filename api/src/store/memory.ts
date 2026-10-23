@@ -41,7 +41,7 @@ export function createMemoryStore(): Store {
           userId,
           status: 'DRAFT' as const,
           createdAt: new Date(),
-          days: days.map((d) => ({ ...d, id: randomUUID(), notes: null })),
+          days: days.map((d) => ({ ...d, id: randomUUID(), notes: null, activities: [] })),
         }
         trips.push(trip)
         return structuredClone(withoutOwner(trip))
@@ -61,6 +61,26 @@ export function createMemoryStore(): Store {
         if (index === -1) return false
         trips.splice(index, 1)
         return true
+      },
+      async addActivity(userId, tripId, dayId, data) {
+        const trip = trips.find((t) => t.id === tripId && t.userId === userId)
+        const day = trip?.days.find((d) => d.id === dayId)
+        if (!day) return null
+        const order = Math.max(0, ...day.activities.map((a) => a.order)) + 1
+        const activity = { ...data, id: randomUUID(), order }
+        day.activities.push(activity)
+        return { ...activity }
+      },
+      async deleteActivity(userId, tripId, activityId) {
+        const trip = trips.find((t) => t.id === tripId && t.userId === userId)
+        for (const day of trip?.days ?? []) {
+          const index = day.activities.findIndex((a) => a.id === activityId)
+          if (index !== -1) {
+            day.activities.splice(index, 1)
+            return true
+          }
+        }
+        return false
       },
     },
   }

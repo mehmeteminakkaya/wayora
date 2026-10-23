@@ -17,3 +17,18 @@ export function startSession(res: Response, userId: string, { secret, secureCook
     path: '/',
   })
 }
+
+export function endSession(res: Response, { secureCookie }: Pick<SessionOptions, 'secureCookie'>) {
+  res.clearCookie(SESSION_COOKIE, { httpOnly: true, sameSite: 'lax', secure: secureCookie, path: '/' })
+}
+
+// Geçerli bir oturum çereziyse kullanıcı id'sini, değilse (yok/bozuk/süresi dolmuş) null döner
+export function readSession(token: unknown, secret: string): string | null {
+  if (typeof token !== 'string' || token === '') return null
+  try {
+    const payload = jwt.verify(token, secret, { algorithms: ['HS256'] })
+    return typeof payload === 'object' && typeof payload.sub === 'string' ? payload.sub : null
+  } catch {
+    return null
+  }
+}

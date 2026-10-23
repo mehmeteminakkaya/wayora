@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { register } from '../api/auth'
 import { ApiError } from '../api/client'
 import { Alert, Button, Card, Field } from '../components/ui'
@@ -72,6 +72,9 @@ export function RegisterPage() {
         <Button type="submit" disabled={mutation.isPending}>
           {mutation.isPending ? 'Kaydediliyor…' : 'Kayıt ol'}
         </Button>
+        <p className="muted">
+          Zaten hesabın var mı? <Link to="/giris">Giriş yap</Link>
+        </p>
       </form>
     </Card>
   )

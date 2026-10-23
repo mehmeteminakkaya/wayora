@@ -14,7 +14,7 @@ async function fillForm(email: string, password: string) {
 
 describe('Kayıt sayfası (W-10)', () => {
   it('geçersiz e-posta ve kısa şifre için istek atmadan Türkçe hata gösterir', async () => {
-    const fetchMock = mockApi({})
+    const fetchMock = mockApi({ 'GET /api/auth/me': [401] })
     renderAt('/kayit')
     await fillForm('ayse', 'kisa')
     expect(screen.getByLabelText('E-posta')).toHaveAccessibleDescription(
@@ -23,7 +23,8 @@ describe('Kayıt sayfası (W-10)', () => {
     expect(screen.getByLabelText('Şifre')).toHaveAccessibleDescription(
       'Şifre en az 8 karakter olmalı',
     )
-    expect(fetchMock).not.toHaveBeenCalled()
+    const posted = fetchMock.mock.calls.filter(([, init]) => init?.method === 'POST')
+    expect(posted).toHaveLength(0)
   })
 
   it('kayıtlı e-postada sunucunun alan hatasını gösterir', async () => {

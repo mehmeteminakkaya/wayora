@@ -70,6 +70,7 @@ a {
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
@@ -86,6 +87,7 @@ a {
 
 .nav {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-4);
 }
@@ -320,4 +322,11 @@ h1 {
 .activity-form {
   padding-top: var(--space-3);
   border-top: 1px solid var(--border);
+}
+
+/* Dar ekranda e-posta menüye sığmıyor; çıkış butonu yeterli */
+@media (max-width: 40rem) {
+  .nav-user {
+    display: none;
+  }
 }

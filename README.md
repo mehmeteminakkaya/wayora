@@ -38,6 +38,13 @@ npm run dev                       # veritabanı + api → :4000 + web → :5180
 
 Tarayıcıda http://localhost:5180 açılınca "API çalışıyor · Veritabanı: bağlı" görmelisin.
 
+**Şema değişikliği içeren bir branch'i çektiğinde** (`api/prisma/migrations/` altında yeni klasör varsa):
+
+```bash
+npm install                       # Prisma istemcisini yeniden üretir
+npm run db:deploy -w api          # yeni migration'ları yerel veritabanına uygular
+```
+
 ## Komutlar (kök dizinden)
 
 | Komut | Ne yapar |

@@ -50,7 +50,7 @@ describe('Giriş ve korumalı sayfalar (W-11)', () => {
     mockApi({ 'GET /api/auth/me': [200, { user }], 'POST /api/auth/logout': [502] })
     renderAt('/tercihler')
     await userEvent.setup().click(await screen.findByRole('button', { name: 'Çıkış yap' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('Çıkış yapılamadı, tekrar dene')
+    expect(await screen.findByText('Çıkış yapılamadı, tekrar dene')).toHaveAttribute('role', 'alert')
     expect(screen.getByRole('button', { name: 'Çıkış yap' })).toBeInTheDocument()
   })
 

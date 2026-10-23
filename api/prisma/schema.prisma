@@ -1,5 +1,5 @@
 // Veri modeli taslağı: docs/ARCHITECTURE.md → "Veri modeli".
-// Sprint 0'da sadece User var; diğer tablolar ilgili story'lerle eklenecek.
+// Tablolar ilgili story'lerle ekleniyor (W-12: Preference).
 
 generator client {
   provider = "prisma-client"
@@ -11,10 +11,42 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
+  id           String      @id @default(uuid())
+  email        String      @unique
   passwordHash String
   name         String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  preference   Preference?
+}
+
+enum BudgetLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Pace {
+  RELAXED
+  BALANCED
+  PACKED
+}
+
+enum TravelStyle {
+  SOLO
+  COUPLE
+  FAMILY
+  FRIENDS
+}
+
+// W-12: kullanıcı başına tek kayıt. İlgi alanı değerleri API'de doğrulanıyor (api/src/routes/preferences.ts).
+model Preference {
+  id          String       @id @default(uuid())
+  userId      String       @unique
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interests   String[]
+  budgetLevel BudgetLevel
+  pace        Pace
+  travelStyle TravelStyle?
+  updatedAt   DateTime     @updatedAt
 }

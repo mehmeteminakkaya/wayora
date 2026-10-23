@@ -5,6 +5,8 @@ import { EmailTakenError, type Store } from './types.ts'
 const isUniqueViolation = (err: unknown) =>
   err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002'
 
+const preferenceFields = { interests: true, budgetLevel: true, pace: true, travelStyle: true } as const
+
 export function createPrismaStore(db: Db): Store {
   return {
     users: {
@@ -18,6 +20,16 @@ export function createPrismaStore(db: Db): Store {
           throw err
         }
       },
+    },
+    preferences: {
+      get: (userId) => db.preference.findUnique({ where: { userId }, select: preferenceFields }),
+      save: (userId, data) =>
+        db.preference.upsert({
+          where: { userId },
+          create: { userId, ...data },
+          update: data,
+          select: preferenceFields,
+        }),
     },
   }
 }

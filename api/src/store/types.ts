@@ -24,6 +24,25 @@ export type UserStore = {
   create(data: NewUser): Promise<User>
 }
 
+// W-12. İlgi alanı değerleri route'ta doğrulanır (INTERESTS)
+export type BudgetLevel = 'LOW' | 'MEDIUM' | 'HIGH'
+export type Pace = 'RELAXED' | 'BALANCED' | 'PACKED'
+export type TravelStyle = 'SOLO' | 'COUPLE' | 'FAMILY' | 'FRIENDS'
+
+export type Preferences = {
+  interests: string[]
+  budgetLevel: BudgetLevel
+  pace: Pace
+  travelStyle: TravelStyle | null
+}
+
+export type PreferenceStore = {
+  get(userId: string): Promise<Preferences | null>
+  // Yoksa oluşturur, varsa günceller
+  save(userId: string, data: Preferences): Promise<Preferences>
+}
+
 export type Store = {
   users: UserStore
+  preferences: PreferenceStore
 }

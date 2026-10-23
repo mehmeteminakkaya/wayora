@@ -20,7 +20,7 @@ export function renderAt(path: string) {
 }
 
 // fetch'i adres+metot bazlı sahte yanıtlarla değiştirir: { 'POST /api/auth/register': [201, {...}] }
-export function mockApi(routes: Record<string, [number, unknown?]>) {
+export function mockApi(routes: Record<string, readonly [number, unknown?]>) {
   const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
     const key = `${init?.method ?? 'GET'} ${url}`
     const match = routes[key]

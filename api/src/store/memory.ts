@@ -1,9 +1,10 @@
 import { randomUUID } from 'node:crypto'
-import { EmailTakenError, type Store, type User } from './types.ts'
+import { EmailTakenError, type Preferences, type Store, type User } from './types.ts'
 
 // Testler için bellek içi depo. Prisma deposuyla aynı davranır (benzersiz e-posta dahil).
 export function createMemoryStore(): Store {
   const users: User[] = []
+  const preferences = new Map<string, Preferences>()
 
   return {
     users: {
@@ -18,6 +19,15 @@ export function createMemoryStore(): Store {
         const user: User = { id: randomUUID(), createdAt: new Date(), ...data }
         users.push(user)
         return user
+      },
+    },
+    preferences: {
+      async get(userId) {
+        return preferences.get(userId) ?? null
+      },
+      async save(userId, data) {
+        preferences.set(userId, { ...data })
+        return { ...data }
       },
     },
   }

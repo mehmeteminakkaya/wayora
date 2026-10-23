@@ -243,3 +243,33 @@ h1 {
   border-radius: var(--radius);
   background: var(--surface);
 }
+
+/* Seçim grupları (checkbox / radio) */
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choices legend {
+  width: 100%;
+  margin-bottom: var(--space-2);
+}
+
+.choices .field-error {
+  width: 100%;
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.choice input {
+  accent-color: var(--accent);
+}

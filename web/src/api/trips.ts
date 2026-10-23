@@ -15,6 +15,8 @@ export type Trip = {
   days: TripDay[]
 }
 
+export type TripSummary = Omit<Trip, 'days'> & { dayCount: number }
+
 export type NewTrip = {
   destination: string
   title?: string
@@ -29,3 +31,8 @@ export const createTrip = (input: NewTrip) =>
 
 export const getTrip = (id: string) =>
   api<{ trip: Trip }>(`/api/trips/${encodeURIComponent(id)}`).then((r) => r.trip)
+
+export const listTrips = () => api<{ trips: TripSummary[] }>('/api/trips').then((r) => r.trips)
+
+export const deleteTrip = (id: string) =>
+  api<void>(`/api/trips/${encodeURIComponent(id)}`, { method: 'DELETE' })

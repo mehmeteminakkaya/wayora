@@ -50,6 +50,18 @@ export function createMemoryStore(): Store {
         const trip = trips.find((t) => t.id === tripId && t.userId === userId)
         return trip ? structuredClone(withoutOwner(trip)) : null
       },
+      async listForUser(userId) {
+        return trips
+          .filter((t) => t.userId === userId)
+          .sort((a, b) => a.startDate.localeCompare(b.startDate) || a.createdAt.getTime() - b.createdAt.getTime())
+          .map(({ userId: _owner, days, createdAt: _created, ...t }) => ({ ...t, dayCount: days.length }))
+      },
+      async deleteForUser(userId, tripId) {
+        const index = trips.findIndex((t) => t.id === tripId && t.userId === userId)
+        if (index === -1) return false
+        trips.splice(index, 1)
+        return true
+      },
     },
   }
 }

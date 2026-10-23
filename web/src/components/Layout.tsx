@@ -30,7 +30,7 @@ function UserMenu() {
   }
   return (
     <>
-      <Link to="/geziler/yeni">Yeni gezi</Link>
+      <Link to="/geziler">Gezilerim</Link>
       <Link to="/tercihler">Tercihlerim</Link>
       <span className="muted">{user.name ?? user.email}</span>
       <Button variant="secondary" onClick={() => signOut.mutate()} disabled={signOut.isPending}>

@@ -60,6 +60,9 @@ export type Trip = {
   days: TripDay[]
 }
 
+// Listede günler yerine gün sayısı döner (W-14)
+export type TripSummary = Omit<Trip, 'days' | 'createdAt'> & { dayCount: number }
+
 export type NewTrip = Pick<Trip, 'title' | 'destination' | 'startDate' | 'endDate' | 'budget' | 'currency'>
 
 export type TripStore = {
@@ -67,6 +70,10 @@ export type TripStore = {
   create(userId: string, data: NewTrip, days: { dayIndex: number; date: string }[]): Promise<Trip>
   // Gezi başka kullanıcınınsa da null döner (varlığı sızmasın)
   findForUser(userId: string, tripId: string): Promise<Trip | null>
+  // Başlangıç tarihine göre sıralı
+  listForUser(userId: string): Promise<TripSummary[]>
+  // Silindiyse true; gezi yoksa ya da başkasınınsa false
+  deleteForUser(userId: string, tripId: string): Promise<boolean>
 }
 
 export type Store = {

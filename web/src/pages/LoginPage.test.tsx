@@ -33,6 +33,14 @@ describe('Giriş ve korumalı sayfalar (W-11)', () => {
     expect(screen.getByRole('button', { name: 'Çıkış yap' })).toBeInTheDocument()
   })
 
+  it('doğrudan giriş sayfasından gelince gezilerim sayfasına gider', async () => {
+    mockApi({ 'GET /api/auth/me': [401], 'POST /api/auth/login': [200, { user }], 'GET /api/trips': [200, { trips: [] }] })
+    const { router } = renderAt('/giris')
+    await signIn()
+    expect(await screen.findByRole('heading', { name: 'Gezilerim' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/geziler')
+  })
+
   it('hatalı bilgilerde sunucunun mesajını gösterir', async () => {
     mockApi({
       'GET /api/auth/me': [401],

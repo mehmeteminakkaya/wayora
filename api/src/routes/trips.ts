@@ -55,6 +55,15 @@ export function tripsRouter(store: Store) {
     res.status(201).json({ trip })
   })
 
+  router.get('/', async (_req, res) => {
+    res.json({ trips: await store.trips.listForUser(currentUserId(res)) })
+  })
+
+  router.delete('/:tripId', async (req, res) => {
+    if (!(await store.trips.deleteForUser(currentUserId(res), req.params.tripId))) throw tripNotFound()
+    res.status(204).end()
+  })
+
   router.get('/:tripId', async (req, res) => {
     const trip = await store.trips.findForUser(currentUserId(res), req.params.tripId)
     if (!trip) throw tripNotFound()

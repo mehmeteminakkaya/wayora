@@ -37,5 +37,23 @@ export function createPrismaTripStore(db: Db): TripStore {
       const row = await db.trip.findFirst({ where: { id: tripId, userId }, include: tripInclude })
       return row ? toTrip(row) : null
     },
+    async listForUser(userId) {
+      const rows = await db.trip.findMany({
+        where: { userId },
+        orderBy: [{ startDate: 'asc' }, { createdAt: 'asc' }],
+        include: { _count: { select: { days: true } } },
+      })
+      return rows.map(({ userId: _owner, updatedAt: _updated, createdAt: _created, _count, ...row }) => ({
+        ...row,
+        startDate: toDay(row.startDate),
+        endDate: toDay(row.endDate),
+        dayCount: _count.days,
+      }))
+    },
+    async deleteForUser(userId, tripId) {
+      // Günler (ve W-15'te aktiviteler) veritabanında onDelete: Cascade ile silinir
+      const { count } = await db.trip.deleteMany({ where: { id: tripId, userId } })
+      return count > 0
+    },
   }
 }

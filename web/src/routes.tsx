@@ -8,6 +8,7 @@ import { NotFoundPage } from './pages/NotFoundPage'
 import { PreferencesPage } from './pages/PreferencesPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { TripPage } from './pages/TripPage'
+import { TripsPage } from './pages/TripsPage'
 
 // Uygulamanın tüm sayfaları. Testler aynı listeyi createMemoryRouter ile kullanır.
 export const routes: RouteObject[] = [
@@ -22,6 +23,7 @@ export const routes: RouteObject[] = [
         element: <RequireAuth />,
         children: [
           { path: 'tercihler', element: <PreferencesPage /> },
+          { path: 'geziler', element: <TripsPage /> },
           { path: 'geziler/yeni', element: <NewTripPage /> },
           { path: 'geziler/:tripId', element: <TripPage /> },
         ],

@@ -282,3 +282,19 @@ h1 {
   margin: 0;
   font-size: 1.125rem;
 }
+
+.page-head {
+  justify-content: space-between;
+}
+
+.page-head h1 {
+  margin: 0;
+}
+
+.trip-card {
+  justify-content: space-between;
+}
+
+.trip-card-body p {
+  margin: var(--space-1) 0 0;
+}

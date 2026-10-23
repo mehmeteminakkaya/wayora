@@ -10,7 +10,7 @@ export function LoginPage() {
   const queryClient = useQueryClient()
   const [missing, setMissing] = useState(false)
   // Korumalı bir sayfadan gelindiyse girişten sonra oraya dön
-  const from = (location.state as { from?: string } | null)?.from ?? '/'
+  const from = (location.state as { from?: string } | null)?.from ?? '/geziler'
 
   const mutation = useMutation({
     mutationFn: login,

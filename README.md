@@ -110,6 +110,16 @@ artefaktlarda:
 
 Tasarım yönü **WAYORA / ROTASYON**: analog seyahat defteri. Putty zemin, krem kağıt, ağır mürekkep tipografisi, gerçek şehir fotoğrafları, damgalar ve el yazısı notlar. Anton + Public Sans + IBM Plex Mono + Caveat. Gradient, glassmorphism, badge, emoji, hazır ikon kütüphanesi ve üç ikonlu kutu yok. Ayrıntı: [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md). Fotoğraflar: Unsplash (demo).
 
+## Teslim dosyaları
+
+Dönem projesi için hazırlanan Word ve sunum paketi:
+
+- [Wayora-Proje-Raporu.docx](docs/Wayora-Proje-Raporu.docx): detaylı proje raporu
+- [Wayora-Proje-Yonetimi.docx](docs/Wayora-Proje-Yonetimi.docx): proje yönetimi planı
+- [Wayora-User-Stories.docx](docs/Wayora-User-Stories.docx): 20 user story + kabul kriterleri
+- [Wayora-Sunum.pptx](docs/Wayora-Sunum.pptx): 14 slaytlık sunum
+- [Teslim özeti](docs/TESLIMLER.md)
+
 ## Test ve guardrail'ler
 
 - **32 API testi:** auth, tercihler, health, hata yolları, offline plan, halüsinasyon filtresi,

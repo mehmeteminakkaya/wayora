@@ -13,7 +13,8 @@
     "lint": "npm run lint --workspaces",
     "typecheck": "npm run typecheck --workspaces",
     "test": "npm run test --workspaces",
-    "setup": "npm install && node -e \"require('fs').existsSync('api/.env')||require('fs').copyFileSync('api/.env.example','api/.env')\" && npm run db:start -w api && npm run db:deploy -w api"
+    "setup": "npm install && node -e \"require('fs').existsSync('api/.env')||require('fs').copyFileSync('api/.env.example','api/.env')\" && npm run db:start -w api && npm run db:deploy -w api",
+    "hooks:install": "git config core.hooksPath .githooks"
   },
   "engines": {
     "node": ">=22"

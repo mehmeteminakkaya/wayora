@@ -1,0 +1,14 @@
+{
+  "name": "@wayora/mcp-context",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Wayora Context MCP server (stdio) — API ve docs bağlamını agent'a açar",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.20.0",
+    "zod": "^3.25.0"
+  }
+}

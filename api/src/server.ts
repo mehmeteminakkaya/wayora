@@ -7,6 +7,8 @@ const prisma = createPrisma(config.DATABASE_URL)
 
 const app = createApp({
   corsOrigin: config.CORS_ORIGIN,
+  db: prisma,
+  config,
   checkDb: async () => {
     await prisma.$queryRaw`SELECT 1`
   },

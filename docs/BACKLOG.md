@@ -1,5 +1,11 @@
 # Product Backlog
 
+> **Güncel durum (23 Eki 2026):** Sprint 0 tamam. Sprint 1 (W-10–W-16) ve Sprint 3
+> (W-30–W-34) tamamlandı. Sprint 2'de katalog + `Place` cache tamam; gerçek Google Places ve
+> harita açık. Sprint 4'te aktivite ekleme/silme ve bütçe özeti tamam; sürükle-bırak açık.
+> Sprint 5'te testler ve agent artefaktları tamam; deploy/demo sunumu açık.
+> Ayrıntılı kanıt: [specs/001-mvp/tasks.md](specs/001-mvp/tasks.md).
+
 GrepThink Scrum Board'a girilecek story'ler. Board'a girerken numarayı (`W-xx`) başlığa yazın ki
 branch/PR adlarıyla eşleşsin. Puanlar Fibonacci (1, 2, 3, 5, 8). Sahibi Product Owner (Bayram);
 öncelik sırası değişebilir.
@@ -20,7 +26,7 @@ Etiketler: `FE` frontend · `BE` backend · `DB` veritabanı · `UX` tasarım ·
 
 ---
 
-## Sprint 0 — Kurulum
+## Sprint 0: Kurulum
 
 | No | Story | Etiket | Puan | Sorumlu | Durum |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -34,7 +40,7 @@ Etiketler: `FE` frontend · `BE` backend · `DB` veritabanı · `UX` tasarım ·
 **W-04 kabul kriterleri:** deploy linki açılıyor · `/api/health` → `{ "status": "ok", "db": "ok" }` ·
 anahtarlar repoda değil, platformun env ayarında.
 
-## Sprint 1 — Temel
+## Sprint 1: Temel
 
 | No | Story | Etiket | Puan |
 | :--- | :--- | :--- | :--- |
@@ -52,7 +58,7 @@ kaydolamaz · şifre bcrypt ile saklanır · başarılı kayıtta tercih ekranı
 **W-13 kabul kriterleri:** bitiş tarihi başlangıçtan önce olamaz · gün sayısı kadar `TripDay` oluşur ·
 kullanıcı sadece kendi gezilerini görür (başkasının id'si → 404).
 
-## Sprint 2 — Harita ve Yerler
+## Sprint 2: Harita ve Yerler
 
 | No | Story | Etiket | Puan |
 | :--- | :--- | :--- | :--- |
@@ -65,7 +71,7 @@ kullanıcı sadece kendi gezilerini görür (başkasının id'si → 404).
 **W-24 çıktısı:** kısa bir not (`docs/spikes/ai-itinerary.md`): kullanılan model, prompt, örnek çıktı,
 ortalama süre, istek başı maliyet, uydurma mekân oranı.
 
-## Sprint 3 — AI Gezi Planı (MVP)
+## Sprint 3: AI Gezi Planı (MVP)
 
 | No | Story | Etiket | Puan |
 | :--- | :--- | :--- | :--- |
@@ -78,7 +84,7 @@ ortalama süre, istek başı maliyet, uydurma mekân oranı.
 **W-30 kabul kriterleri:** plan, gezi gün sayısı kadar gün içerir · her aktivitenin saati ve tahmini
 maliyeti var · tercihlerdeki ilgi alanları plana yansıyor · 60 sn içinde sonuç ya da anlaşılır hata.
 
-## Sprint 4 — Zenginleştirme
+## Sprint 4: Zenginleştirme
 
 | No | Story | Etiket | Puan |
 | :--- | :--- | :--- | :--- |
@@ -88,7 +94,7 @@ maliyeti var · tercihlerdeki ilgi alanları plana yansıyor · 60 sn içinde so
 | W-43 | Kullanıcı olarak tercihlerime göre destinasyon önerisi almak istiyorum | AI BE FE | 5 |
 | W-44 | (İsteğe bağlı) Kullanıcı olarak planımı salt-okunur bir linkle paylaşmak istiyorum | BE FE | 3 |
 
-## Sprint 5 — Kalite ve Final
+## Sprint 5: Kalite ve Final
 
 | No | Story | Etiket | Puan |
 | :--- | :--- | :--- | :--- |

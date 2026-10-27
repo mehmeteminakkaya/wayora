@@ -1,4 +1,4 @@
-# Wayora — Travel Planning (Proje Özeti)
+# Wayora: Travel Planning (Proje Özeti)
 
 > Kaynak: GrepThink → JOB-191 → *Wayora - Travel Planning* → Overview (14 Ekim 2026'da alındı).
 > GrepThink'teki metin değişirse burayı da güncelleyin.

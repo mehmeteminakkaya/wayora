@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "wayora-context": {
+      "command": "node",
+      "args": ["mcp/wayora-context/server.mjs"],
+      "env": {
+        "WAYORA_API_URL": "http://localhost:4000",
+        "WAYORA_COOKIE": ""
+      }
+    }
+  }
+}

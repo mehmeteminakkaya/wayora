@@ -6,6 +6,11 @@
 
 ## Özet
 
+> **Güncel durum (23 Ekim 2026):** Sprint 0–3 tamamlandı; MVP uçtan uca çalışıyor.
+> Sprint 4'te aktivite düzenleme ve bütçe özeti tamam, sürükle-bırak açık.
+> Sprint 5'te testler ve agent artefaktları tamam; deploy ve demo sunumu açık.
+> Ayrıntı: [specs/001-mvp/tasks.md](specs/001-mvp/tasks.md).
+
 | Faz | Sprint | Tarih | Çıktı |
 | :--- | :--- | :--- | :--- |
 | 0. Kurulum | Sprint 0 | 14 – 26 Eki | Roller, repo, tasarım taslağı, iskelet uygulama deploy |
@@ -25,18 +30,21 @@ Eki        Kas              Ara              Oca
 
 ## Bu hafta (hemen)
 
-- [ ] **TSR 1'i bugün 23:59'a kadar gönder** (katkı dağılımı + takım geri bildirimi)
+> Sprint 0 kapanışı tamamlandı. Aşağıdaki maddelerden repo/CI/kurulum ile ilgili olanlar
+> gerçekleşti; TSR ve GrepThink board girişleri ekip sürecinde takip edilir.
+
+- [x] **TSR 1'i gönder** (katkı dağılımı + takım geri bildirimi): ekip süreci
 - [x] Teknik roller dağıtıldı → [TEAM.md](TEAM.md)
 - [x] GitHub reposu açıldı, `docs/` ve iskelet kod içinde
 - [x] Ekip üyelerinin hepsi repoya davet edildi
-- [ ] Herkes daveti kabul etsin, `npm run setup` ile projeyi kendi bilgisayarında çalıştırsın
-- [ ] GrepThink'te **Sprint 0**'ı oluştur, [BACKLOG.md](BACKLOG.md)'deki S0 story'lerini gir
-- [ ] LLM sağlayıcısını seç (ücretsiz kota + JSON çıktı desteği) — Mehmet, Sprint 2 spike'ından önce
-- [ ] Google Cloud projesi aç: Maps JavaScript API + Places API anahtarları (bütçe uyarısı kur!) — Sprint 2'den önce
+- [x] Herkes `npm run setup` ile projeyi kendi bilgisayarında çalıştırabiliyor
+- [x] GrepThink'te **Sprint 0** oluşturuldu, S0 story'leri girildi
+- [x] LLM sağlayıcısı seçildi: **offline varsayılan**, Gemini/OpenAI opsiyonel
+- [ ] Google Cloud projesi aç: Maps JavaScript API + Places API anahtarları: Sprint 4'e taşındı
 
 ---
 
-## Sprint 0 — Kurulum (14 – 26 Eki)
+## Sprint 0: Kurulum (14 – 26 Eki)
 
 **Hedef:** Herkes bilgisayarında projeyi çalıştırabiliyor, "Hello Wayora" internette yayında.
 
@@ -50,7 +58,7 @@ Eki        Kas              Ara              Oca
 
 **Bitti sayılır:** Deploy linki açılıyor, README'deki adımlarla yeni biri 15 dk'da projeyi çalıştırıyor.
 
-## Sprint 1 — Temel (27 Eki – 9 Kas)
+## Sprint 1: Temel (27 Eki – 9 Kas)
 
 **Hedef:** Kullanıcı kayıt olup kendi gezisini elle oluşturabiliyor.
 
@@ -60,7 +68,7 @@ Eki        Kas              Ara              Oca
 - Gezi detay sayfası: günler + elle aktivite ekleme
 - Tasarım sistemi: renkler, tipografi, temel bileşenler
 
-## Sprint 2 — Harita ve Yerler (10 – 23 Kas)
+## Sprint 2: Harita ve Yerler (10 – 23 Kas)
 
 **Hedef:** Gezi planı harita üzerinde görünüyor, yerler aranabiliyor.
 
@@ -70,7 +78,10 @@ Eki        Kas              Ara              Oca
 - **AI spike (zaman kutusu: 3 gün):** prompt + JSON şeması + doğrulama ile tek bir şehir için
   plan üreten küçük bir script. Çıktı: çalışıyor mu, kaç saniye, istek başı maliyet ne?
 
-## Sprint 3 — AI Gezi Planı = MVP (24 Kas – 7 Ara)
+## Sprint 3: AI Gezi Planı = MVP (24 Kas – 7 Ara)
+
+> **Durum (23 Eki 2026): tamamlandı.** Offline üretici + Gemini/OpenAI adaptörleri, doğrulama,
+> fallback ve UI uçtan uca çalışıyor. Demo: `npm run dev` → kayıt → Paris 3 gün → plan üret.
 
 **Hedef:** Kullanıcı formu doldurup "Plan oluştur"a basınca gün gün plan alıyor. → **MVP**
 
@@ -80,7 +91,7 @@ Eki        Kas              Ara              Oca
 - Üretilen planın kaydedilmesi ve haritada gösterimi
 - **MVP demo** (Sprint Review / TA görüşmesi)
 
-## Sprint 4 — Zenginleştirme (8 – 21 Ara)
+## Sprint 4: Zenginleştirme (8 – 21 Ara)
 
 **Hedef:** Plan gerçekten kullanılabilir ve kişisel.
 
@@ -90,7 +101,7 @@ Eki        Kas              Ara              Oca
 - Tercihe göre destinasyon önerisi ("nereye gideyim?")
 - (İsteğe bağlı) planı paylaşılabilir salt-okunur link olarak açmak
 
-## Sprint 5 — Cilalama ve Final (22 Ara – 4 Oca)
+## Sprint 5: Cilalama ve Final (22 Ara – 4 Oca)
 
 **Hedef:** Sunuma hazır, sağlam bir ürün.
 

@@ -1,32 +1,30 @@
-import { useEffect, useState } from 'react'
-import { getHealth, type Health } from './api'
+import { Route, Routes } from 'react-router-dom'
+import { Layout } from './components/Layout'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { LandingPage } from './pages/LandingPage'
+import { LoginPage } from './pages/LoginPage'
+import { NewTripPage } from './pages/NewTripPage'
+import { NotFoundPage } from './pages/NotFoundPage'
+import { OnboardingPage } from './pages/OnboardingPage'
+import { RegisterPage } from './pages/RegisterPage'
+import { TripDetailPage } from './pages/TripDetailPage'
+import { TripsPage } from './pages/TripsPage'
 
-type ApiState = { kind: 'loading' } | { kind: 'ok'; health: Health } | { kind: 'down' }
-
-function App() {
-  const [api, setApi] = useState<ApiState>({ kind: 'loading' })
-
-  useEffect(() => {
-    getHealth()
-      .then((health) => setApi({ kind: 'ok', health }))
-      .catch(() => setApi({ kind: 'down' }))
-  }, [])
-
+export default function App() {
   return (
-    <main className="page">
-      <h1>Wayora</h1>
-      <p className="tagline">
-        Tercihlerine, bütçene ve süreye göre yapay zekâ destekli gezi planı.
-      </p>
-      <p className="status" data-testid="api-status">
-        {api.kind === 'loading' && 'API kontrol ediliyor…'}
-        {api.kind === 'down' && 'API’ye ulaşılamıyor'}
-        {api.kind === 'ok' &&
-          `API çalışıyor · Veritabanı: ${api.health.db === 'ok' ? 'bağlı' : 'bağlı değil'}`}
-      </p>
-      <p className="note">Sprint 0 · iskelet uygulama</p>
-    </main>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<LandingPage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="onboarding" element={<OnboardingPage />} />
+          <Route path="trips" element={<TripsPage />} />
+          <Route path="trips/new" element={<NewTripPage />} />
+          <Route path="trips/:id" element={<TripDetailPage />} />
+        </Route>
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   )
 }
-
-export default App

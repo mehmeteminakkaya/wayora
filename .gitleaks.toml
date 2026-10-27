@@ -1,0 +1,19 @@
+title = "Wayora gitleaks"
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Doküman/test/örnek dosyalardaki placeholder değerler"
+paths = [
+  '''api/\.env\.example''',
+  '''docs/.*\.md''',
+  '''.*\.test\.ts''',
+  '''.*\.test\.tsx''',
+  '''mcp/.*/README\.md''',
+]
+regexes = [
+  '''wayora-dev-only-secret-change-me-32-chars''',
+  '''test-key''',
+  '''parola123''',
+  '''wayora_session=\.\.\.''',
+]

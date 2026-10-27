@@ -10,7 +10,7 @@ değiştirirse buraya not düşün (altta "Karar kaydı").
 ┌──────────────────────┐   REST/JSON   ┌───────────────────────────┐
 │  web/  (React + TS)  │ ────────────▶ │  api/  (Express + TS)     │
 │  Vite, React Router  │               │  auth · trips · places ·  │
-│  TanStack Query      │ ◀──────────── │  ai                       │
+│  TanStack Query      │ �-�──────────── │  ai                       │
 │  Google Maps JS SDK  │               └─────┬──────────┬──────────┘
 └──────────────────────┘                     │          │
                                              ▼          ▼
@@ -125,6 +125,12 @@ Notlar:
 | 2026-10-14 | Lint: oxlint (Vite şablonunun varsayılanı) | Hızlı, ayarsız; gerekirse ESLint'e geçilebilir |
 | 2026-10-14 | Prisma 7.x sabitlendi | npm'deki `latest` 8.0 RC idi; RC kullanmıyoruz |
 | 2026-10-14 | Geliştirmede yerel `prisma dev` Postgres'i | Hesap/Docker gerekmez, herkes aynı komutla kurar; yayına alırken Neon/Supabase'e sadece `DATABASE_URL` değişir |
-| _bekliyor_ | LLM sağlayıcısı (Gemini / OpenAI / Claude…) | Ücretsiz kota + JSON çıktı desteğine bakın |
-| _bekliyor_ | Arayüz dili (TR / EN / ikisi) | |
-| _bekliyor_ | UI kütüphanesi (Tailwind / MUI) | Designer ile birlikte |
+| 2026-10-23 | LLM: offline varsayılan + Gemini/OpenAI adaptörleri | Anahtarsız demo, deterministik test, düşük maliyet |
+| 2026-10-23 | Arayüz dili: Türkçe | Ekip ve hedef kullanıcı |
+| 2026-10-23 | UI: saf CSS + tasarım değişkenleri | Ek bağımlılık yok, koyu tema ve responsive kolay |
+| 2026-10-23 | Auth: JWT httpOnly cookie + bcryptjs | XSS'e karşı token koruması; Windows'ta native derleme yok |
+| 2026-10-23 | AI: sağlayıcı adaptörü + offline varsayılan | Anahtarsız demo, deterministik test, sıfır maliyet |
+| 2026-10-23 | LLM çıktısı zod + aday filtresi | Halüsinasyon ve prompt injection'a karşı |
+| 2026-10-23 | React Router + saf CSS | Küçük bundle, tasarım üzerinde tam kontrol |
+| 2026-10-23 | `Trip.tips` alanı | AI ipuçları sayfa yenilense de kalsın |
+| 2026-10-23 | Gemini/OpenAI model routing + fallback | Maliyet/gecikme dengesi; sağlayıcı hatasında servis ayakta kalır |

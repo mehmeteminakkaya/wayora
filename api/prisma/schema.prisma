@@ -1,5 +1,5 @@
-// Veri modeli taslağı: docs/ARCHITECTURE.md → "Veri modeli".
-// Sprint 0'da sadece User var; diğer tablolar ilgili story'lerle eklenecek.
+// Wayora veri modeli — docs/ARCHITECTURE.md ve docs/specs/001-mvp/spec.md ile hizalıdır.
+// Sprint 0'da User vardı; MVP ile tercihler, geziler, günler, aktiviteler ve yer önbelleği eklendi.
 
 generator client {
   provider = "prisma-client"
@@ -11,10 +11,90 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
+  id           String      @id @default(uuid())
+  email        String      @unique
   passwordHash String
   name         String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  preference   Preference?
+  trips        Trip[]
+}
+
+model Preference {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interests   String[] @default([])
+  budgetLevel String   @default("mid") // low | mid | high
+  travelStyle String   @default("balanced") // relaxed | balanced | packed
+  pace        String   @default("moderate") // slow | moderate | fast
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Trip {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  destination String
+  startDate   DateTime  @db.Date
+  endDate     DateTime  @db.Date
+  budget      Decimal?  @db.Decimal(10, 2)
+  currency    String    @default("EUR")
+  status      String    @default("draft") // draft | generating | planned | failed
+  tips        String[]  @default([])
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  days        TripDay[]
+
+  @@index([userId])
+}
+
+model TripDay {
+  id         String     @id @default(uuid())
+  tripId     String
+  trip       Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  dayIndex   Int
+  date       DateTime   @db.Date
+  notes      String?
+  activities Activity[]
+
+  @@unique([tripId, dayIndex])
+  @@index([tripId])
+}
+
+model Activity {
+  id            String   @id @default(uuid())
+  tripDayId     String
+  tripDay       TripDay  @relation(fields: [tripDayId], references: [id], onDelete: Cascade)
+  order         Int      @default(0)
+  title         String
+  category      String   @default("other") // museum | food | nature | landmark | shopping | other
+  startTime     String? // "09:00"
+  endTime       String? // "11:00"
+  estimatedCost Decimal? @db.Decimal(10, 2)
+  placeId       String?
+  place         Place?   @relation(fields: [placeId], references: [id], onDelete: SetNull)
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([tripDayId])
+}
+
+// Google Places sonuçlarının önbelleği (kota/maliyet). Offline katalog da bu tabloya yazılır.
+model Place {
+  id            String     @id @default(uuid())
+  googlePlaceId String     @unique
+  name          String
+  lat           Float
+  lng           Float
+  address       String?
+  rating        Float?
+  types         String[]   @default([])
+  cachedAt      DateTime   @default(now())
+  activities    Activity[]
 }

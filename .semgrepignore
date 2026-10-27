@@ -1,0 +1,11 @@
+# Semgrep'in taramadığı üretilen/test/tooling dosyaları
+node_modules/
+dist/
+coverage/
+api/src/generated/
+**/*.test.ts
+**/*.test.tsx
+scripts/
+api/scripts/
+mcp/
+docs/

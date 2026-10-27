@@ -4,6 +4,7 @@ dist-ssr/
 *.local
 *.log
 coverage/
+*.tsbuildinfo
 
 # Gizli anahtarlar — sadece .env.example commit'lenir
 .env

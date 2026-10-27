@@ -38,6 +38,8 @@ export function createApp({ corsOrigin, checkDb, db, config, generateLimiter }: 
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     skip: () => isTest,
+    // Yalnızca başarısız giriş denemeleri sayılır; /me gibi oturum kontrolleri limite takılmaz.
+    skipSuccessfulRequests: true,
     message: { error: { code: 'RATE_LIMITED', message: 'Çok fazla deneme. Lütfen biraz sonra tekrar deneyin.' } },
   })
 
@@ -58,7 +60,10 @@ export function createApp({ corsOrigin, checkDb, db, config, generateLimiter }: 
     })
 
   app.use('/api/health', healthRouter(checkDb))
-  app.use('/api/auth', authLimiter, authRouter({ db, config }))
+  // Limit yalnızca kimlik denemelerine uygulanır; /me her sayfa yüklemesinde çağrılır.
+  app.use('/api/auth/login', authLimiter)
+  app.use('/api/auth/register', authLimiter)
+  app.use('/api/auth', authRouter({ db, config }))
   app.use('/api/me/preferences', preferenceRouter({ db, config }))
   app.use('/api/trips', tripRouter({ db, config, generateLimiter: aiLimiter }))
   app.use('/api/activities', activityRouter({ db, config }))

@@ -119,6 +119,8 @@ Dönem projesi için hazırlanan Word ve sunum paketi:
 - [Wayora-User-Stories.docx](docs/Wayora-User-Stories.docx): 20 user story + kabul kriterleri
 - [Wayora-Sunum.pptx](docs/Wayora-Sunum.pptx): 14 slaytlık sunum
 - [Teslim özeti](docs/TESLIMLER.md)
+- [Audit raporu](docs/audit/AUDIT_REPORT.md)
+- [1000 kişilik master audit promptu](docs/MASTER_AUDIT_PROMPT.md)
 
 ## Test ve guardrail'ler
 

@@ -15,6 +15,9 @@ Tüm dosyalar Türkçedir ve projedeki gerçek kod, test ve sprint durumuyla hiz
 | [preview-rotasyon-se.png](preview-rotasyon-se.png) | Görsel | 375x667 mobil uygulama önizlemesi |
 | [preview-rotasyon-mobile.png](preview-rotasyon-mobile.png) | Görsel | Mobil tam sayfa |
 | [assets/](assets/) | Klasör | Word ve sunum içinde kullanılan ekran görüntüleri |
+| [audit/AUDIT_REPORT.md](audit/AUDIT_REPORT.md) | Markdown | 1000 kişilik denetim raporu ve düzeltmeler |
+| [audit/FIX_LOG.md](audit/FIX_LOG.md) | Markdown | Uygulanan düzeltmelerin kaydı |
+| [MASTER_AUDIT_PROMPT.md](MASTER_AUDIT_PROMPT.md) | Markdown | Tekrarlanabilir 1000 uzmanlı denetim promptu |
 
 ## Sunum akışı
 

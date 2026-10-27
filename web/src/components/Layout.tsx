@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
@@ -9,6 +9,8 @@ const mobileClass = ({ isActive }: { isActive: boolean }) => (isActive ? 'is-act
 export function Layout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register'
 
   async function handleLogout() {
     await logout()
@@ -65,7 +67,7 @@ export function Layout() {
         <Outlet />
       </main>
 
-      {user ? (
+      {!isAuthPage && user ? (
         <nav className="mobile-nav" aria-label="Mobil menü">
           <NavLink to="/trips" className={mobileClass}>
             Rotasyon
@@ -77,7 +79,7 @@ export function Layout() {
             Kurulum
           </NavLink>
         </nav>
-      ) : (
+      ) : !isAuthPage ? (
         <nav className="mobile-nav" aria-label="Mobil menü">
           <NavLink to="/" className={mobileClass} end>
             Rotasyon
@@ -89,7 +91,7 @@ export function Layout() {
             Kurulum
           </NavLink>
         </nav>
-      )}
+      ) : null}
 
       <footer className="site-footer">
         <div className="footer-inner">

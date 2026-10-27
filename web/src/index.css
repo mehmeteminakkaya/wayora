@@ -1176,8 +1176,8 @@ body::after {
   justify-content: space-between;
   min-height: 620px;
   padding: clamp(1.5rem, 4vw, 2.8rem);
-  background-image: url('/images/street.jpg');
-  background-position: center;
+  background-image: url('/images/paris.jpg');
+  background-position: center 35%;
   background-size: cover;
   color: var(--cream);
   isolation: isolate;
@@ -1188,7 +1188,7 @@ body::after {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: rgba(20, 17, 14, 0.45);
+  background: rgba(20, 17, 14, 0.56);
 }
 
 .auth-poster .eyebrow {
@@ -1200,6 +1200,7 @@ body::after {
   margin: 0 0 1rem;
   color: var(--cream);
   font-size: clamp(3rem, 5.5vw, 5.4rem);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
 }
 
 .auth-poster p {
@@ -1396,7 +1397,7 @@ body::after {
 }
 
 .chip-toggle.is-selected::before {
-  content: 'Ã¢Å“â€œ';
+  content: '✓';
   font-size: 0.68rem;
 }
 
@@ -1442,7 +1443,7 @@ body::after {
 }
 
 .option-card.is-selected::after {
-  content: 'Ã¢Å“â€œ';
+  content: '✓';
   position: absolute;
   top: 0.45rem;
   right: 0.55rem;
@@ -1455,6 +1456,12 @@ body::after {
   font-family: var(--display);
   font-size: 1rem;
   text-transform: uppercase;
+}
+
+.option-card.is-selected .option-title,
+.option-card.is-selected .option-hint {
+  color: var(--on-terracotta);
+  opacity: 1;
 }
 
 .option-hint {
@@ -2168,6 +2175,10 @@ body::after {
 
   .site-main {
     padding-bottom: 6rem;
+  }
+
+  .app-shell:has(.mobile-nav) .site-footer {
+    padding-bottom: 4.2rem;
   }
 
   .mobile-nav {

@@ -20,6 +20,8 @@ const loginSchema = z.object({
 })
 
 // E-posta var/yok bilgisini zamanlama üzerinden sızdırmamak için sabit bir hash.
+// Gerçek bir kullanıcıya ait değil; hiçbir şifreyi doğrulamaz.
+// nosemgrep: generic.secrets.security.detected-bcrypt-hash.detected-bcrypt-hash
 const DUMMY_HASH = '$2b$12$C6UzMDM.H6dfI/f/IKcEeO7ZBj0P5x7h1r0p9Q0jXy0i8Z9m8G1a2'
 
 const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000

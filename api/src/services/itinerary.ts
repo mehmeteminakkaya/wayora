@@ -457,7 +457,7 @@ export async function generateItinerary(
     }
   } catch (error) {
     // Week 10 fallback: sağlayıcı hatası/timeout → deterministik yerel üretici.
-    console.warn(`[llm] ${provider} başarısız, offline üreticiye düşülüyor:`, error)
+    console.warn('[llm] %s başarısız, offline üreticiye düşülüyor:', provider, error)
     return {
       plan: generateOfflinePlan(input, candidates),
       meta: {

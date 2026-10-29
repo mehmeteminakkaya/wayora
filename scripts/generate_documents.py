@@ -291,7 +291,7 @@ def build_report():
     add_bullets(
         doc,
         [
-            '32 API testi ve 4 web testi ile kritik akışlar otomatik doğrulanır.',
+            '51 API testi ve 4 web testi ile kritik akışlar otomatik doğrulanır.',
             'AI anahtarı olmadan da uçtan uca demo çalışır; offline üretici varsayılandır.',
             'Güvenlik hattı; helmet, CORS allowlist, httpOnly cookie, bcrypt, zod, rate limit ve prompt injection sınırlarını içerir.',
             'Tasarım dili WAYORA / ROTASYON olarak adlandırıldı: krem kağıt, mürekkep, film çerçeveli fotoğraf, damga ve el yazısı not.',
@@ -332,7 +332,7 @@ def build_report():
             ('Kayıttan plana ulaşma', '≤ 3 dakika, ≤ 5 ekran', '3 ekran, tek akış'),
             ('Offline plan üretimi', '< 1 saniye', '1 ms civarı'),
             ('LLM plan üretimi', '< 20 saniye veya fallback', 'Timeout + offline fallback'),
-            ('Kritik akış testi', 'auth, gezi, AI, fallback', '32 API + 4 web testi'),
+            ('Kritik akış testi', 'auth, gezi, AI, fallback', '51 API + 4 web testi'),
             ('Güvenlik', 'Secret yok, rate limit var', 'gitleaks/CodeQL/Semgrep hattı'),
         ],
         widths=[4.6, 5.8, 5.6],
@@ -581,7 +581,7 @@ def build_report():
     )
     add_paragraph(
         doc,
-        'Toplam 32 API ve 4 web testi bulunur. CI; lint, typecheck, test, build ve audit adımlarını '
+        'Toplam 51 API ve 4 web testi bulunur. CI; lint, typecheck, test, build ve audit adımlarını '
         'her PR’da çalıştırır. Ayrıca gitleaks, CodeQL ve Semgrep iş akışları vardır.',
     )
 
@@ -702,7 +702,7 @@ def build_pm_plan():
             ('Kullanıcıyı 3 dakikada plana ulaştırmak', '≤ 3 ekran / ≤ 5 tıklama', 'Karşılandı'),
             ('AI planını güvenilir üretmek', 'Şema + aday filtresi + fallback', 'Karşılandı'),
             ('Anahtarsız demo', 'offline sağlayıcı', 'Karşılandı'),
-            ('Kritik akışları otomatik doğrulamak', '32 API + 4 web testi', 'Karşılandı'),
+            ('Kritik akışları otomatik doğrulamak', '51 API + 4 web testi', 'Karşılandı'),
             ('Agent-ready repo', 'AGENTS, skills, MCP, CI', 'Karşılandı'),
         ],
         widths=[5.8, 5.4, 5.0],

@@ -15,7 +15,7 @@ const eventSchema = z
         z
           .object({
             ratio: z.string().optional(),
-            url: z.string(),
+            url: z.string().optional(),
             width: z.number().optional(),
           })
           .passthrough(),
@@ -51,7 +51,7 @@ const eventSchema = z
           .array(
             z
               .object({
-                name: z.string(),
+                name: z.string().optional(),
                 city: z.object({ name: z.string() }).passthrough().optional(),
               })
               .passthrough(),
@@ -85,13 +85,17 @@ export type EventOffer = {
 }
 
 function pickImage(
-  images: Array<{ ratio?: string; url: string; width?: number }> | undefined,
+  images: Array<{ ratio?: string; url?: string; width?: number }> | undefined,
 ): string | null {
   if (!images || images.length === 0) return null
-  const wide = images
+  const usable = images.filter((image): image is { ratio?: string; url: string; width?: number } =>
+    Boolean(image.url),
+  )
+  if (usable.length === 0) return null
+  const wide = usable
     .filter((image) => image.ratio === '16_9')
     .sort((a, b) => (b.width ?? 0) - (a.width ?? 0))
-  return wide[0]?.url ?? images[0]?.url ?? null
+  return wide[0]?.url ?? usable[0]?.url ?? null
 }
 
 function normalizeEvent(event: z.infer<typeof eventSchema>): EventOffer {
@@ -103,10 +107,9 @@ function normalizeEvent(event: z.infer<typeof eventSchema>): EventOffer {
     url: event.url ?? null,
     imageUrl: pickImage(event.images),
     startDate: event.dates?.start?.localDate ?? event.dates?.start?.dateTime ?? null,
-    startTime: event.dates?.start?.localTime ?? null,
+    startTime: event.dates?.start?.localTime?.slice(0, 5) ?? null,
     venue: venue?.name ?? null,
-    city: venue?.city?.name ?? null,
-    priceMin: price?.min ?? null,
+    city: venue?.city?.name ?? null,    priceMin: price?.min ?? null,
     priceMax: price?.max ?? null,
     currency: price?.currency ?? null,
     status: event.dates?.status?.code ?? null,

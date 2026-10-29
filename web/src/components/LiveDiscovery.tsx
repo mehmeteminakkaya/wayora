@@ -14,7 +14,8 @@ type LiveDiscoveryProps = {
 function eventDate(event: EventOffer): string {
   if (!event.startDate) return 'Tarih belirtilmedi'
   const date = event.startDate.includes('T') ? event.startDate.slice(0, 10) : event.startDate
-  return `${formatShortDate(date)}${event.startTime ? ` · ${event.startTime}` : ''}`
+  const time = event.startTime?.slice(0, 5)
+  return `${formatShortDate(date)}${time ? ` · ${time}` : ''}`
 }
 
 function eventPrice(event: EventOffer): string {

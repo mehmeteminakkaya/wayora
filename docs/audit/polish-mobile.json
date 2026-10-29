@@ -21,8 +21,8 @@
   "liveDiscovery": {
     "exists": true,
     "panels": [
-      "TICKETMASTER DISCOVERY\n\nEtkinlikler\n\nCanlı etkinlikler bu ortamda yapılandırılmadı. Anahtar eklendiğinde şehirdeki etkinlikler burada görünür.\n\nEtkinlik verisi Ticketmaster Discove",
-      "DUFFEL\n\nUçuş fikri\n\nUçuş denemeleri bu ortamda yapılandırılmadı. Test token'ı eklendiğinde burada görünür.\n\nUçuşlar Duffel test ortamından gelir; gerçek fiyat veya rezervasyon deği"
+      "TICKETMASTER DISCOVERY\n\nEtkinlikler\nAli Doğan Gönültaş Trio\n\n05.11.2026 · 20:30 · Türkan Saylan Kültür Merkezi\n\nFiyat bilgisi yok\n\nİnteraktif Talk Show - Gömüş Açısı\n\n05.11.2026 · ",
+      "DUFFEL\n\nUçuş fikri\n\nUçuş denemeleri bu ortamda yapılandırılmadı. Test token'ı eklendiğinde burada görünür.\n\nUçuş yanıtı Duffel'dan gelir. Test modunda fiyatlar gerçek değildir; bu "
     ],
     "overflow": false
   },

@@ -3,7 +3,7 @@ import type { FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { api } from '../api'
 import type { Pace } from '../api'
-import { formatMoney, formatShortDate, todayIso, tripDayCount } from '../lib/format'
+import { formatMoney, formatShortDate, titleCaseTr, todayIso, tripDayCount } from '../lib/format'
 
 const CITIES = [
   'İstanbul',
@@ -79,7 +79,7 @@ export function NewTripPage() {
   ]
 
   const [step, setStep] = useState(destinationParam ? 2 : 1)
-  const [destination, setDestination] = useState(destinationParam)
+  const [destination, setDestination] = useState(titleCaseTr(destinationParam))
   const [startDate, setStartDate] = useState(todayIso(7))
   const [endDate, setEndDate] = useState(todayIso(9))
   const [preset, setPreset] = useState<DatePreset>(null)
@@ -182,8 +182,8 @@ export function NewTripPage() {
     try {
       const noteLines = [notes.trim(), `Tempo tercihi: ${paceLabel(pace)}`].filter(Boolean)
       const { trip } = await api.createTrip({
-        title: title.trim() || `${destination.trim()} rotası`,
-        destination: destination.trim(),
+        title: title.trim() || `${titleCaseTr(destination)} rotası`,
+        destination: titleCaseTr(destination),
         startDate,
         endDate,
         budget: budget === '' ? null : Number(budget),
@@ -446,7 +446,7 @@ export function NewTripPage() {
               <div className="summary-card" aria-label="Rota özeti">
                 <div className="summary-row">
                   <span>Şehir</span>
-                  <strong>{destination.trim() || 'Belirtilmedi'}</strong>
+                  <strong>{titleCaseTr(destination) || 'Belirtilmedi'}</strong>
                 </div>
                 <div className="summary-row">
                   <span>Tarih</span>
@@ -557,7 +557,7 @@ export function NewTripPage() {
                 Geri
               </button>
             ) : (
-              <Link className="btn btn-ghost" to="/trips">
+              <Link className="btn btn-secondary" to="/trips">
                 Vazgeç
               </Link>
             )}

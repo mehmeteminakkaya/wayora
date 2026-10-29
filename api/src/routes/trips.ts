@@ -67,7 +67,30 @@ const createActivitySchema = z.object({
 
 const updateActivitySchema = createActivitySchema
   .partial()
+  .extend({
+    // Sürükle-bırak sıralama; yalnızca aynı gün içindeki sıra değişir.
+    order: z.number().int('Sıra tam sayı olmalı').nonnegative('Sıra negatif olamaz'),
+  })
   .refine((value) => Object.keys(value).length > 0, 'Güncellenecek en az bir alan gerekli')
+
+const importExperiencesSchema = z.object({
+  experienceIds: z
+    .array(z.string().trim().min(1, 'Deneyim kimliği gerekli').max(200))
+    .min(1, 'En az bir deneyim seçmelisiniz')
+    .max(20, 'En fazla 20 deneyim seçebilirsiniz'),
+})
+
+const IMPORT_TIME_SLOTS: ReadonlyArray<readonly [string, string]> = [
+  ['09:30', '11:00'],
+  ['11:30', '13:00'],
+  ['14:00', '15:30'],
+  ['16:00', '17:30'],
+  ['18:30', '20:00'],
+]
+
+function importTimeSlot(order: number): readonly [string, string] {
+  return IMPORT_TIME_SLOTS[order % IMPORT_TIME_SLOTS.length]!
+}
 
 function utcDay(value: Date): Date {
   return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), value.getUTCDate()))
@@ -105,6 +128,47 @@ function serializeActivity(activity: {
     estimatedCost: toNumber(activity.estimatedCost),
     placeId: activity.placeId,
     notes: activity.notes,
+  }
+}
+
+/**
+ * Deneyimi aktiviteye bağlarken Place önbelleğine de yazar. Katalogda koordinat
+ * bulunmadığı için mevcut üretim akışındaki gibi 0/0 kullanılır; var olan kaydın
+ * koordinatları güncellenmez. Yer yazılamazsa aktivite yine oluşturulur.
+ */
+async function upsertExperiencePlace(
+  db: Db,
+  experience: {
+    id: string
+    googlePlaceId: string
+    name: string
+    address: string | null
+    rating: number | null
+    category: string
+    tags: string[]
+  },
+) {
+  try {
+    return await db.place.upsert({
+      where: { googlePlaceId: experience.googlePlaceId },
+      create: {
+        googlePlaceId: experience.googlePlaceId,
+        name: experience.name,
+        lat: 0,
+        lng: 0,
+        address: experience.address,
+        rating: experience.rating,
+        types: [experience.category, ...experience.tags],
+      },
+      update: {
+        name: experience.name,
+        address: experience.address,
+        rating: experience.rating,
+      },
+    })
+  } catch (error) {
+    console.warn('[trips] deneyim yeri bağlanamadı:', experience.id, error)
+    return null
   }
 }
 
@@ -291,6 +355,83 @@ export function tripRouter({
       console.error('[generate] plan oluşturulamadı:', error)
       throw new HttpError(502, 'AI_FAILED', 'Gezi planı oluşturulamadı, lütfen tekrar deneyin')
     }
+  })
+
+  // Seçilen katalog deneyimlerini günlere sırayla (round-robin) dağıtır.
+  router.post('/:id/experiences', async (req, res) => {
+    const input = parseOrThrow(importExperiencesSchema, req.body)
+    const experienceIds = [...new Set(input.experienceIds)]
+
+    const trip = await db.trip.findFirst({
+      where: { id: String(req.params.id), userId: req.userId! },
+      include: {
+        days: {
+          orderBy: { dayIndex: 'asc' },
+          include: { activities: { select: { order: true } } },
+        },
+      },
+    })
+    if (!trip) throw new HttpError(404, 'NOT_FOUND', 'Gezi bulunamadı')
+    if (trip.days.length === 0) {
+      throw new HttpError(409, 'TRIP_HAS_NO_DAYS', 'Gezide planlanmış gün bulunmuyor')
+    }
+
+    const experiences = await db.cityExperience.findMany({
+      where: { id: { in: experienceIds } },
+    })
+    if (experiences.length !== experienceIds.length) {
+      throw new HttpError(404, 'EXPERIENCE_NOT_FOUND', 'Seçilen deneyimlerden biri bulunamadı')
+    }
+    const experienceById = new Map(experiences.map((experience) => [experience.id, experience]))
+    const orderedExperiences = experienceIds.map((id) => experienceById.get(id)!)
+
+    const placeIdByExperience = new Map<string, string>()
+    for (const experience of orderedExperiences) {
+      const place = await upsertExperiencePlace(db, experience)
+      if (place) placeIdByExperience.set(experience.id, place.id)
+    }
+
+    // Her günün mevcut en yüksek sırasından sonrasına ekle; gün içi sıra korunur.
+    const nextOrderByDay = new Map<string, number>()
+    for (const day of trip.days) {
+      const highestOrder = day.activities.reduce(
+        (highest, activity) => Math.max(highest, activity.order),
+        -1,
+      )
+      nextOrderByDay.set(day.id, highestOrder + 1)
+    }
+
+    const existingActivityCount = trip.days.reduce((sum, day) => sum + day.activities.length, 0)
+    const status = existingActivityCount > 0 || orderedExperiences.length > 0 ? 'planned' : 'draft'
+
+    const updated = await db.$transaction(async (tx) => {
+      const activities = orderedExperiences.map((experience, index) => {
+        const day = trip.days[index % trip.days.length]
+        const order = nextOrderByDay.get(day.id)!
+        const [startTime, endTime] = importTimeSlot(order)
+        nextOrderByDay.set(day.id, order + 1)
+        return {
+          tripDayId: day.id,
+          order,
+          title: experience.name,
+          category: experience.category,
+          startTime,
+          endTime,
+          estimatedCost: experience.estimatedCost,
+          placeId: placeIdByExperience.get(experience.id) ?? null,
+        }
+      })
+
+      await tx.activity.createMany({ data: activities })
+
+      return tx.trip.update({
+        where: { id: trip.id },
+        data: { status },
+        include: tripInclude,
+      })
+    })
+
+    res.status(201).json({ trip: serializeTrip(updated) })
   })
 
   router.post('/:tripId/days/:dayId/activities', async (req, res) => {

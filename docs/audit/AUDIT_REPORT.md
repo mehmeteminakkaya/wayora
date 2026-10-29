@@ -19,7 +19,7 @@ Otomatik kontroller:
 
 - `npm run lint`: geçti
 - `npm run typecheck`: geçti
-- `npm test`: **38 API + 4 web testi geçti**
+- `npm test`: **51 API + 4 web testi geçti**
 - `npm run build`: geçti
 - `npm audit --omit=dev --audit-level=high`: **0 vulnerability**
 - UI audit: 7 viewport (320, 360, 375, 390, 768, 1024, 1440), **0 yatay taşma**, 0 kırık görsel, 0 etiketsiz input/buton
@@ -27,6 +27,7 @@ Otomatik kontroller:
 - API E2E: kayıt, tercih, 10 şehir kataloğu, Berlin planı, rota, AI plan, aktivite ekleme/silme, sahiplik, çıkış, tekrar giriş ve silme, **31/31 kontrol geçti**
 - Mobil UI E2E: kayıt → tercih → rota → plan → aktivite ekleme/silme → çıkış → tekrar giriş, **0 konsol hatası**
 - Keşif UI E2E: 10 şehir, Berlin rehberi, müze filtresi, misafir CTA → giriş → Berlin ön dolu rota, 320/360/768/1440 px, **0 yatay taşma**
+- V2 tasarım E2E: mobil keşif, şehir seçimi, giriş, 3 adımlı yeni rota, seçili deneyimlerin rotaya aktarımı, gün sekmeleri, profil ve çıkış, **0 konsol hatası**
 
 ## 2. Bulgular ve düzeltmeler
 
@@ -182,7 +183,7 @@ Dosyalar: `docs/audit/explore-audit.json`, `docs/audit/explore-mobile.png`,
 ```
 npm run lint       → geçti
 npm run typecheck  → geçti
-npm test           → 38 API + 4 web
+npm test           → 51 API + 4 web
 npm run build      → geçti
 npm audit --omit=dev --audit-level=high → 0 vulnerability
 ```

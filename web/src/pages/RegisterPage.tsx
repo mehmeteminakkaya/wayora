@@ -1,3 +1,4 @@
+import { UserPlus } from 'lucide-react'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -16,7 +17,7 @@ export function RegisterPage() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (password.length < 8) {
-      setError('Şifre en az 8 karakter olmalı')
+      setError('Şifre en az 8 karakter olmalı.')
       return
     }
     setBusy(true)
@@ -32,29 +33,12 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="auth-shell">
-      <aside className="auth-poster">
-        <div>
-          <p className="eyebrow">WAYORA / KAYIT</p>
-          <h1>
-            Yeni
-            <br />
-            rota.
-          </h1>
-          <p>
-            Tercihlerini bir kez seç. Wayora her yeni planda bunları hatırlar; sen sadece şehri ve
-            tarihleri değiştirirsin.
-          </p>
-        </div>
-        <div className="auth-poster-foot">
-          <span>İLGİ ALANLARI</span>
-          <span>BÜTÇE / TEMPO</span>
-        </div>
-      </aside>
-
-      <section className="auth-form">
-        <p className="eyebrow">HESAP / 01</p>
-        <h2>Hesap aç.</h2>
+    <div className="auth-page">
+      <section className="auth-card" aria-labelledby="register-title">
+        <h1 id="register-title">Hesap aç.</h1>
+        <p className="auth-sub">
+          Tercihlerini bir kez seç. Wayora her yeni planda bunları hatırlar.
+        </p>
 
         {error && (
           <p className="notice error" role="alert">
@@ -66,6 +50,7 @@ export function RegisterPage() {
           <label className="field">
             <span>Adın (opsiyonel)</span>
             <input
+              className="input"
               type="text"
               name="name"
               autoComplete="name"
@@ -78,6 +63,7 @@ export function RegisterPage() {
           <label className="field">
             <span>E-posta</span>
             <input
+              className="input"
               type="email"
               name="email"
               autoComplete="email"
@@ -91,6 +77,7 @@ export function RegisterPage() {
           <label className="field">
             <span>Şifre</span>
             <input
+              className="input"
               type="password"
               name="password"
               autoComplete="new-password"
@@ -101,19 +88,31 @@ export function RegisterPage() {
               placeholder="En az 8 karakter"
               aria-describedby="password-hint"
             />
-            <span className="field-hint" id="password-hint">
+            <span className="helper" id="password-hint">
               En az 8 karakter. Boşluk ve Türkçe karakter kullanabilirsin.
             </span>
           </label>
 
-          <button className="button full" type="submit" disabled={busy} aria-busy={busy}>
-            {busy ? 'Hesap açılıyor…' : 'Hesap aç'}
+          <button
+            className="btn btn-primary btn-block"
+            type="submit"
+            disabled={busy}
+            aria-busy={busy}
+          >
+            <UserPlus size={20} strokeWidth={1.75} aria-hidden="true" />
+            {busy ? 'Hesap açılıyor...' : 'Hesap aç'}
           </button>
         </form>
 
-        <p className="auth-switch">
-          Hesabın var mı? <Link to="/login">Giriş yap</Link>
-        </p>
+        <div className="auth-links">
+          <span>Hesabın var mı?</span>
+          <Link
+            to="/login"
+            style={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
+          >
+            Giriş yap
+          </Link>
+        </div>
       </section>
     </div>
   )

@@ -12,79 +12,146 @@
       "scrollWidth": 320,
       "bodyScrollWidth": 320,
       "horizontalOverflow": false,
-      "header": {
-        "x": 0,
-        "y": 0,
-        "width": 320,
-        "height": 60.375,
-        "top": 0,
-        "right": 320,
-        "bottom": 60.375,
-        "left": 0
-      },
-      "heroTitle": {
-        "x": 35.59375,
-        "y": 136.953125,
-        "width": 248.8125,
-        "height": 113.25,
-        "top": 136.953125,
-        "right": 284.40625,
-        "bottom": 250.203125,
-        "left": 35.59375
-      },
-      "heroPhoto": {
-        "x": 34.322914123535156,
-        "y": 257.904296875,
-        "width": 251.35418701171875,
-        "height": 294.50390625,
-        "top": 257.904296875,
-        "right": 285.6771011352539,
-        "bottom": 552.408203125,
-        "left": 34.322914123535156
-      },
-      "bottomNav": {
-        "x": 0,
-        "y": 518,
-        "width": 320,
-        "height": 50,
-        "top": 518,
-        "right": 320,
-        "bottom": 568,
-        "left": 0
-      },
-      "bottomNavDisplay": "grid",
+      "header": null,
+      "heroTitle": null,
+      "heroPhoto": null,
+      "bottomNav": null,
+      "bottomNavDisplay": null,
       "images": [
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Eyfel Kulesi ve Paris silüeti"
+          "alt": "Berlin'de sokak ve şehir görünümü"
         },
         {
-          "src": "/images/street.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Akşam ışığında Paris sokağı"
+          "alt": "Berlin şehir görünümü"
         },
         {
-          "src": "/images/istanbul.jpg",
+          "src": "/images/cities/rome.jpg",
           "loaded": true,
-          "alt": "İstanbul şehir görünümü"
+          "alt": "Roma şehir görünümü"
         },
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/lisbon.jpg",
+          "loaded": true,
+          "alt": "Lizbon şehir görünümü"
+        },
+        {
+          "src": "/images/cities/paris.jpg",
           "loaded": true,
           "alt": "Paris şehir görünümü"
         },
         {
-          "src": "/images/rome.jpg",
+          "src": "/images/cities/barcelona.jpg",
           "loaded": true,
-          "alt": "Roma şehir görünümü"
+          "alt": "Barselona şehir görünümü"
+        },
+        {
+          "src": "/images/cities/amsterdam.jpg",
+          "loaded": true,
+          "alt": "Amsterdam şehir görünümü"
+        },
+        {
+          "src": "/images/cities/istanbul.jpg",
+          "loaded": true,
+          "alt": "İstanbul şehir görünümü"
+        },
+        {
+          "src": "/images/cities/london.jpg",
+          "loaded": true,
+          "alt": "Londra şehir görünümü"
+        },
+        {
+          "src": "/images/cities/prague.jpg",
+          "loaded": true,
+          "alt": "Prag şehir görünümü"
+        },
+        {
+          "src": "/images/cities/vienna.jpg",
+          "loaded": true,
+          "alt": "Viyana şehir görünümü"
         }
       ],
-      "overflow": [],
+      "overflow": [
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 488,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-title-row",
+          "right": 475,
+          "width": 204
+        },
+        {
+          "tag": "H3",
+          "cls": "city-card-title",
+          "right": 333,
+          "width": 62
+        },
+        {
+          "tag": "SPAN",
+          "cls": "city-card-country",
+          "right": 475,
+          "width": 35
+        },
+        {
+          "tag": "P",
+          "cls": "city-card-meta",
+          "right": 475,
+          "width": 204
+        },
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 730,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 729,
+          "width": 228
+        }
+      ],
       "unlabeledButtons": [],
       "missingAlt": [],
       "inputsWithoutLabel": [],
-      "h1": "Bir şehir.Üç gün.",
+      "h1": "Bir şehir seç. Günlerini Wayora sıralasın.",
       "errors": []
     },
     {
@@ -98,79 +165,146 @@
       "scrollWidth": 360,
       "bodyScrollWidth": 360,
       "horizontalOverflow": false,
-      "header": {
-        "x": 0,
-        "y": 0,
-        "width": 360,
-        "height": 60.375,
-        "top": 0,
-        "right": 360,
-        "bottom": 60.375,
-        "left": 0
-      },
-      "heroTitle": {
-        "x": 35.59375,
-        "y": 136.953125,
-        "width": 288.8125,
-        "height": 127.4375,
-        "top": 136.953125,
-        "right": 324.40625,
-        "bottom": 264.390625,
-        "left": 35.59375
-      },
-      "heroPhoto": {
-        "x": 34.11860275268555,
-        "y": 271.9181823730469,
-        "width": 291.7628173828125,
-        "height": 341.8511047363281,
-        "top": 271.9181823730469,
-        "right": 325.88142013549805,
-        "bottom": 613.769287109375,
-        "left": 34.11860275268555
-      },
-      "bottomNav": {
-        "x": 0,
-        "y": 590,
-        "width": 360,
-        "height": 50,
-        "top": 590,
-        "right": 360,
-        "bottom": 640,
-        "left": 0
-      },
-      "bottomNavDisplay": "grid",
+      "header": null,
+      "heroTitle": null,
+      "heroPhoto": null,
+      "bottomNav": null,
+      "bottomNavDisplay": null,
       "images": [
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Eyfel Kulesi ve Paris silüeti"
+          "alt": "Berlin'de sokak ve şehir görünümü"
         },
         {
-          "src": "/images/street.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Akşam ışığında Paris sokağı"
+          "alt": "Berlin şehir görünümü"
         },
         {
-          "src": "/images/istanbul.jpg",
+          "src": "/images/cities/rome.jpg",
           "loaded": true,
-          "alt": "İstanbul şehir görünümü"
+          "alt": "Roma şehir görünümü"
         },
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/lisbon.jpg",
+          "loaded": true,
+          "alt": "Lizbon şehir görünümü"
+        },
+        {
+          "src": "/images/cities/paris.jpg",
           "loaded": true,
           "alt": "Paris şehir görünümü"
         },
         {
-          "src": "/images/rome.jpg",
+          "src": "/images/cities/barcelona.jpg",
           "loaded": true,
-          "alt": "Roma şehir görünümü"
+          "alt": "Barselona şehir görünümü"
+        },
+        {
+          "src": "/images/cities/amsterdam.jpg",
+          "loaded": true,
+          "alt": "Amsterdam şehir görünümü"
+        },
+        {
+          "src": "/images/cities/istanbul.jpg",
+          "loaded": true,
+          "alt": "İstanbul şehir görünümü"
+        },
+        {
+          "src": "/images/cities/london.jpg",
+          "loaded": true,
+          "alt": "Londra şehir görünümü"
+        },
+        {
+          "src": "/images/cities/prague.jpg",
+          "loaded": true,
+          "alt": "Prag şehir görünümü"
+        },
+        {
+          "src": "/images/cities/vienna.jpg",
+          "loaded": true,
+          "alt": "Viyana şehir görünümü"
         }
       ],
-      "overflow": [],
+      "overflow": [
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 488,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-title-row",
+          "right": 475,
+          "width": 204
+        },
+        {
+          "tag": "SPAN",
+          "cls": "city-card-country",
+          "right": 475,
+          "width": 35
+        },
+        {
+          "tag": "P",
+          "cls": "city-card-meta",
+          "right": 475,
+          "width": 204
+        },
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 730,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-title-row",
+          "right": 717,
+          "width": 204
+        }
+      ],
       "unlabeledButtons": [],
       "missingAlt": [],
       "inputsWithoutLabel": [],
-      "h1": "Bir şehir.Üç gün.",
+      "h1": "Bir şehir seç. Günlerini Wayora sıralasın.",
       "errors": []
     },
     {
@@ -184,79 +318,146 @@
       "scrollWidth": 375,
       "bodyScrollWidth": 375,
       "horizontalOverflow": false,
-      "header": {
-        "x": 0,
-        "y": 0,
-        "width": 375,
-        "height": 60.375,
-        "top": 0,
-        "right": 375,
-        "bottom": 60.375,
-        "left": 0
-      },
-      "heroTitle": {
-        "x": 35.59375,
-        "y": 136.953125,
-        "width": 303.8125,
-        "height": 132.75,
-        "top": 136.953125,
-        "right": 339.40625,
-        "bottom": 269.703125,
-        "left": 35.59375
-      },
-      "heroPhoto": {
-        "x": 34.04198455810547,
-        "y": 277.1655578613281,
-        "width": 306.916015625,
-        "height": 359.6064147949219,
-        "top": 277.1655578613281,
-        "right": 340.95800018310547,
-        "bottom": 636.77197265625,
-        "left": 34.04198455810547
-      },
-      "bottomNav": {
-        "x": 0,
-        "y": 617,
-        "width": 375,
-        "height": 50,
-        "top": 617,
-        "right": 375,
-        "bottom": 667,
-        "left": 0
-      },
-      "bottomNavDisplay": "grid",
+      "header": null,
+      "heroTitle": null,
+      "heroPhoto": null,
+      "bottomNav": null,
+      "bottomNavDisplay": null,
       "images": [
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Eyfel Kulesi ve Paris silüeti"
+          "alt": "Berlin'de sokak ve şehir görünümü"
         },
         {
-          "src": "/images/street.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Akşam ışığında Paris sokağı"
+          "alt": "Berlin şehir görünümü"
         },
         {
-          "src": "/images/istanbul.jpg",
+          "src": "/images/cities/rome.jpg",
           "loaded": true,
-          "alt": "İstanbul şehir görünümü"
+          "alt": "Roma şehir görünümü"
         },
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/lisbon.jpg",
+          "loaded": true,
+          "alt": "Lizbon şehir görünümü"
+        },
+        {
+          "src": "/images/cities/paris.jpg",
           "loaded": true,
           "alt": "Paris şehir görünümü"
         },
         {
-          "src": "/images/rome.jpg",
+          "src": "/images/cities/barcelona.jpg",
           "loaded": true,
-          "alt": "Roma şehir görünümü"
+          "alt": "Barselona şehir görünümü"
+        },
+        {
+          "src": "/images/cities/amsterdam.jpg",
+          "loaded": true,
+          "alt": "Amsterdam şehir görünümü"
+        },
+        {
+          "src": "/images/cities/istanbul.jpg",
+          "loaded": true,
+          "alt": "İstanbul şehir görünümü"
+        },
+        {
+          "src": "/images/cities/london.jpg",
+          "loaded": true,
+          "alt": "Londra şehir görünümü"
+        },
+        {
+          "src": "/images/cities/prague.jpg",
+          "loaded": true,
+          "alt": "Prag şehir görünümü"
+        },
+        {
+          "src": "/images/cities/vienna.jpg",
+          "loaded": true,
+          "alt": "Viyana şehir görünümü"
         }
       ],
-      "overflow": [],
+      "overflow": [
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 488,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-title-row",
+          "right": 475,
+          "width": 204
+        },
+        {
+          "tag": "SPAN",
+          "cls": "city-card-country",
+          "right": 475,
+          "width": 35
+        },
+        {
+          "tag": "P",
+          "cls": "city-card-meta",
+          "right": 475,
+          "width": 204
+        },
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 730,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-title-row",
+          "right": 717,
+          "width": 204
+        }
+      ],
       "unlabeledButtons": [],
       "missingAlt": [],
       "inputsWithoutLabel": [],
-      "h1": "Bir şehir.Üç gün.",
+      "h1": "Bir şehir seç. Günlerini Wayora sıralasın.",
       "errors": []
     },
     {
@@ -270,79 +471,146 @@
       "scrollWidth": 390,
       "bodyScrollWidth": 390,
       "horizontalOverflow": false,
-      "header": {
-        "x": 0,
-        "y": 0,
-        "width": 390,
-        "height": 60.375,
-        "top": 0,
-        "right": 390,
-        "bottom": 60.375,
-        "left": 0
-      },
-      "heroTitle": {
-        "x": 35.59375,
-        "y": 136.953125,
-        "width": 318.8125,
-        "height": 138.03125,
-        "top": 136.953125,
-        "right": 354.40625,
-        "bottom": 274.984375,
-        "left": 35.59375
-      },
-      "heroPhoto": {
-        "x": 33.96536636352539,
-        "y": 282.3816833496094,
-        "width": 322.06927490234375,
-        "height": 377.3616027832031,
-        "top": 282.3816833496094,
-        "right": 356.03464126586914,
-        "bottom": 659.7432861328125,
-        "left": 33.96536636352539
-      },
-      "bottomNav": {
-        "x": 0,
-        "y": 794,
-        "width": 390,
-        "height": 50,
-        "top": 794,
-        "right": 390,
-        "bottom": 844,
-        "left": 0
-      },
-      "bottomNavDisplay": "grid",
+      "header": null,
+      "heroTitle": null,
+      "heroPhoto": null,
+      "bottomNav": null,
+      "bottomNavDisplay": null,
       "images": [
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Eyfel Kulesi ve Paris silüeti"
+          "alt": "Berlin'de sokak ve şehir görünümü"
         },
         {
-          "src": "/images/street.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Akşam ışığında Paris sokağı"
+          "alt": "Berlin şehir görünümü"
         },
         {
-          "src": "/images/istanbul.jpg",
+          "src": "/images/cities/rome.jpg",
           "loaded": true,
-          "alt": "İstanbul şehir görünümü"
+          "alt": "Roma şehir görünümü"
         },
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/lisbon.jpg",
+          "loaded": true,
+          "alt": "Lizbon şehir görünümü"
+        },
+        {
+          "src": "/images/cities/paris.jpg",
           "loaded": true,
           "alt": "Paris şehir görünümü"
         },
         {
-          "src": "/images/rome.jpg",
+          "src": "/images/cities/barcelona.jpg",
           "loaded": true,
-          "alt": "Roma şehir görünümü"
+          "alt": "Barselona şehir görünümü"
+        },
+        {
+          "src": "/images/cities/amsterdam.jpg",
+          "loaded": true,
+          "alt": "Amsterdam şehir görünümü"
+        },
+        {
+          "src": "/images/cities/istanbul.jpg",
+          "loaded": true,
+          "alt": "İstanbul şehir görünümü"
+        },
+        {
+          "src": "/images/cities/london.jpg",
+          "loaded": true,
+          "alt": "Londra şehir görünümü"
+        },
+        {
+          "src": "/images/cities/prague.jpg",
+          "loaded": true,
+          "alt": "Prag şehir görünümü"
+        },
+        {
+          "src": "/images/cities/vienna.jpg",
+          "loaded": true,
+          "alt": "Viyana şehir görünümü"
         }
       ],
-      "overflow": [],
+      "overflow": [
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 488,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 487,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-title-row",
+          "right": 475,
+          "width": 204
+        },
+        {
+          "tag": "SPAN",
+          "cls": "city-card-country",
+          "right": 475,
+          "width": 35
+        },
+        {
+          "tag": "P",
+          "cls": "city-card-meta",
+          "right": 475,
+          "width": 204
+        },
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 730,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 729,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-title-row",
+          "right": 717,
+          "width": 204
+        }
+      ],
       "unlabeledButtons": [],
       "missingAlt": [],
       "inputsWithoutLabel": [],
-      "h1": "Bir şehir.Üç gün.",
+      "h1": "Bir şehir seç. Günlerini Wayora sıralasın.",
       "errors": []
     },
     {
@@ -356,79 +624,146 @@
       "scrollWidth": 768,
       "bodyScrollWidth": 768,
       "horizontalOverflow": false,
-      "header": {
-        "x": 0,
-        "y": 0,
-        "width": 768,
-        "height": 68,
-        "top": 0,
-        "right": 768,
-        "bottom": 68,
-        "left": 0
-      },
-      "heroTitle": {
-        "x": 63.4375,
-        "y": 178.171875,
-        "width": 641.125,
-        "height": 152.25,
-        "top": 178.171875,
-        "right": 704.5625,
-        "bottom": 330.421875,
-        "left": 63.4375
-      },
-      "heroPhoto": {
-        "x": 58.073638916015625,
-        "y": 380.34130859375,
-        "width": 526.727783203125,
-        "height": 628.0986328125,
-        "top": 380.34130859375,
-        "right": 584.8014221191406,
-        "bottom": 1008.43994140625,
-        "left": 58.073638916015625
-      },
-      "bottomNav": {
-        "x": 0,
-        "y": 0,
-        "width": 0,
-        "height": 0,
-        "top": 0,
-        "right": 0,
-        "bottom": 0,
-        "left": 0
-      },
-      "bottomNavDisplay": "none",
+      "header": null,
+      "heroTitle": null,
+      "heroPhoto": null,
+      "bottomNav": null,
+      "bottomNavDisplay": null,
       "images": [
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Eyfel Kulesi ve Paris silüeti"
+          "alt": "Berlin'de sokak ve şehir görünümü"
         },
         {
-          "src": "/images/street.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Akşam ışığında Paris sokağı"
+          "alt": "Berlin şehir görünümü"
         },
         {
-          "src": "/images/istanbul.jpg",
+          "src": "/images/cities/rome.jpg",
           "loaded": true,
-          "alt": "İstanbul şehir görünümü"
+          "alt": "Roma şehir görünümü"
         },
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/lisbon.jpg",
+          "loaded": true,
+          "alt": "Lizbon şehir görünümü"
+        },
+        {
+          "src": "/images/cities/paris.jpg",
           "loaded": true,
           "alt": "Paris şehir görünümü"
         },
         {
-          "src": "/images/rome.jpg",
+          "src": "/images/cities/barcelona.jpg",
           "loaded": true,
-          "alt": "Roma şehir görünümü"
+          "alt": "Barselona şehir görünümü"
+        },
+        {
+          "src": "/images/cities/amsterdam.jpg",
+          "loaded": true,
+          "alt": "Amsterdam şehir görünümü"
+        },
+        {
+          "src": "/images/cities/istanbul.jpg",
+          "loaded": true,
+          "alt": "İstanbul şehir görünümü"
+        },
+        {
+          "src": "/images/cities/london.jpg",
+          "loaded": true,
+          "alt": "Londra şehir görünümü"
+        },
+        {
+          "src": "/images/cities/prague.jpg",
+          "loaded": true,
+          "alt": "Prag şehir görünümü"
+        },
+        {
+          "src": "/images/cities/vienna.jpg",
+          "loaded": true,
+          "alt": "Viyana şehir görünümü"
         }
       ],
-      "overflow": [],
+      "overflow": [
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 980,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 979,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 979,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 979,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-title-row",
+          "right": 967,
+          "width": 204
+        },
+        {
+          "tag": "H3",
+          "cls": "city-card-title",
+          "right": 817,
+          "width": 54
+        },
+        {
+          "tag": "SPAN",
+          "cls": "city-card-country",
+          "right": 967,
+          "width": 41
+        },
+        {
+          "tag": "P",
+          "cls": "city-card-meta",
+          "right": 967,
+          "width": 204
+        },
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 1222,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 1221,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 1221,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 1221,
+          "width": 228
+        }
+      ],
       "unlabeledButtons": [],
       "missingAlt": [],
       "inputsWithoutLabel": [],
-      "h1": "Bir şehir.Üç gün.",
+      "h1": "Bir şehir seç. Günlerini Wayora sıralasın.",
       "errors": []
     },
     {
@@ -442,79 +777,146 @@
       "scrollWidth": 1009,
       "bodyScrollWidth": 1009,
       "horizontalOverflow": false,
-      "header": {
-        "x": 0,
-        "y": 0,
-        "width": 1009,
-        "height": 68,
-        "top": 0,
-        "right": 1009,
-        "bottom": 68,
-        "left": 0
-      },
-      "heroTitle": {
-        "x": 82.953125,
-        "y": 190.96875,
-        "width": 419.703125,
-        "height": 202.96875,
-        "top": 190.96875,
-        "right": 502.65625,
-        "bottom": 393.9375,
-        "left": 82.953125
-      },
-      "heroPhoto": {
-        "x": 550.224365234375,
-        "y": 166.18096923828125,
-        "width": 355.42626953125,
-        "height": 423.8255615234375,
-        "top": 166.18096923828125,
-        "right": 905.650634765625,
-        "bottom": 590.0065307617188,
-        "left": 550.224365234375
-      },
-      "bottomNav": {
-        "x": 0,
-        "y": 0,
-        "width": 0,
-        "height": 0,
-        "top": 0,
-        "right": 0,
-        "bottom": 0,
-        "left": 0
-      },
-      "bottomNavDisplay": "none",
+      "header": null,
+      "heroTitle": null,
+      "heroPhoto": null,
+      "bottomNav": null,
+      "bottomNavDisplay": null,
       "images": [
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Eyfel Kulesi ve Paris silüeti"
+          "alt": "Berlin'de sokak ve şehir görünümü"
         },
         {
-          "src": "/images/street.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Akşam ışığında Paris sokağı"
+          "alt": "Berlin şehir görünümü"
         },
         {
-          "src": "/images/istanbul.jpg",
+          "src": "/images/cities/rome.jpg",
           "loaded": true,
-          "alt": "İstanbul şehir görünümü"
+          "alt": "Roma şehir görünümü"
         },
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/lisbon.jpg",
+          "loaded": true,
+          "alt": "Lizbon şehir görünümü"
+        },
+        {
+          "src": "/images/cities/paris.jpg",
           "loaded": true,
           "alt": "Paris şehir görünümü"
         },
         {
-          "src": "/images/rome.jpg",
+          "src": "/images/cities/barcelona.jpg",
           "loaded": true,
-          "alt": "Roma şehir görünümü"
+          "alt": "Barselona şehir görünümü"
+        },
+        {
+          "src": "/images/cities/amsterdam.jpg",
+          "loaded": true,
+          "alt": "Amsterdam şehir görünümü"
+        },
+        {
+          "src": "/images/cities/istanbul.jpg",
+          "loaded": true,
+          "alt": "İstanbul şehir görünümü"
+        },
+        {
+          "src": "/images/cities/london.jpg",
+          "loaded": true,
+          "alt": "Londra şehir görünümü"
+        },
+        {
+          "src": "/images/cities/prague.jpg",
+          "loaded": true,
+          "alt": "Prag şehir görünümü"
+        },
+        {
+          "src": "/images/cities/vienna.jpg",
+          "loaded": true,
+          "alt": "Viyana şehir görünümü"
         }
       ],
-      "overflow": [],
+      "overflow": [
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 1222,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 1221,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 1221,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 1221,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-title-row",
+          "right": 1209,
+          "width": 204
+        },
+        {
+          "tag": "H3",
+          "cls": "city-card-title",
+          "right": 1114,
+          "width": 109
+        },
+        {
+          "tag": "SPAN",
+          "cls": "city-card-country",
+          "right": 1209,
+          "width": 49
+        },
+        {
+          "tag": "P",
+          "cls": "city-card-meta",
+          "right": 1209,
+          "width": 204
+        },
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 1464,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 1463,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 1463,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 1463,
+          "width": 228
+        }
+      ],
       "unlabeledButtons": [],
       "missingAlt": [],
       "inputsWithoutLabel": [],
-      "h1": "Bir şehir.Üç gün.",
+      "h1": "Bir şehir seç. Günlerini Wayora sıralasın.",
       "errors": []
     },
     {
@@ -528,79 +930,146 @@
       "scrollWidth": 1425,
       "bodyScrollWidth": 1425,
       "horizontalOverflow": false,
-      "header": {
-        "x": 0,
-        "y": 0,
-        "width": 1425,
-        "height": 68,
-        "top": 0,
-        "right": 1425,
-        "bottom": 68,
-        "left": 0
-      },
-      "heroTitle": {
-        "x": 139.296875,
-        "y": 195.78125,
-        "width": 573.671875,
-        "height": 285.4375,
-        "top": 195.78125,
-        "right": 712.96875,
-        "bottom": 481.21875,
-        "left": 139.296875
-      },
-      "heroPhoto": {
-        "x": 771.9299926757812,
-        "y": 169.81454467773438,
-        "width": 494.79620361328125,
-        "height": 590.0272216796875,
-        "top": 169.81454467773438,
-        "right": 1266.7261962890625,
-        "bottom": 759.8417663574219,
-        "left": 771.9299926757812
-      },
-      "bottomNav": {
-        "x": 0,
-        "y": 0,
-        "width": 0,
-        "height": 0,
-        "top": 0,
-        "right": 0,
-        "bottom": 0,
-        "left": 0
-      },
-      "bottomNavDisplay": "none",
+      "header": null,
+      "heroTitle": null,
+      "heroPhoto": null,
+      "bottomNav": null,
+      "bottomNavDisplay": null,
       "images": [
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Eyfel Kulesi ve Paris silüeti"
+          "alt": "Berlin'de sokak ve şehir görünümü"
         },
         {
-          "src": "/images/street.jpg",
+          "src": "/images/cities/berlin.jpg",
           "loaded": true,
-          "alt": "Akşam ışığında Paris sokağı"
+          "alt": "Berlin şehir görünümü"
         },
         {
-          "src": "/images/istanbul.jpg",
+          "src": "/images/cities/rome.jpg",
           "loaded": true,
-          "alt": "İstanbul şehir görünümü"
+          "alt": "Roma şehir görünümü"
         },
         {
-          "src": "/images/paris.jpg",
+          "src": "/images/cities/lisbon.jpg",
+          "loaded": true,
+          "alt": "Lizbon şehir görünümü"
+        },
+        {
+          "src": "/images/cities/paris.jpg",
           "loaded": true,
           "alt": "Paris şehir görünümü"
         },
         {
-          "src": "/images/rome.jpg",
+          "src": "/images/cities/barcelona.jpg",
           "loaded": true,
-          "alt": "Roma şehir görünümü"
+          "alt": "Barselona şehir görünümü"
+        },
+        {
+          "src": "/images/cities/amsterdam.jpg",
+          "loaded": true,
+          "alt": "Amsterdam şehir görünümü"
+        },
+        {
+          "src": "/images/cities/istanbul.jpg",
+          "loaded": true,
+          "alt": "İstanbul şehir görünümü"
+        },
+        {
+          "src": "/images/cities/london.jpg",
+          "loaded": true,
+          "alt": "Londra şehir görünümü"
+        },
+        {
+          "src": "/images/cities/prague.jpg",
+          "loaded": true,
+          "alt": "Prag şehir görünümü"
+        },
+        {
+          "src": "/images/cities/vienna.jpg",
+          "loaded": true,
+          "alt": "Viyana şehir görünümü"
         }
       ],
-      "overflow": [],
+      "overflow": [
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 1617,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 1616,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 1616,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 1616,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-title-row",
+          "right": 1604,
+          "width": 204
+        },
+        {
+          "tag": "H3",
+          "cls": "city-card-title",
+          "right": 1525,
+          "width": 126
+        },
+        {
+          "tag": "SPAN",
+          "cls": "city-card-country",
+          "right": 1604,
+          "width": 56
+        },
+        {
+          "tag": "P",
+          "cls": "city-card-meta",
+          "right": 1604,
+          "width": 204
+        },
+        {
+          "tag": "A",
+          "cls": "city-card",
+          "right": 1859,
+          "width": 230
+        },
+        {
+          "tag": "DIV",
+          "cls": "photo city-card-media",
+          "right": 1858,
+          "width": 228
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "right": 1858,
+          "width": 228
+        },
+        {
+          "tag": "DIV",
+          "cls": "city-card-body",
+          "right": 1858,
+          "width": 228
+        }
+      ],
       "unlabeledButtons": [],
       "missingAlt": [],
       "inputsWithoutLabel": [],
-      "h1": "Bir şehir.Üç gün.",
+      "h1": "Bir şehir seç. Günlerini Wayora sıralasın.",
       "errors": []
     }
   ]

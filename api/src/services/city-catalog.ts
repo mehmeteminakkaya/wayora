@@ -30,6 +30,7 @@ export type CitySummary = {
   currency: string
   experienceCount: number
   averageCost: number
+  averageDailyCost: number
   minCost: number
   tags: string[]
 }
@@ -52,6 +53,21 @@ export type CityExperienceResponse = {
   openingHours: string | null
   bookingUrl: string | null
 }
+
+export type CityExperienceSearchResult = CityExperienceResponse & {
+  citySlug: string
+  cityName: string
+}
+
+export type CitySearchResponse = {
+  cities: CitySummary[]
+  experiences: CityExperienceSearchResult[]
+}
+
+const CITY_SEARCH_LIMIT = 6
+const EXPERIENCE_SEARCH_LIMIT = 8
+
+const aliasesBySlug = new Map(CITY_CATALOG.map((city) => [city.slug, city.aliases]))
 
 function numberValue(value: unknown): number {
   if (typeof value === 'number') return value
@@ -86,6 +102,8 @@ export function summarizeCity(
     currency: city.currency,
     experienceCount: experiences.length,
     averageCost,
+    // Günlük plan varsayımı: günde üç ana deneyim.
+    averageDailyCost: roundMoney(averageCost * 3),
     minCost: costs.length ? Math.min(...costs) : 0,
     tags: uniqueTags(experiences),
   }
@@ -221,4 +239,111 @@ export function staticCities(): Array<CitySummary & { experiences: CityExperienc
     }))
     return { ...staticSummary(city), experiences }
   })
+}
+
+/** "Müze" ile "muze" aramalarını eşleştirmek için metni sadeleştirir. */
+function foldSearchText(value: string): string {
+  return value
+    .toLocaleLowerCase('tr-TR')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ı/g, 'i')
+}
+
+// 4: tam ad eşleşmesi, 3: adın başlangıcı, 2: ad içinde, 1: açıklama/etiket içinde.
+function matchScore(needle: string, primary: string[], secondary: string[]): number {
+  let score = 0
+  for (const value of primary) {
+    const folded = foldSearchText(value)
+    if (folded === needle) return 4
+    if (folded.startsWith(needle)) score = Math.max(score, 3)
+    else if (folded.includes(needle)) score = Math.max(score, 2)
+  }
+  for (const value of secondary) {
+    if (foldSearchText(value).includes(needle)) score = Math.max(score, 1)
+  }
+  return score
+}
+
+function searchCatalogEntries(
+  cities: Array<CitySummary & { experiences: CityExperienceResponse[] }>,
+  query: string,
+): CitySearchResponse {
+  const needle = foldSearchText(query.trim())
+  if (!needle) return { cities: [], experiences: [] }
+
+  const cityResults: Array<{ score: number; city: CitySummary }> = []
+  const experienceResults: Array<{ score: number; experience: CityExperienceSearchResult }> = []
+
+  for (const city of cities) {
+    const aliases = aliasesBySlug.get(city.slug) ?? []
+    const cityScore = matchScore(needle, [city.name, ...aliases], [city.country])
+    if (cityScore > 0) {
+      const { experiences: _experiences, ...summary } = city
+      cityResults.push({ score: cityScore, city: summary })
+    }
+
+    for (const experience of city.experiences) {
+      const score = matchScore(
+        needle,
+        [experience.name],
+        [
+          experience.description,
+          experience.neighborhood ?? '',
+          experience.category,
+          ...experience.tags,
+        ],
+      )
+      if (score > 0) {
+        experienceResults.push({
+          score,
+          experience: { citySlug: city.slug, cityName: city.name, ...experience },
+        })
+      }
+    }
+  }
+
+  cityResults.sort((a, b) => b.score - a.score || a.city.name.localeCompare(b.city.name, 'tr'))
+  experienceResults.sort(
+    (a, b) => b.score - a.score || a.experience.name.localeCompare(b.experience.name, 'tr'),
+  )
+
+  return {
+    cities: cityResults.slice(0, CITY_SEARCH_LIMIT).map((result) => result.city),
+    experiences: experienceResults
+      .slice(0, EXPERIENCE_SEARCH_LIMIT)
+      .map((result) => result.experience),
+  }
+}
+
+export function searchStaticCities(query: string): CitySearchResponse {
+  return searchCatalogEntries(staticCities(), query)
+}
+
+/**
+ * Şehir ve deneyim araması. Katalog 10 şehir × 10 deneyimlik sabit bir küme olduğu için
+ * eşleştirme Türkçe katlama ile bellekte yapılır. DB boş veya erişilemezse statik katalog kullanılır.
+ */
+export async function searchCityCatalog(db: Db, query: string): Promise<CitySearchResponse> {
+  if (!query.trim()) return { cities: [], experiences: [] }
+
+  try {
+    const cities = await db.city.findMany({
+      orderBy: { sortOrder: 'asc' },
+      include: { experiences: { orderBy: { sortOrder: 'asc' } } },
+    })
+    if (cities.length > 0) {
+      return searchCatalogEntries(
+        cities.map((city) => ({
+          ...summarizeCity(city, city.experiences),
+          experiences: city.experiences.map(serializeExperience),
+        })),
+        query,
+      )
+    }
+  } catch {
+    // Şehir tabloları yoksa/erişilemezse statik kataloğa düş.
+  }
+
+  return searchStaticCities(query)
 }

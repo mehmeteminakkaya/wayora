@@ -1,0 +1,43 @@
+{
+  "search": {
+    "cards": 1,
+    "name": "Berlin"
+  },
+  "selection": {
+    "count": "2 durak seçili€55 kişi başı",
+    "href": "/trips/new?destination=%C4%B0stanbul&experiences=484cf6e8-875d-4ccb-b61e-680d364eb359%2C14206431-539c-412c-8e75-cf95cdfb16f8"
+  },
+  "prefilled": {
+    "path": "/trips/new",
+    "search": "?destination=%C4%B0stanbul&experiences=484cf6e8-875d-4ccb-b61e-680d364eb359%2C14206431-539c-412c-8e75-cf95cdfb16f8",
+    "destination": "İstanbul",
+    "selectedNotice": true
+  },
+  "trip": {
+    "path": "/trips/f52c025c-b568-4862-b5ab-eaf2f5fce2cf",
+    "heading": "İstanbul rotası",
+    "days": 3,
+    "activities": 2,
+    "status": false,
+    "overflow": false
+  },
+  "secondDay": {
+    "active": "026 Kas",
+    "activities": 1
+  },
+  "trips": {
+    "path": "/trips",
+    "cards": 15,
+    "overflow": false
+  },
+  "profile": {
+    "heading": "Hesabın",
+    "preferences": true,
+    "overflow": false
+  },
+  "logout": {
+    "path": "/",
+    "loginLink": true
+  },
+  "errors": []
+}

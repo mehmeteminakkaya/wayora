@@ -84,6 +84,7 @@ export type CitySummary = {
   currency: string
   experienceCount: number
   averageCost: number
+  averageDailyCost: number
   minCost: number
   tags: string[]
 }
@@ -109,6 +110,16 @@ export type CityExperience = {
 
 export type CityDetail = CitySummary & {
   experiences: CityExperience[]
+}
+
+export type CitySearchExperience = CityExperience & {
+  citySlug: string
+  cityName: string
+}
+
+export type CitySearchResult = {
+  cities: CitySummary[]
+  experiences: CitySearchExperience[]
 }
 
 export type CreateTripInput = {
@@ -173,6 +184,9 @@ export const api = {
   getCity: (slug: string) =>
     request<{ city: CityDetail }>(`/api/cities/${encodeURIComponent(slug)}`),
 
+  searchCities: (query: string) =>
+    request<CitySearchResult>(`/api/cities/search?q=${encodeURIComponent(query)}`),
+
   register: (input: { email: string; password: string; name?: string }) =>
     request<{ user: User }>('/api/auth/register', {
       method: 'POST',
@@ -212,6 +226,18 @@ export const api = {
   generateTrip: (id: string) =>
     request<{ trip: Trip; meta: GenerationMeta }>(`/api/trips/${id}/generate`, {
       method: 'POST',
+    }),
+
+  importExperiences: (tripId: string, experienceIds: string[]) =>
+    request<{ trip: Trip }>(`/api/trips/${tripId}/experiences`, {
+      method: 'POST',
+      body: JSON.stringify({ experienceIds }),
+    }),
+
+  reorderActivity: (id: string, order: number) =>
+    request<{ activity: Activity }>(`/api/activities/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ order }),
     }),
 
   addActivity: (tripId: string, dayId: string, input: CreateActivityInput) =>

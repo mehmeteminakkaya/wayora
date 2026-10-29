@@ -1,249 +1,175 @@
-import { Link } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext'
+import { ArrowRight, Search } from 'lucide-react'
+import { useState } from 'react'
+import type { FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Photo } from '../components/Photo'
+import { cityPhoto, cityPhotoLabel, citySlug } from '../lib/photos'
 
-const stops = [
-  { time: '09:00', title: 'Louvre / Merdivenler', price: '22 €', checked: true },
-  { time: '12:30', title: 'Latin Quarter / Pazarlar', price: '35 €', checked: true },
-  { time: '15:00', title: 'Luxembourg Bahçesi', price: 'Ücretsiz', checked: false },
+const CITIES = [
+  { name: 'Berlin', country: 'Almanya' },
+  { name: 'Roma', country: 'İtalya' },
+  { name: 'Lizbon', country: 'Portekiz' },
+  { name: 'Paris', country: 'Fransa' },
+  { name: 'Barselona', country: 'İspanya' },
+  { name: 'Amsterdam', country: 'Hollanda' },
+  { name: 'İstanbul', country: 'Türkiye' },
+  { name: 'Londra', country: 'Birleşik Krallık' },
+  { name: 'Prag', country: 'Çekya' },
+  { name: 'Viyana', country: 'Avusturya' },
 ]
 
-const dayNotes = [
+const STEPS = [
   {
-    stamp: 'GÜN 01',
-    title: 'Müze, mahalle, bahçe.',
-    meta: '3 durak · 09:00–17:00',
-    rows: [
-      { time: '09:00', title: 'Louvre', price: '22 €' },
-      { time: '12:30', title: 'Latin Quarter', price: '35 €' },
-      { time: '15:00', title: 'Luxembourg', price: 'Ücretsiz' },
-    ],
-    hand: 'sabah sakin.',
+    title: 'Şehri seç',
+    text: 'Berlin, Roma, Lizbon ve yedi şehir daha. Tarihlerini sen belirle.',
   },
   {
-    stamp: 'GÜN 02',
-    title: 'Eyfel, sokaklar, akşam.',
-    meta: '3 durak · 10:00–20:00',
-    rows: [
-      { time: '10:00', title: 'Eyfel Kulesi', price: '29 €' },
-      { time: '13:00', title: 'Montmartre', price: 'Ücretsiz' },
-      { time: '18:30', title: 'Seine kıyısı', price: 'Ücretsiz' },
-    ],
-    hand: 'gün batımını kaçırma.',
+    title: 'Tercihlerini söyle',
+    text: 'İlgi alanların, bütçen ve tempon üç kısa adımda kaydedilir.',
   },
   {
-    stamp: 'GÜN 03',
-    title: 'Pazar, kahve, dönüş.',
-    meta: '2 durak · 09:30–15:00',
-    rows: [
-      { time: '09:30', title: 'Borough Market', price: '20 €' },
-      { time: '13:00', title: 'Galeries Lafayette', price: 'Ücretsiz' },
-    ],
-    hand: 'çantada yer bırak.',
+    title: 'Planını al',
+    text: 'Wayora günleri saat saat sıralar. İstediğin durağı değiştirirsin.',
   },
 ]
 
-const cities = [
-  { name: 'İstanbul', image: '/images/istanbul.jpg', label: '3 GÜN / 7 DURAK' },
-  { name: 'Paris', image: '/images/paris.jpg', label: '3 GÜN / 9 DURAK' },
-  { name: 'Roma', image: '/images/rome.jpg', label: '2 GÜN / 6 DURAK' },
+const SAMPLE_STOPS = [
+  { time: '09:30', title: 'East Side Gallery', price: 'Ücretsiz' },
+  { time: '12:30', title: 'Markthalle Neun', price: '14 €' },
+  { time: '15:00', title: 'Tempelhofer Feld', price: 'Ücretsiz' },
 ]
 
 export function LandingPage() {
-  const { user } = useAuth()
+  const navigate = useNavigate()
+  const [destination, setDestination] = useState('')
+
+  function handleSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const city = destination.trim()
+    navigate(city ? `/trips/new?destination=${encodeURIComponent(city)}` : '/trips/new')
+  }
 
   return (
-    <div className="landing">
-      <section className="hero">
-        <div className="hero-copy">
-          <p className="eyebrow">SEYAHAT PLANLAMA / 01</p>
-          <h1>
-            Bir şehir.
-            <span>Üç gün.</span>
+    <div className="landing-page">
+      <section className="landing-hero page" aria-labelledby="landing-title">
+        <div className="landing-hero-copy">
+          <p className="eyebrow landing-kicker">SEYAHAT PLANLAMA</p>
+          <h1 className="landing-title" id="landing-title">
+            Bir şehir seç. Günlerini Wayora sıralasın.
           </h1>
+          <p className="landing-lead">
+            İlgi alanlarını, bütçeni ve temponu söyle. Wayora şehri günlere, günleri saatlere
+            böler. Planı hazır bırakmaz, düzenlemen için eline verir.
+          </p>
+
+          <form className="hero-search" role="search" onSubmit={handleSearch}>
+            <label className="field-label" htmlFor="landing-city">
+              Şehir
+            </label>
+            <div className="search-box">
+              <Search size={24} strokeWidth={1.75} aria-hidden="true" />
+              <input
+                className="input"
+                id="landing-city"
+                name="city"
+                type="text"
+                autoComplete="off"
+                aria-label="Şehir ara"
+                value={destination}
+                onChange={(event) => setDestination(event.target.value)}
+                placeholder="Şehir ara: Berlin, Roma, Lizbon..."
+              />
+            </div>
+            <button className="btn btn-primary btn-block" type="submit">
+              Planı başlat
+              <ArrowRight size={20} strokeWidth={1.75} aria-hidden="true" />
+            </button>
+          </form>
+
+          <p className="hero-stat">10 şehir · 100 deneyim · ücretsiz</p>
         </div>
 
-        <div className="hero-visual">
-          <p className="hand hero-hand">
-            bütçe 500 € <span className="hand-arrow" aria-hidden="true">↙</span>
-          </p>
-          <figure className="photo-frame hero-photo">
-            <img src="/images/paris.jpg" alt="Eyfel Kulesi ve Paris silüeti" />
-            <span className="film-code film-code-left" aria-hidden="true">
-              253.35.3'30f
-            </span>
-            <span className="film-code film-code-right" aria-hidden="true">
-              18.20.06'27
-            </span>
-            <figcaption className="photo-caption">
-              <span>PARİS // 14:02</span>
-              <span>48.8584 / 2.2945</span>
-            </figcaption>
-          </figure>
+        <div className="landing-hero-media">
+          <Photo
+            src={cityPhoto('Berlin')}
+            alt="Berlin'de sokak ve şehir görünümü"
+            label={cityPhotoLabel('Berlin')}
+          />
+        </div>
+      </section>
 
-          <div className="route-card" aria-label="Örnek günlük rota">
-            <div className="route-card-head">
-              <span className="mono">01 / GÜNLÜK ROTA</span>
-              <span className="stamp">03 GÜN</span>
-            </div>
-            {stops.map((stop) => (
-              <div className="route-stop" key={stop.time}>
-                <span className="route-check" aria-hidden="true">
-                  {stop.checked ? '✓' : ''}
+      <div className="page">
+        <section className="section" aria-labelledby="how-title">
+          <div className="section-head">
+            <h2 id="how-title">Nasıl çalışır</h2>
+          </div>
+          <div className="how-list">
+            {STEPS.map((step, index) => (
+              <article className="how-item" key={step.title}>
+                <span className="how-number" aria-hidden="true">
+                  {String(index + 1).padStart(2, '0')}
                 </span>
-                <span className="route-time">{stop.time}</span>
-                <span className="route-title">{stop.title}</span>
-                <span className="route-price">{stop.price}</span>
+                <div>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="cities-title">
+          <div className="section-head">
+            <h2 id="cities-title">Şehirler</h2>
+            <Link
+              className="section-link"
+              to="/kesfet"
+              style={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
+            >
+              Tüm şehirler
+            </Link>
+          </div>
+          <div className="city-rail">
+            {CITIES.map((city) => (
+              <Link className="city-card" to={`/kesfet/${citySlug(city.name)}`} key={city.name}>
+                <Photo
+                  className="city-card-media"
+                  src={cityPhoto(city.name)}
+                  alt={`${city.name} şehir görünümü`}
+                  label={cityPhotoLabel(city.name)}
+                />
+                <div className="city-card-body">
+                  <div className="city-card-title-row">
+                    <h3 className="city-card-title">{city.name}</h3>
+                    <span className="city-card-country">{city.country}</span>
+                  </div>
+                  <p className="city-card-meta">10 deneyim</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="sample-title">
+          <div className="section-head">
+            <h2 id="sample-title">Örnek bir gün</h2>
+            <span className="small muted">Berlin · 3 durak</span>
+          </div>
+          <div className="sample-day" aria-label="Berlin için örnek gün planı">
+            <div className="sample-day-head">
+              <span>BERLİN / GÜN 01</span>
+              <span>09:30-17:00</span>
+            </div>
+            {SAMPLE_STOPS.map((stop) => (
+              <div className="sample-row" key={stop.time}>
+                <time>{stop.time}</time>
+                <strong>{stop.title}</strong>
+                <span>{stop.price}</span>
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="hero-details">
-          <p className="hero-lead">
-            Wayora; ilgi alanlarını, bütçeni ve temponu okur. Şehri günlere, günleri saatlere
-            böler. Planı hazır bırakmaz, düzenlemen için eline verir.
-          </p>
-          <div className="hero-actions">
-            <Link className="button large" to={user ? '/trips/new' : '/register'}>
-              {user ? 'Rotanı çiz' : 'İlk rotayı çiz'}
-            </Link>
-            <a className="text-link" href="#gunluk-rota">
-              Örnek plana bak
-            </a>
-          </div>
-          <p className="hand hero-note">üç gün yeter.</p>
-        </div>
-      </section>
-
-      <div className="route-strip" aria-hidden="true">
-        <span>İSTANBUL</span>
-        <span>PARİS</span>
-        <span>ROMA</span>
-        <span>LİZBON</span>
-        <span>AMSTERDAM</span>
+        </section>
       </div>
-
-      <section className="notebook" id="gunluk-rota">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">02 / DEFTER</p>
-            <h2>Günün notları.</h2>
-          </div>
-          <p>Her gün bir sayfa. Saatler, duraklar ve maliyetler aynı yerde.</p>
-        </div>
-
-        <div className="notebook-grid">
-          {dayNotes.map((day) => (
-            <article className="note-card" key={day.stamp}>
-              <span className="stamp">{day.stamp}</span>
-              <h3>{day.title}</h3>
-              <p className="note-meta">{day.meta}</p>
-              {day.rows.map((row) => (
-                <div className="note-row" key={row.time}>
-                  <span className="route-check" aria-hidden="true">
-                    ✓
-                  </span>
-                  <span className="route-time">{row.time}</span>
-                  <span className="route-title">{row.title}</span>
-                  <span className="route-price">{row.price}</span>
-                </div>
-              ))}
-              <div className="note-foot">
-                <span className="mono">{day.rows.length} DURAK</span>
-                <span className="hand">{day.hand}</span>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="photo-break">
-        <img src="/images/street.jpg" alt="Akşam ışığında Paris sokağı" />
-        <div className="photo-overlay">
-          <p className="eyebrow">03 / ŞEHİR NOTLARI</p>
-          <h2>Sessiz keşif.</h2>
-          <p>
-            Kalabalığın olmadığı saatleri plana ekle. Wayora durakları sıraya koyar; sen sadece
-            yürürsün.
-          </p>
-        </div>
-        <aside className="paper-note">
-          <p className="hand">notlar: sabah erken çık, ara sokaklara gir.</p>
-        </aside>
-      </section>
-
-      <section className="budget-section">
-        <div>
-          <p className="eyebrow">04 / BÜTÇE</p>
-          <h2>500 € nereye gider?</h2>
-          <p>
-            Tahmini maliyet planın içinde görünür. Bütçeni aşarsan Wayora bunu saklamaz; kalan
-            tutarı ve aşımı aynı sayfada gösterir.
-          </p>
-          <p className="hand" style={{ marginTop: '1.2rem' }}>
-            para cebinde kalsın.
-          </p>
-          <span className="stamp" style={{ marginTop: '0.8rem' }}>
-            BÜTÇE 500 €
-          </span>
-        </div>
-
-        <div className="receipt">
-          <div className="receipt-head">
-            <span className="mono">PARİS / 3 GÜN</span>
-            <span className="mono">TAHMİN</span>
-          </div>
-          <div className="receipt-row">
-            <span>Ulaşım</span>
-            <span>60 €</span>
-          </div>
-          <div className="receipt-row">
-            <span>Müzeler</span>
-            <span>40 €</span>
-          </div>
-          <div className="receipt-row">
-            <span>Yemek</span>
-            <span>72 €</span>
-          </div>
-          <div className="receipt-total">
-            <span className="mono">TOPLAM</span>
-            <strong>172 €</strong>
-          </div>
-        </div>
-      </section>
-
-      <section className="city-strip" aria-label="Şehirler">
-        {cities.map((city) => (
-          <article className="city-card" key={city.name}>
-            <img src={city.image} alt={`${city.name} şehir görünümü`} />
-            <div className="city-caption">
-              <span>{city.name}</span>
-              <span>{city.label}</span>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <section className="cta explore-teaser">
-        <div>
-          <p className="eyebrow">05 / ŞEHİR REHBERİ</p>
-          <h2>10 şehir. 100 deneyim.</h2>
-          <p>Müzeler, sokak lezzetleri, parklar ve günübirlik rotalar. Fiyatları gör, bütçeni kur.</p>
-        </div>
-        <Link className="button large" to="/kesfet">
-          Keşfe başla
-        </Link>
-      </section>
-
-      <section className="cta">
-        <div>
-          <h2>Rotanı çiz.</h2>
-          <p>Üç soruya cevap ver, planını al. Sonra kendi ritmine göre düzenle.</p>
-        </div>
-        <Link className="button large" to={user ? '/trips/new' : '/register'}>
-          {user ? 'Yeni rota çiz' : 'Hesap aç'}
-        </Link>
-      </section>
     </div>
   )
 }

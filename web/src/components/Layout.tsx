@@ -1,74 +1,68 @@
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Compass, Map, Plus, UserRound } from 'lucide-react'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
-  isActive ? 'nav-link is-active' : 'nav-link'
+  isActive ? 'topbar-link is-active' : 'topbar-link'
 
 const mobileClass = ({ isActive }: { isActive: boolean }) => (isActive ? 'is-active' : '')
 
 export function Layout() {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
+  const { user } = useAuth()
   const location = useLocation()
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register'
-  const isNewTrip = location.pathname === '/trips/new'
-  const isTripsSection =
-    location.pathname === '/trips' || (location.pathname.startsWith('/trips/') && !isNewTrip)
-
-  async function handleLogout() {
-    navigate('/')
-    await logout()
-  }
+  const isLanding = location.pathname === '/'
+  const isExplore = location.pathname === '/kesfet'
+  const isTrips = location.pathname === '/trips'
+  const isProfile = location.pathname === '/profil'
+  const showBottomNav = !!user && !isAuthPage && (isExplore || isTrips || isProfile)
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell${showBottomNav ? ' has-bottom-nav' : ''}`}>
       <a className="skip-link" href="#main">
         İçeriğe geç
       </a>
 
-      <header className="site-header">
-        <div className="header-inner">
-          <Link to="/" className="brand" aria-label="Wayora ana sayfa">
-            WAYORA<span className="brand-slash">/</span>
-            <span className="brand-sub">ROTASYON</span>
+      <header className="topbar">
+        <div className="topbar-inner">
+          <Link to="/" className="logo" aria-label="Wayora ana sayfa">
+            WAYORA
           </Link>
 
-          <nav className={`main-nav${user ? ' is-auth' : ''}`} aria-label="Ana menü">
+          <nav className="topbar-nav" aria-label="Ana menü">
+            <NavLink to="/kesfet" className={navClass}>
+              Keşfet
+            </NavLink>
             {user ? (
               <>
-                <NavLink to="/kesfet" className={navClass}>
-                  Keşfet
-                </NavLink>
                 <NavLink to="/trips" className={navClass}>
-                  Rotalar
+                  Rotalarım
                 </NavLink>
-                <NavLink to="/onboarding" className={navClass}>
-                  Tercihler
+                <NavLink to="/trips/new" className={navClass}>
+                  Planla
                 </NavLink>
-                <span className="nav-user" title={user.email}>
-                  {user.name ?? user.email}
-                </span>
-                <Link className="button small" to="/trips/new">
-                  Rotanı çiz
-                </Link>
-                <button type="button" className="button ghost small" onClick={handleLogout}>
-                  Çıkış
-                </button>
+                <NavLink to="/profil" className={navClass}>
+                  Profil
+                </NavLink>
               </>
             ) : (
-              <>
-                <NavLink to="/kesfet" className={navClass}>
-                  Keşfet
-                </NavLink>
-                <NavLink to="/login" className={navClass}>
-                  Giriş
-                </NavLink>
-                <Link className="button small" to="/register">
-                  Hesap aç
-                </Link>
-              </>
+              <NavLink to="/login" className={navClass}>
+                Giriş yap
+              </NavLink>
             )}
           </nav>
+
+          <div className="topbar-actions">
+            {user ? (
+              <Link className="icon-btn" to="/profil" aria-label="Profil">
+                <UserRound size={22} strokeWidth={1.75} />
+              </Link>
+            ) : (
+              <Link className="topbar-login" to="/login">
+                Giriş yap
+              </Link>
+            )}
+          </div>
         </div>
       </header>
 
@@ -76,52 +70,40 @@ export function Layout() {
         <Outlet />
       </main>
 
-      {!isAuthPage && user ? (
-        <nav className="mobile-nav" aria-label="Mobil menü">
-          <NavLink to="/kesfet" className={mobileClass}>
-            Keşfet
-          </NavLink>
-          <Link
-            to="/trips"
-            className={isTripsSection ? 'is-active' : undefined}
-            aria-current={isTripsSection ? 'page' : undefined}
-          >
-            Rotasyon
-          </Link>
-          <Link
-            to="/trips/new"
-            className={isNewTrip ? 'is-active' : undefined}
-            aria-current={isNewTrip ? 'page' : undefined}
-          >
-            Planlama
-          </Link>
-          <NavLink to="/onboarding" className={mobileClass}>
-            Kurulum
-          </NavLink>
-        </nav>
-      ) : !isAuthPage ? (
-        <nav className="mobile-nav" aria-label="Mobil menü">
-          <NavLink to="/" className={mobileClass} end>
-            Rotasyon
-          </NavLink>
-          <NavLink to="/kesfet" className={mobileClass}>
-            Keşfet
-          </NavLink>
-          <NavLink to="/login" className={mobileClass}>
-            Giriş
-          </NavLink>
-          <NavLink to="/register" className={mobileClass}>
-            Kurulum
-          </NavLink>
-        </nav>
-      ) : null}
+      {isLanding && (
+        <footer className="landing-footer">
+          <strong>WAYORA</strong>
+          <div className="landing-footer-links">
+            <span>Hakkında</span>
+            <span>Gizlilik</span>
+            <a href="/photo-credits.html" target="_blank" rel="noreferrer">
+              Fotoğraf kaynakları
+            </a>
+            <span>İletişim</span>
+          </div>
+        </footer>
+      )}
 
-      <footer className="site-footer">
-        <div className="footer-inner">
-          <span>WAYORA / ROTASYON</span>
-          <span>JOB-191 · GREPTHINK · İSTİNYE ÜNİVERSİTESİ</span>
-        </div>
-      </footer>
+      {showBottomNav && (
+        <nav className="bottom-nav" aria-label="Mobil menü">
+          <NavLink to="/kesfet" className={mobileClass} end>
+            <Compass size={24} strokeWidth={1.75} aria-hidden="true" />
+            <span>Keşfet</span>
+          </NavLink>
+          <NavLink to="/trips" className={mobileClass} end>
+            <Map size={24} strokeWidth={1.75} aria-hidden="true" />
+            <span>Rotalarım</span>
+          </NavLink>
+          <NavLink to="/trips/new" className={mobileClass}>
+            <Plus size={24} strokeWidth={1.75} aria-hidden="true" />
+            <span>Planla</span>
+          </NavLink>
+          <NavLink to="/profil" className={mobileClass}>
+            <UserRound size={24} strokeWidth={1.75} aria-hidden="true" />
+            <span>Profil</span>
+          </NavLink>
+        </nav>
+      )}
     </div>
   )
 }

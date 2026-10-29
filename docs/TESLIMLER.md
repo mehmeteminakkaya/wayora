@@ -16,6 +16,8 @@ Tüm dosyalar Türkçedir ve projedeki gerçek kod, test ve sprint durumuyla hiz
 | [preview-rotasyon-mobile.png](preview-rotasyon-mobile.png) | Görsel | Mobil tam sayfa |
 | [assets/](assets/) | Klasör | Word ve sunum içinde kullanılan ekran görüntüleri |
 | [CITY_CATALOG.md](CITY_CATALOG.md) | Markdown | 10 şehir / 100 deneyim kataloğu, fiyat yaklaşımı, seed ve API |
+| [DESIGN_V2.md](DESIGN_V2.md) | Markdown | Wayora V2 mobil tasarım sistemi ve sayfa kuralları |
+| [PHOTO_CREDITS.md](PHOTO_CREDITS.md) | Markdown | V2 şehir ve kategori fotoğraflarının lisans/atıf kayıtları |
 | [audit/AUDIT_REPORT.md](audit/AUDIT_REPORT.md) | Markdown | 1000 kişilik denetim raporu ve düzeltmeler |
 | [audit/FIX_LOG.md](audit/FIX_LOG.md) | Markdown | Uygulanan düzeltmelerin kaydı |
 | [MASTER_AUDIT_PROMPT.md](MASTER_AUDIT_PROMPT.md) | Markdown | Tekrarlanabilir 1000 uzmanlı denetim promptu |
@@ -55,7 +57,7 @@ okunabilir. Sunumun tamamı 16:9 (13.333 x 7.5 inç) olarak hazırlanmıştır.
 
 ## Doğrulama durumu
 
-- 38 API testi
+- 51 API testi
 - 4 web testi
 - lint, typecheck ve build temiz
 - `npm audit --omit=dev`: 0 vulnerability

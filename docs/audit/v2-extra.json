@@ -1,0 +1,15 @@
+{
+  "experience": {
+    "title": "Ayasofya",
+    "iframe": true,
+    "facts": 4,
+    "sticky": true,
+    "overflow": false
+  },
+  "onboarding": {
+    "step": "ADIM 1 / 3\nAtla",
+    "chips": 10,
+    "overflow": false
+  },
+  "errors": []
+}

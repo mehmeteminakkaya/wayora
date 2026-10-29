@@ -1,9 +1,29 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { ArrowLeft, Check, Plus } from 'lucide-react'
 import { api } from '../api'
-import type { ActivityCategory, CityDetail } from '../api'
-import { useAuth } from '../auth/AuthContext'
-import { CATEGORY_LABELS, formatMoney } from '../lib/format'
+import type { CityDetail, CityExperience } from '../api'
+import { Photo } from '../components/Photo'
+import { formatMoney } from '../lib/format'
+import {
+  categoryLabel,
+  categoryPhoto,
+  cityPhoto,
+  cityPhotoLabel,
+  normalizeCityKey,
+} from '../lib/photos'
+
+type CityFilter = 'all' | 'free' | 'history' | 'food' | 'night'
+
+const FILTERS: Array<{ value: CityFilter; label: string }> = [
+  { value: 'all', label: 'Tümü' },
+  { value: 'free', label: 'Ücretsiz' },
+  { value: 'history', label: 'Tarih' },
+  { value: 'food', label: 'Yemek' },
+  { value: 'night', label: 'Gece' },
+]
+
+const NIGHT_TERMS = ['gece', 'gosteri', 'bar', 'muzik', 'aksam']
 
 function formatDuration(minutes: number): string {
   const hours = Math.floor(minutes / 60)
@@ -13,23 +33,38 @@ function formatDuration(minutes: number): string {
   return `${hours} saat ${rest} dk`
 }
 
-const PRICE_FILTERS = [
-  { value: 'all', label: 'Tüm fiyatlar' },
-  { value: 'free', label: 'Ücretsiz' },
-  { value: 'under20', label: '20 € altı' },
-  { value: 'over20', label: '20 € ve üzeri' },
-] as const
+function priceText(value: number, currency: string): string {
+  return value === 0 ? 'Ücretsiz' : formatMoney(value, currency)
+}
 
-type PriceFilter = (typeof PRICE_FILTERS)[number]['value']
+function isNightExperience(experience: CityExperience): boolean {
+  if ((experience.category as string) === 'nightlife') return true
+  const tags = experience.tags.map((tag) => normalizeCityKey(tag))
+  return NIGHT_TERMS.some((term) => tags.includes(term))
+}
+
+function matchesFilter(experience: CityExperience, filter: CityFilter): boolean {
+  if (filter === 'all') return true
+  if (filter === 'free') return experience.estimatedCost === 0
+  if (filter === 'food') return experience.category === 'food'
+  if (filter === 'night') return isNightExperience(experience)
+  return experience.tags.some((tag) => normalizeCityKey(tag).includes('tarih'))
+}
+
+function shortDescription(text: string, maxLength = 84): string {
+  if (text.length <= maxLength) return text
+  const cut = text.slice(0, maxLength)
+  const lastSpace = cut.lastIndexOf(' ')
+  return `${cut.slice(0, lastSpace > 0 ? lastSpace : maxLength).trimEnd()}…`
+}
 
 export function CityPage() {
   const { slug } = useParams<{ slug: string }>()
-  const { user } = useAuth()
   const [city, setCity] = useState<CityDetail | null>(null)
   const [requestedSlug, setRequestedSlug] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [category, setCategory] = useState<'all' | ActivityCategory>('all')
-  const [price, setPrice] = useState<PriceFilter>('all')
+  const [filter, setFilter] = useState<CityFilter>('all')
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
 
   useEffect(() => {
     if (!slug) return
@@ -56,25 +91,30 @@ export function CityPage() {
     }
   }, [slug])
 
-  const categories = useMemo(() => {
-    if (!city) return []
-    return [...new Set(city.experiences.map((experience) => experience.category))]
-  }, [city])
+  const visibleExperiences = useMemo(
+    () => city?.experiences.filter((experience) => matchesFilter(experience, filter)) ?? [],
+    [city, filter],
+  )
 
-  const visibleExperiences = useMemo(() => {
-    if (!city) return []
-    return city.experiences.filter((experience) => {
-      if (category !== 'all' && experience.category !== category) return false
-      if (price === 'free' && experience.estimatedCost !== 0) return false
-      if (price === 'under20' && !(experience.estimatedCost > 0 && experience.estimatedCost < 20)) {
-        return false
-      }
-      if (price === 'over20' && experience.estimatedCost < 20) return false
-      return true
-    })
-  }, [city, category, price])
+  const selectedExperiences = useMemo(
+    () => city?.experiences.filter((experience) => selectedIds.includes(experience.id)) ?? [],
+    [city, selectedIds],
+  )
 
-  const loading = requestedSlug !== slug
+  const loading = Boolean(slug) && requestedSlug !== slug
+
+  if (!slug) {
+    return (
+      <div className="page narrow">
+        <p className="notice error" role="alert">
+          Şehir bulunamadı.
+        </p>
+        <Link className="btn btn-secondary" to="/kesfet">
+          Keşfet sayfasına dön
+        </Link>
+      </div>
+    )
+  }
 
   if (loading) {
     return (
@@ -87,164 +127,152 @@ export function CityPage() {
 
   if (error || !city) {
     return (
-      <div className="page-shell">
+      <div className="page narrow">
+        <Link className="back-link" to="/kesfet">
+          <ArrowLeft size={18} strokeWidth={1.75} aria-hidden="true" />
+          Keşfet
+        </Link>
         <p className="notice error" role="alert">
           {error ?? 'Şehir bulunamadı'}
         </p>
-        <Link className="button ghost" to="/kesfet">
+        <Link className="btn btn-secondary" to="/kesfet">
           Tüm şehirlere dön
         </Link>
       </div>
     )
   }
 
-  const createTripPath = `/trips/new?destination=${encodeURIComponent(city.name)}`
+  const selectedTotal = selectedExperiences.reduce(
+    (sum, experience) => sum + experience.estimatedCost,
+    0,
+  )
+  const createTripPath = `/trips/new?destination=${encodeURIComponent(city.name)}&experiences=${encodeURIComponent(selectedIds.join(','))}`
+  const hasSelection = selectedIds.length > 0
+
+  function toggleExperience(id: string) {
+    setSelectedIds((current) =>
+      current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
+    )
+  }
 
   return (
-    <div className="page-shell city-guide-page">
+    <div className={`page${hasSelection ? ' with-sticky-action' : ''}`}>
       <Link className="back-link" to="/kesfet">
-        TÜM ŞEHİRLER
+        <ArrowLeft size={18} strokeWidth={1.75} aria-hidden="true" />
+        Keşfet
       </Link>
 
-      <header className="city-guide-hero">
-        <div>
-          <p className="eyebrow">
-            KEŞİF / {city.country.toLocaleUpperCase('tr-TR')}
-          </p>
+      <header className="city-hero">
+        <Photo
+          key={city.slug}
+          className="city-hero-media"
+          src={cityPhoto(city.name)}
+          alt={`${city.name} şehir fotoğrafı`}
+          label={cityPhotoLabel(city.name)}
+        />
+        <div className="city-hero-body">
+          <p className="label">{city.country}</p>
           <h1>{city.name}</h1>
-          <p className="city-guide-lead">{city.summary}</p>
-          <div className="city-guide-actions">
-            <Link className="button" to={createTripPath}>
-              Bu şehirle rota oluştur
-            </Link>
-            <span className="mono">
-              {city.experienceCount} deneyim · {formatMoney(city.averageCost, city.currency)} ortalama
-            </span>
-          </div>
+          <p className="city-hero-meta">
+            {city.experienceCount} deneyim · ort.{' '}
+            {priceText(city.averageDailyCost, city.currency)}/gün {' · '}
+            {city.bestSeason ?? 'Yıl boyu'}
+          </p>
+          <p className="city-hero-summary">{city.summary}</p>
         </div>
-        <aside className="city-guide-ticket">
-          <span className="stamp">ŞEHİR DOSYASI</span>
-          <p className="city-ticket-name">{city.name}</p>
-          <div className="city-ticket-row">
-            <span>Ülke</span>
-            <strong>{city.country}</strong>
-          </div>
-          <div className="city-ticket-row">
-            <span>En iyi zaman</span>
-            <strong>{city.bestSeason ?? 'Yıl boyu'}</strong>
-          </div>
-          <div className="city-ticket-row">
-            <span>Başlangıç</span>
-            <strong>{formatMoney(city.minCost, city.currency)}</strong>
-          </div>
-          <p className="hand">fiyatlar yaklaşık.</p>
-        </aside>
       </header>
 
-      <section className="guide-filters" aria-label="Deneyim filtreleri">
-        <div className="filter-group">
-          <span className="mono">TÜR</span>
-          <div className="filter-row">
+      <section className="city-filter-bar" aria-label="Deneyim filtresi">
+        <div className="chip-row" role="group" aria-label="Deneyimleri filtrele">
+          {FILTERS.map((item) => (
             <button
-              className={category === 'all' ? 'filter-chip is-selected' : 'filter-chip'}
+              key={item.value}
               type="button"
-              aria-pressed={category === 'all'}
-              onClick={() => setCategory('all')}
+              className={filter === item.value ? 'chip is-active' : 'chip'}
+              aria-pressed={filter === item.value}
+              onClick={() => setFilter(item.value)}
             >
-              Tümü
+              {item.label}
             </button>
-            {categories.map((item) => (
-              <button
-                className={category === item ? 'filter-chip is-selected' : 'filter-chip'}
-                type="button"
-                aria-pressed={category === item}
-                onClick={() => setCategory(item)}
-                key={item}
-              >
-                {CATEGORY_LABELS[item] ?? item}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="filter-group">
-          <span className="mono">BÜTÇE</span>
-          <div className="filter-row">
-            {PRICE_FILTERS.map((item) => (
-              <button
-                className={price === item.value ? 'filter-chip is-selected' : 'filter-chip'}
-                type="button"
-                aria-pressed={price === item.value}
-                onClick={() => setPrice(item.value)}
-                key={item.value}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
+          ))}
         </div>
       </section>
 
-      <div className="guide-result-head">
-        <h2>{visibleExperiences.length} deneyim</h2>
-        <span className="mono">
-          {category === 'all' ? 'TÜM TÜRLER' : (CATEGORY_LABELS[category] ?? category).toLocaleUpperCase('tr-TR')}
-        </span>
-      </div>
-
       {visibleExperiences.length === 0 ? (
-        <p className="notice">Bu filtreyle eşleşen deneyim yok. Filtreleri gevşetmeyi dene.</p>
+        <p className="notice">
+          Bu filtreyle eşleşen deneyim yok. Başka bir filtre seçmeyi dene.
+        </p>
       ) : (
         <div className="experience-list">
-          {visibleExperiences.map((experience) => (
-            <article className="experience-card" key={experience.id}>
-              <div className="experience-card-head">
-                <span className="stamp">{CATEGORY_LABELS[experience.category] ?? experience.category}</span>
-                <span className="mono">
-                  {formatDuration(experience.durationMinutes)} ·{' '}
-                  {experience.estimatedCost === 0
-                    ? 'Ücretsiz'
-                    : formatMoney(experience.estimatedCost, experience.currency)}
-                </span>
-              </div>
-              <h3>{experience.name}</h3>
-              <p className="experience-description">{experience.description}</p>
-              <div className="experience-meta">
-                <span>{experience.neighborhood ?? 'Şehir merkezi'}</span>
-                <span>{experience.rating ? `${experience.rating.toFixed(1)} / 5` : 'Yerel seçki'}</span>
-                <span>{experience.priceNote ?? 'tahmini fiyat'}</span>
-              </div>
-              <div className="tag-row">
-                {experience.tags.slice(0, 4).map((tag) => (
-                  <span className="tag" key={tag}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <details className="experience-details">
-                <summary>Pratik bilgi</summary>
-                <p>{experience.address ?? 'Adres bilgisi için resmî kaynağa bakın.'}</p>
-                <p>{experience.openingHours ?? 'Güncel saatleri kontrol edin.'}</p>
-                {experience.bookingUrl && (
-                  <a
-                    className="text-link"
-                    href={experience.bookingUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Resmî siteyi aç
-                  </a>
-                )}
-              </details>
-            </article>
-          ))}
+          {visibleExperiences.map((experience) => {
+            const selected = selectedIds.includes(experience.id)
+            const detailPath = `/kesfet/${city.slug}/${experience.slug}`
+            return (
+              <article className="experience-row" key={experience.id}>
+                <Link to={detailPath} aria-label={`${experience.name} detayını aç`}>
+                  <Photo
+                    className="experience-thumb"
+                    src={categoryPhoto(experience.category)}
+                    alt={`${experience.name}, ${categoryLabel(experience.category)}`}
+                    label={categoryLabel(experience.category)}
+                  />
+                </Link>
+                <div className="experience-row-body">
+                  <h3>
+                    <Link to={detailPath}>{experience.name}</Link>
+                  </h3>
+                  <p>{shortDescription(experience.description)}</p>
+                  <div className="meta-line">
+                    <span>{formatDuration(experience.durationMinutes)}</span>
+                    <span className="dot" aria-hidden="true">
+                      ·
+                    </span>
+                    <span>{priceText(experience.estimatedCost, experience.currency)}</span>
+                    {experience.rating !== null && (
+                      <>
+                        <span className="dot" aria-hidden="true">
+                          ·
+                        </span>
+                        <span>{experience.rating.toFixed(1)} / 5</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <button
+                  className={selected ? 'select-button is-selected' : 'select-button'}
+                  type="button"
+                  aria-pressed={selected}
+                  aria-label={
+                    selected
+                      ? `${experience.name} seçimini kaldır`
+                      : `${experience.name} durağını rotaya ekle`
+                  }
+                  onClick={() => toggleExperience(experience.id)}
+                >
+                  {selected ? (
+                    <Check size={20} strokeWidth={2} aria-hidden="true" />
+                  ) : (
+                    <Plus size={20} strokeWidth={2} aria-hidden="true" />
+                  )}
+                </button>
+              </article>
+            )
+          })}
         </div>
       )}
 
-      <p className="explore-disclaimer">
-        {user
-          ? 'Bu rehberdeki bir şehri seçip rota oluşturabilirsin. Planı oluşturduktan sonra durakları ekleyip çıkarabilirsin.'
-          : 'Rota oluşturmak için giriş yapman yeterli. Keşif rehberi hesap açmadan da okunabilir.'}
-      </p>
+      {hasSelection && (
+        <div className="sticky-action" aria-live="polite">
+          <span className="selection-count">
+            {selectedIds.length} durak seçili
+            <br />
+            {priceText(selectedTotal, city.currency)} kişi başı
+          </span>
+          <Link className="btn btn-primary" to={createTripPath}>
+            {city.name} rotası oluştur
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

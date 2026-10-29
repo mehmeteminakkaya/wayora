@@ -1,7 +1,18 @@
 import { Router } from 'express'
+import { z } from 'zod'
 import { CITY_CATALOG } from '../data/city-catalog.ts'
 import type { Db } from '../lib/prisma.ts'
-import { serializeExperience, staticCities, summarizeCity } from '../services/city-catalog.ts'
+import { parseOrThrow } from '../middleware/error.ts'
+import {
+  searchCityCatalog,
+  serializeExperience,
+  staticCities,
+  summarizeCity,
+} from '../services/city-catalog.ts'
+
+const searchQuerySchema = z.object({
+  q: z.string().trim().max(80, 'Arama en fazla 80 karakter olabilir').default(''),
+})
 
 function staticCityDetail(slug: string) {
   return staticCities().find((city) => city.slug === slug) ?? null
@@ -29,6 +40,12 @@ export function cityRouter({ db }: { db: Db }) {
         cities: staticCities().map(({ experiences: _experiences, ...summary }) => summary),
       })
     }
+  })
+
+  // "/:slug" tanımından önce gelmeli; aksi halde Express "search" yolunu şehir slug'ı sanır.
+  router.get('/search', async (req, res) => {
+    const { q } = parseOrThrow(searchQuerySchema, req.query)
+    res.json(await searchCityCatalog(db, q))
   })
 
   router.get('/:slug', async (req, res) => {

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { GripVertical } from 'lucide-react'
 import { api } from '../api'
 import type { Activity, ActivityCategory, CreateActivityInput, Trip } from '../api'
-import { CATEGORY_LABELS, formatDate, formatMoney } from '../lib/format'
-import { cityImage, cityInitials } from '../lib/cityImage'
+import { CATEGORY_LABELS, formatMoney, formatShortDate } from '../lib/format'
+import { cityCoords } from '../lib/photos'
 
 const CATEGORY_OPTIONS: ActivityCategory[] = [
   'landmark',
@@ -15,10 +16,54 @@ const CATEGORY_OPTIONS: ActivityCategory[] = [
   'other',
 ]
 
+function formatDayShort(isoDate: string): string {
+  return new Intl.DateTimeFormat('tr-TR', {
+    day: 'numeric',
+    month: 'short',
+    timeZone: 'UTC',
+  }).format(new Date(`${isoDate}T00:00:00.000Z`))
+}
+
+function durationLabel(startTime: string | null, endTime: string | null): string | null {
+  if (!startTime || !endTime) return null
+  const [startHour, startMinute] = startTime.split(':').map(Number)
+  const [endHour, endMinute] = endTime.split(':').map(Number)
+  if (![startHour, startMinute, endHour, endMinute].every(Number.isFinite)) return null
+  const minutes = endHour * 60 + endMinute - (startHour * 60 + startMinute)
+  if (minutes <= 0) return null
+  const hours = Math.floor(minutes / 60)
+  const rest = minutes % 60
+  if (hours === 0) return `${rest} dk`
+  if (rest === 0) return `${hours} saat`
+  return `${hours} saat ${rest} dk`
+}
+
+function priceLabel(value: number | null, currency: string): string {
+  if (value === null) return 'Fiyat belirtilmedi'
+  if (value === 0) return 'Ücretsiz'
+  return formatMoney(value, currency)
+}
+
+function mapSrc(destination: string): string {
+  const [lat, lng] = cityCoords(destination)
+  const delta = 0.045
+  const bbox = [lng - delta, lat - delta, lng + delta, lat + delta]
+    .map((value) => value.toFixed(5))
+    .join('%2C')
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat.toFixed(5)}%2C${lng.toFixed(5)}`
+}
+
+function mapLink(destination: string): string {
+  const [lat, lng] = cityCoords(destination)
+  return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=13/${lat}/${lng}`
+}
+
 function ActivityForm({
+  currency,
   onSubmit,
   onCancel,
 }: {
+  currency: string
   onSubmit: (input: CreateActivityInput) => Promise<void>
   onCancel: () => void
 }) {
@@ -32,11 +77,21 @@ function ActivityForm({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    const trimmed = title.trim()
+    if (!trimmed) {
+      setError('Durak adı gerekli.')
+      return
+    }
+    if (startTime && endTime && endTime <= startTime) {
+      setError('Bitiş saati başlangıçtan sonra olmalı.')
+      return
+    }
+
     setBusy(true)
     setError(null)
     try {
       await onSubmit({
-        title,
+        title: trimmed,
         category,
         startTime: startTime || null,
         endTime: endTime || null,
@@ -44,83 +99,100 @@ function ActivityForm({
         notes: null,
       })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Aktivite eklenemedi')
+      setError(err instanceof Error ? err.message : 'Durak eklenemedi')
     } finally {
       setBusy(false)
     }
   }
 
   return (
-    <form className="activity-form" onSubmit={handleSubmit}>
-      {error && (
-        <p className="notice error" role="alert">
-          {error}
-        </p>
-      )}
+    <div className="summary-card">
+      <form className="form" onSubmit={handleSubmit} noValidate>
+        <p className="label">Yeni durak</p>
 
-      <label className="field">
-        <span>Aktivite</span>
-        <input
-          type="text"
-          required
-          autoFocus
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-          placeholder="Örn. Kahvaltı ve şehir turu"
-        />
-      </label>
-
-      <div className="three-column">
-        <label className="field">
-          <span>Kategori</span>
-          <select
-            value={category}
-            onChange={(event) => setCategory(event.target.value as ActivityCategory)}
-          >
-            {CATEGORY_OPTIONS.map((item) => (
-              <option key={item} value={item}>
-                {CATEGORY_LABELS[item]}
-              </option>
-            ))}
-          </select>
-        </label>
+        {error && (
+          <p className="notice error" role="alert">
+            {error}
+          </p>
+        )}
 
         <label className="field">
-          <span>Başlangıç</span>
+          <span>Durak adı</span>
           <input
-            type="time"
-            value={startTime}
-            onChange={(event) => setStartTime(event.target.value)}
+            className="input"
+            type="text"
+            required
+            maxLength={200}
+            autoFocus
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder="Örn. Kahvaltı ve şehir turu"
           />
         </label>
 
-        <label className="field">
-          <span>Bitiş</span>
-          <input type="time" value={endTime} onChange={(event) => setEndTime(event.target.value)} />
-        </label>
-      </div>
+        <div className="form-row">
+          <label className="field">
+            <span>Kategori</span>
+            <select
+              className="select"
+              value={category}
+              onChange={(event) => setCategory(event.target.value as ActivityCategory)}
+            >
+              {CATEGORY_OPTIONS.map((item) => (
+                <option key={item} value={item}>
+                  {CATEGORY_LABELS[item] ?? item}
+                </option>
+              ))}
+            </select>
+          </label>
 
-      <label className="field">
-        <span>Tahmini maliyet (opsiyonel)</span>
-        <input
-          type="number"
-          min="0"
-          step="1"
-          value={cost}
-          onChange={(event) => setCost(event.target.value)}
-          placeholder="0"
-        />
-      </label>
+          <label className="field">
+            <span>Tahmini fiyat ({currency})</span>
+            <input
+              className="input"
+              type="number"
+              min="0"
+              max="100000"
+              step="1"
+              value={cost}
+              onChange={(event) => setCost(event.target.value)}
+              placeholder="0"
+            />
+          </label>
+        </div>
 
-      <div className="form-actions">
-        <button className="button small" type="submit" disabled={busy} aria-busy={busy}>
-          {busy ? 'Ekleniyor…' : 'Ekle'}
-        </button>
-        <button className="button ghost small" type="button" onClick={onCancel}>
-          İptal
-        </button>
-      </div>
-    </form>
+        <div className="form-row">
+          <label className="field">
+            <span>Başlangıç</span>
+            <input
+              className="input"
+              type="time"
+              value={startTime}
+              onChange={(event) => setStartTime(event.target.value)}
+            />
+          </label>
+
+          <label className="field">
+            <span>Bitiş</span>
+            <input
+              className="input"
+              type="time"
+              value={endTime}
+              onChange={(event) => setEndTime(event.target.value)}
+            />
+          </label>
+        </div>
+
+        <div className="form-actions">
+          <button className="btn btn-primary" type="submit" disabled={busy} aria-busy={busy}>
+            {busy ? 'Ekleniyor...' : 'Durağı ekle'}
+          </button>
+          <button className="btn btn-ghost" type="button" disabled={busy} onClick={onCancel}>
+            Vazgeç
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }
 
@@ -135,11 +207,16 @@ export function TripDetailPage() {
   const [planNotice, setPlanNotice] = useState<{ tone: 'success' | 'warning'; text: string } | null>(
     null,
   )
-  const [openDayId, setOpenDayId] = useState<string | null>(null)
+  const [selectedDayId, setSelectedDayId] = useState<string | null>(null)
+  const [view, setView] = useState<'list' | 'map'>('list')
+  const [showAddForm, setShowAddForm] = useState(false)
   const [confirmTripDelete, setConfirmTripDelete] = useState(false)
   const [deletingTrip, setDeletingTrip] = useState(false)
   const [confirmRegenerate, setConfirmRegenerate] = useState(false)
   const [confirmActivityId, setConfirmActivityId] = useState<string | null>(null)
+  const [deletingActivityId, setDeletingActivityId] = useState<string | null>(null)
+  const [draggedActivityId, setDraggedActivityId] = useState<string | null>(null)
+  const [dropTargetId, setDropTargetId] = useState<string | null>(null)
 
   useEffect(() => {
     let active = true
@@ -147,9 +224,11 @@ export function TripDetailPage() {
     async function load() {
       try {
         const result = await api.getTrip(id)
-        if (active) setTrip(result.trip)
+        if (!active) return
+        setTrip(result.trip)
+        setSelectedDayId(result.trip.days[0]?.id ?? null)
       } catch (err) {
-        if (active) setError(err instanceof Error ? err.message : 'Gezi yüklenemedi')
+        if (active) setError(err instanceof Error ? err.message : 'Rota yüklenemedi')
       } finally {
         if (active) setLoading(false)
       }
@@ -161,12 +240,16 @@ export function TripDetailPage() {
     }
   }, [id])
 
+  const hasPlan = trip ? trip.days.some((day) => day.activities.length > 0) : false
+
   async function handleGenerate() {
     if (!trip) return
     if (hasPlan && !confirmRegenerate) {
+      setConfirmTripDelete(false)
       setConfirmRegenerate(true)
       return
     }
+
     setConfirmRegenerate(false)
     setGenerating(true)
     setError(null)
@@ -174,6 +257,9 @@ export function TripDetailPage() {
     try {
       const result = await api.generateTrip(trip.id)
       setTrip(result.trip)
+      setSelectedDayId(result.trip.days[0]?.id ?? null)
+      setShowAddForm(false)
+      setConfirmActivityId(null)
       setPlanNotice(
         result.meta.fallback
           ? {
@@ -196,7 +282,7 @@ export function TripDetailPage() {
       await api.deleteTrip(trip.id)
       navigate('/trips')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Gezi silinemedi')
+      setError(err instanceof Error ? err.message : 'Rota silinemedi')
       setDeletingTrip(false)
     }
   }
@@ -214,11 +300,13 @@ export function TripDetailPage() {
           }
         : current,
     )
-    setOpenDayId(null)
+    setShowAddForm(false)
   }
 
   async function handleDeleteActivity(activity: Activity) {
     if (!trip) return
+    setDeletingActivityId(activity.id)
+    setError(null)
     try {
       await api.deleteActivity(activity.id)
       setTrip((current) =>
@@ -234,16 +322,18 @@ export function TripDetailPage() {
       )
       setConfirmActivityId(null)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Aktivite silinemedi')
+      setError(err instanceof Error ? err.message : 'Durak silinemedi')
+    } finally {
+      setDeletingActivityId(null)
     }
   }
 
   if (loading) {
     return (
-      <div className="page-shell">
+      <div className="page">
         <div className="center-state" role="status">
           <span className="spinner" aria-hidden="true" />
-          <span>Gezi yükleniyor…</span>
+          <span>Rota yükleniyor...</span>
         </div>
       </div>
     )
@@ -251,135 +341,176 @@ export function TripDetailPage() {
 
   if (!trip) {
     return (
-      <div className="page-shell">
+      <div className="page">
         <section className="empty-state">
-          <span className="empty-code" aria-hidden="true">
-            404
-          </span>
-          <h1>Gezi bulunamadı.</h1>
-          <p>{error ?? 'Bu gezi silinmiş ya da başka bir hesaba ait olabilir.'}</p>
-          <Link className="button" to="/trips">
-            Rotalara dön
+          <h1>Rota bulunamadı.</h1>
+          <p>{error ?? 'Bu rota silinmiş ya da başka bir hesaba ait olabilir.'}</p>
+          <Link className="btn btn-primary" to="/trips">
+            Rotalarıma dön
           </Link>
         </section>
       </div>
     )
   }
 
+  const activeDay = trip.days.find((day) => day.id === selectedDayId) ?? trip.days[0] ?? null
   const activities = trip.days.flatMap((day) => day.activities)
   const estimatedTotal = activities.reduce((sum, activity) => sum + (activity.estimatedCost ?? 0), 0)
+  const activeDayTotal = activeDay
+    ? activeDay.activities.reduce((sum, activity) => sum + (activity.estimatedCost ?? 0), 0)
+    : 0
   const remaining = trip.budget === null ? null : trip.budget - estimatedTotal
   const overBudget = remaining !== null && remaining < 0
-  const hasPlan = activities.length > 0
-  const heroImage = cityImage(trip.destination)
-  const emptyDays = trip.days.filter((day) => day.activities.length === 0).length
-  const progress =
-    trip.budget === null || trip.budget <= 0
-      ? 0
-      : Math.min(100, Math.round((estimatedTotal / trip.budget) * 100))
+
+  function selectDay(dayId: string) {
+    setSelectedDayId(dayId)
+    setShowAddForm(false)
+    setConfirmActivityId(null)
+  }
+
+  function openAddForm() {
+    if (!activeDay) return
+    setView('list')
+    setShowAddForm(true)
+  }
+
+  async function handleDrop(targetId: string) {
+    if (!activeDay || !draggedActivityId || draggedActivityId === targetId) {
+      setDraggedActivityId(null)
+      setDropTargetId(null)
+      return
+    }
+
+    const sourceIndex = activeDay.activities.findIndex((activity) => activity.id === draggedActivityId)
+    const targetIndex = activeDay.activities.findIndex((activity) => activity.id === targetId)
+    if (sourceIndex < 0 || targetIndex < 0) return
+
+    const reordered = [...activeDay.activities]
+    const [moved] = reordered.splice(sourceIndex, 1)
+    if (!moved) return
+    reordered.splice(targetIndex, 0, moved)
+
+    setTrip((current) =>
+      current
+        ? {
+            ...current,
+            days: current.days.map((day) =>
+              day.id === activeDay.id ? { ...day, activities: reordered } : day,
+            ),
+          }
+        : current,
+    )
+    setDraggedActivityId(null)
+    setDropTargetId(null)
+
+    try {
+      await Promise.all(
+        reordered.map((activity, index) => api.reorderActivity(activity.id, index)),
+      )
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? `Sıra kaydedilemedi: ${err.message}`
+          : 'Sıra kaydedilemedi. Sayfayı yenileyip tekrar dene.',
+      )
+    }
+  }
 
   return (
-    <div className="page-shell">
+    <div className="page with-sticky-action">
       <Link className="back-link" to="/trips">
-        ← Rotalar
+        Rotalarım
       </Link>
 
-      <header className="trip-hero">
-        <div>
-          <p className="eyebrow">
-            {trip.destination} / {String(trip.days.length).padStart(2, '0')} GÜN
-          </p>
-          <h1>{trip.title}</h1>
-          <p className="trip-sub">
-            {formatDate(trip.startDate)} – {formatDate(trip.endDate)} · {trip.currency}
-          </p>
-          {trip.notes && <p className="trip-notes">{trip.notes}</p>}
+      <header className="trip-header">
+        <p className="eyebrow">
+          {trip.destination} · {trip.days.length} gün
+        </p>
+        <h1>{trip.title}</h1>
+        <p className="trip-header-meta">
+          {formatShortDate(trip.startDate)} - {formatShortDate(trip.endDate)} · {trip.days.length}{' '}
+          gün · {trip.budget === null ? 'Bütçe belirtilmedi' : formatMoney(trip.budget, trip.currency)}
+        </p>
+        {trip.notes && <p className="helper">{trip.notes}</p>}
 
-          <div className="trip-actions">
-            {confirmRegenerate && hasPlan ? (
-              <div className="inline-confirm">
-                <span>Mevcut plan silinip yeniden hazırlanacak. Devam?</span>
-                <button
-                  className="button danger small"
-                  type="button"
-                  onClick={handleGenerate}
-                  disabled={generating}
-                  aria-busy={generating}
-                >
-                  {generating ? 'Hazırlanıyor…' : 'Yeniden hazırla'}
-                </button>
-                <button
-                  className="button ghost small"
-                  type="button"
-                  onClick={() => setConfirmRegenerate(false)}
-                >
-                  Vazgeç
-                </button>
-              </div>
-            ) : (
-              <button
-                className="button"
-                type="button"
-                onClick={handleGenerate}
-                disabled={generating}
-                aria-busy={generating}
-              >
-                {generating
-                  ? 'Plan hazırlanıyor…'
-                  : hasPlan
-                    ? 'Planı yeniden hazırla'
-                    : 'Planı hazırla'}
-              </button>
-            )}
+        <div className="trip-actions">
+          <button
+            className="btn btn-secondary"
+            type="button"
+            onClick={() => void handleGenerate()}
+            disabled={generating}
+            aria-busy={generating}
+          >
+            {generating
+              ? 'Plan hazırlanıyor...'
+              : hasPlan
+                ? 'Planı yeniden hazırla'
+                : 'Planı hazırla'}
+          </button>
+          <button
+            className="btn btn-ghost"
+            type="button"
+            onClick={() => {
+              setConfirmRegenerate(false)
+              setConfirmTripDelete(true)
+            }}
+          >
+            Geziyi sil
+          </button>
+        </div>
+      </header>
 
-            {confirmTripDelete ? (
-              <div className="inline-confirm">
-                <span>Gezi silinsin mi?</span>
-                <button
-                  className="button danger small"
-                  type="button"
-                  disabled={deletingTrip}
-                  onClick={handleDeleteTrip}
-                >
-                  {deletingTrip ? 'Siliniyor…' : 'Sil'}
-                </button>
-                <button
-                  className="button ghost small"
-                  type="button"
-                  onClick={() => setConfirmTripDelete(false)}
-                >
-                  Vazgeç
-                </button>
-              </div>
-            ) : (
-              <button
-                className="button ghost danger"
-                type="button"
-                onClick={() => setConfirmTripDelete(true)}
-              >
-                Geziyi sil
-              </button>
-            )}
+      {confirmRegenerate && (
+        <div className="notice" role="group" aria-label="Planı yeniden hazırlama onayı">
+          <p className="small">Mevcut plan silinip yeniden hazırlanacak. Devam edilsin mi?</p>
+          <div className="form-actions">
+            <button
+              className="btn btn-danger"
+              type="button"
+              onClick={() => void handleGenerate()}
+              disabled={generating}
+              aria-busy={generating}
+            >
+              {generating ? 'Hazırlanıyor...' : 'Yeniden hazırla'}
+            </button>
+            <button
+              className="btn btn-ghost"
+              type="button"
+              disabled={generating}
+              onClick={() => setConfirmRegenerate(false)}
+            >
+              Vazgeç
+            </button>
           </div>
         </div>
+      )}
 
-        <figure className="trip-photo">
-          {heroImage ? (
-            <img src={heroImage} alt={`${trip.destination} şehir görünümü`} />
-          ) : (
-            <div className="city-plate-inner">
-              <span className="mono">ŞEHİR DOSYASI</span>
-              <strong>{trip.destination}</strong>
-              <span className="mono">
-                {cityInitials(trip.destination)} / {String(trip.days.length).padStart(2, '0')} GÜN
-              </span>
-            </div>
-          )}
-          <figcaption>
-            {trip.destination} / {String(trip.days.length).padStart(2, '0')} GÜN
-          </figcaption>
-        </figure>
-      </header>
+      {confirmTripDelete && (
+        <div className="notice" role="group" aria-label="Rotayı silme onayı">
+          <p className="small">
+            {trip.destination} rotası silinsin mi? Bu işlem geri alınamaz.
+          </p>
+          <div className="form-actions">
+            <button
+              className="btn btn-danger"
+              type="button"
+              disabled={deletingTrip}
+              aria-busy={deletingTrip}
+              onClick={() => void handleDeleteTrip()}
+            >
+              {deletingTrip ? 'Siliniyor...' : 'Rotayı sil'}
+            </button>
+            <button
+              className="btn btn-ghost"
+              type="button"
+              disabled={deletingTrip}
+              onClick={() => setConfirmTripDelete(false)}
+            >
+              Vazgeç
+            </button>
+          </div>
+        </div>
+      )}
 
       {error && (
         <p className="notice error" role="alert">
@@ -399,188 +530,289 @@ export function TripDetailPage() {
         </p>
       )}
 
-      <section className="budget-panel" aria-label="Bütçe özeti">
-        <div>
-          <p className="budget-label">
-            {trip.budget === null ? 'TAHMİNİ TOPLAM' : overBudget ? 'BÜTÇE AŞIMI' : 'KALAN BÜTÇE'}
-          </p>
-          <p className={`budget-figure${overBudget ? ' is-over' : ''}`}>
-            {formatMoney(trip.budget === null ? estimatedTotal : remaining, trip.currency)}
-          </p>
+      {overBudget && remaining !== null && (
+        <p className="notice">
+          Tahmini durak maliyeti bütçeyi {formatMoney(Math.abs(remaining), trip.currency)} aşıyor.
+        </p>
+      )}
 
-          {trip.budget !== null && (
-            <>
-              <div
-                className="budget-track"
-                role="progressbar"
-                aria-label="Bütçe kullanımı"
-                aria-valuemin={0}
-                aria-valuemax={trip.budget}
-                aria-valuenow={Math.min(Math.round(estimatedTotal), trip.budget)}
-              >
-                <div
-                  className={`budget-fill${overBudget ? ' is-over' : ''}`}
-                  style={{ width: `${progress}%` }}
-                />
+      <div className="segmented trip-view-toggle" role="group" aria-label="Plan görünümü">
+        <button
+          className={view === 'list' ? 'is-active' : ''}
+          type="button"
+          aria-pressed={view === 'list'}
+          onClick={() => setView('list')}
+        >
+          Liste
+        </button>
+        <button
+          className={view === 'map' ? 'is-active' : ''}
+          type="button"
+          aria-pressed={view === 'map'}
+          onClick={() => {
+            setView('map')
+            setShowAddForm(false)
+          }}
+        >
+          Harita
+        </button>
+      </div>
+
+      {trip.days.length === 0 ? (
+        <p className="notice">Bu rotada gün bulunmuyor. Planı yeniden hazırlayabilirsin.</p>
+      ) : (
+        <>
+          <div className="day-tabs" role="group" aria-label="Günler">
+            {trip.days.map((day) => {
+              const active = activeDay?.id === day.id
+              return (
+                <button
+                  key={day.id}
+                  className={active ? 'day-tab is-active' : 'day-tab'}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => selectDay(day.id)}
+                >
+                  <strong>{String(day.dayIndex).padStart(2, '0')}</strong>
+                  <span>{formatDayShort(day.date)}</span>
+                </button>
+              )
+            })}
+          </div>
+
+          {activeDay && (
+            <section aria-label={`${formatDayShort(activeDay.date)} planı`}>
+              <div className="day-board">
+                <span>GÜN {String(activeDay.dayIndex).padStart(2, '0')}</span>
+                <span>{activeDay.activities.length} DURAK</span>
+                <span>
+                  {activeDay.activities[0]?.startTime && activeDay.activities.at(-1)?.endTime
+                    ? `${activeDay.activities[0].startTime} - ${activeDay.activities.at(-1)?.endTime}`
+                    : 'SAAT YOK'}
+                </span>
+                <span>
+                  {activeDayTotal === 0 ? 'ÜCRETSİZ' : formatMoney(activeDayTotal, trip.currency)}
+                </span>
               </div>
-              <div className="budget-meta">
-                <span>Tahmini {formatMoney(estimatedTotal, trip.currency)}</span>
-                <span>Bütçe {formatMoney(trip.budget, trip.currency)}</span>
-              </div>
-            </>
-          )}
-        </div>
 
-        <div>
-          <p className="budget-label">PLAN / DURUM</p>
-          <p className="stat-line">
-            <span>
-              <strong>{activities.length}</strong> durak
-            </span>
-            <span>
-              <strong>{trip.days.length}</strong> gün
-            </span>
-            <span>
-              <strong>{emptyDays}</strong> boş gün
-            </span>
-          </p>
+              {view === 'map' ? (
+                <div className="trip-map">
+                  <div className="map-frame">
+                    <p
+                      className="map-fallback"
+                      style={{ position: 'absolute', inset: 0, minHeight: 0 }}
+                    >
+                      Harita yüklenemedi. Aşağıdaki bağlantıdan OpenStreetMap'te açabilirsin.
+                    </p>
+                    <iframe
+                      src={mapSrc(trip.destination)}
+                      title={`${trip.destination} haritası`}
+                      loading="lazy"
+                    />
+                  </div>
+                  <p className="trip-note">
+                    Harita {trip.destination} merkezini gösterir. Durakların adresleri aşağıda.
+                  </p>
+                  <a
+                    className="section-link"
+                    href={mapLink(trip.destination)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    OpenStreetMap'te aç
+                  </a>
 
-          {overBudget && (
-            <p className="notice warning">
-              Plan, bütçeni {formatMoney(Math.abs(remaining ?? 0), trip.currency)} aşıyor. Bir
-              aktiviteyi çıkararak ya da daha ekonomik bir seçenekle dengeleyebilirsin.
-            </p>
+                  <div className="info-block">
+                    <h2>Günün durakları</h2>
+                    {activeDay.activities.length === 0 ? (
+                      <p className="notice">Bu gün için durak yok.</p>
+                    ) : (
+                      <ul className="info-list">
+                        {activeDay.activities.map((activity) => (
+                          <li key={activity.id}>
+                            <span>{activity.title}</span>
+                            <strong>
+                              {activity.place?.address ??
+                                CATEGORY_LABELS[activity.category] ??
+                                activity.category}
+                            </strong>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {showAddForm && (
+                    <div className="info-block" id="add-activity-form">
+                      <ActivityForm
+                        currency={trip.currency}
+                        onSubmit={(input) => handleAddActivity(activeDay.id, input)}
+                        onCancel={() => setShowAddForm(false)}
+                      />
+                    </div>
+                  )}
+
+                  {activeDay.activities.length === 0 ? (
+                    <p className="notice">
+                      Bu gün henüz boş. "Güne durak ekle" ile ilk durağı ekleyebilirsin.
+                    </p>
+                  ) : (
+                    <ol className="timeline" role="list">
+                      {activeDay.activities.map((activity) => {
+                        const duration = durationLabel(activity.startTime, activity.endTime)
+                        const confirming = confirmActivityId === activity.id
+                        const deleting = deletingActivityId === activity.id
+                        return (
+                          <li
+                            className={`timeline-item${draggedActivityId === activity.id ? ' is-dragging' : ''}${dropTargetId === activity.id ? ' is-drop-target' : ''}`}
+                            key={activity.id}
+                            draggable
+                            onDragStart={() => {
+                              setConfirmActivityId(null)
+                              setDraggedActivityId(activity.id)
+                            }}
+                            onDragOver={(event) => {
+                              event.preventDefault()
+                              setDropTargetId(activity.id)
+                            }}
+                            onDrop={(event) => {
+                              event.preventDefault()
+                              void handleDrop(activity.id)
+                            }}
+                            onDragEnd={() => {
+                              setDraggedActivityId(null)
+                              setDropTargetId(null)
+                            }}
+                          >
+                            <span className="timeline-time">
+                              {activity.startTime ?? '--:--'}
+                              {activity.endTime && (
+                                <>
+                                  <br />
+                                  {activity.endTime}
+                                </>
+                              )}
+                            </span>
+
+                            <div className="timeline-body">
+                              <h3>{activity.title}</h3>
+                              <p className="meta-line">
+                                <span>
+                                  {CATEGORY_LABELS[activity.category] ?? activity.category}
+                                </span>
+                                {activity.place?.address && (
+                                  <>
+                                    <span className="dot" aria-hidden="true">
+                                      ·
+                                    </span>
+                                    <span>{activity.place.address}</span>
+                                  </>
+                                )}
+                              </p>
+                              <p className="meta-line">
+                                {duration && (
+                                  <>
+                                    <span>{duration}</span>
+                                    <span className="dot" aria-hidden="true">
+                                      ·
+                                    </span>
+                                  </>
+                                )}
+                                <span>{priceLabel(activity.estimatedCost, trip.currency)}</span>
+                              </p>
+
+                              {confirming ? (
+                                <div
+                                  className="notice"
+                                  role="group"
+                                  aria-label={`${activity.title} durağını silme onayı`}
+                                >
+                                  <p className="small">Bu durak silinsin mi?</p>
+                                  <div className="form-actions">
+                                    <button
+                                      className="btn btn-danger"
+                                      type="button"
+                                      disabled={deleting}
+                                      aria-busy={deleting}
+                                      onClick={() => void handleDeleteActivity(activity)}
+                                    >
+                                      {deleting ? 'Siliniyor...' : 'Sil'}
+                                    </button>
+                                    <button
+                                      className="btn btn-ghost"
+                                      type="button"
+                                      disabled={deleting}
+                                      onClick={() => setConfirmActivityId(null)}
+                                    >
+                                      Vazgeç
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="row-actions">
+                                  <span
+                                    className="drag-handle"
+                                    title="Sürükleyerek sırala"
+                                    aria-hidden="true"
+                                  >
+                                    <GripVertical size={20} strokeWidth={1.75} />
+                                  </span>
+                                  <button
+                                    className="btn btn-ghost"
+                                    type="button"
+                                    onClick={() => setConfirmActivityId(activity.id)}
+                                  >
+                                    Durağı sil
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </li>
+                        )
+                      })}
+                    </ol>
+                  )}
+
+                  <p className="trip-note">
+                    Yeni durak seçili günün sonuna eklenir.
+                  </p>
+                </>
+              )}
+            </section>
           )}
-        </div>
-      </section>
+        </>
+      )}
 
       {trip.tips.length > 0 && (
-        <section className="tip-note" aria-label="Pratik notlar">
+        <section className="info-block" aria-label="Pratik notlar">
           <h2>Pratik notlar</h2>
-          <ul>
+          <ul className="info-list">
             {trip.tips.map((tip) => (
-              <li key={tip}>{tip}</li>
+              <li key={tip}>
+                <span>{tip}</span>
+              </li>
             ))}
           </ul>
         </section>
       )}
 
-      <section className="days" aria-label="Gün gün plan">
-        {trip.days.map((day) => {
-          const dayTotal = day.activities.reduce(
-            (sum, activity) => sum + (activity.estimatedCost ?? 0),
-            0,
-          )
-          const first = day.activities[0]
-          const last = day.activities[day.activities.length - 1]
-          const timeRange =
-            first?.startTime && last?.endTime ? `${first.startTime}–${last.endTime}` : null
-
-          return (
-            <article className="day" key={day.id}>
-              <div className="day-num" aria-hidden="true">
-                {String(day.dayIndex).padStart(2, '0')}
-              </div>
-
-              <div>
-                <header className="day-head">
-                  <div>
-                    <h2 className="day-title">{formatDate(day.date)}</h2>
-                    <p className="day-summary">
-                      {day.activities.length} durak
-                      {timeRange ? ` · ${timeRange}` : ''} ·{' '}
-                      {formatMoney(dayTotal, trip.currency)}
-                    </p>
-                  </div>
-                  <button
-                    className="button ghost small"
-                    type="button"
-                    onClick={() => setOpenDayId(openDayId === day.id ? null : day.id)}
-                    aria-expanded={openDayId === day.id}
-                  >
-                    {openDayId === day.id ? 'Kapat' : 'Durak ekle'}
-                  </button>
-                </header>
-
-                {day.activities.length === 0 ? (
-                  <p className="empty-inline">
-                    Bu gün henüz boş. Planı hazırla ya da kendi durağını ekle.
-                  </p>
-                ) : (
-                  <ol className="activity-list" role="list">
-                    {day.activities.map((activity) => (
-                      <li className="activity-card" key={activity.id}>
-                        <span className="activity-check" aria-hidden="true">
-                          ✓
-                        </span>
-                        <span className="activity-time">
-                          {activity.startTime ?? '--:--'}
-                          {activity.endTime ? `–${activity.endTime}` : ''}
-                        </span>
-
-                        <div className="activity-body">
-                          <h3 className="activity-title">{activity.title}</h3>
-                          <p className="activity-meta">
-                            <span className={`category-tag ${activity.category}`}>
-                              {CATEGORY_LABELS[activity.category] ?? activity.category}
-                            </span>
-                            {activity.place?.address && <span>{activity.place.address}</span>}
-                          </p>
-                        </div>
-
-                        <span className="activity-price">
-                          {activity.estimatedCost === null
-                            ? ''
-                            : activity.estimatedCost === 0
-                              ? 'Ücretsiz'
-                              : formatMoney(activity.estimatedCost, trip.currency)}
-                        </span>
-
-                        <div className="activity-actions">
-                          {confirmActivityId === activity.id ? (
-                            <div className="inline-confirm">
-                              <button
-                                className="button danger small"
-                                type="button"
-                                onClick={() => handleDeleteActivity(activity)}
-                              >
-                                Sil
-                              </button>
-                              <button
-                                className="button ghost small"
-                                type="button"
-                                onClick={() => setConfirmActivityId(null)}
-                              >
-                                Vazgeç
-                              </button>
-                            </div>
-                          ) : (
-                            <button
-                              className="icon-button"
-                              type="button"
-                              aria-label={`${activity.title} aktivitesini sil`}
-                              onClick={() => setConfirmActivityId(activity.id)}
-                            >
-                              ×
-                            </button>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                )}
-
-                {openDayId === day.id && (
-                  <ActivityForm
-                    onSubmit={(input) => handleAddActivity(day.id, input)}
-                    onCancel={() => setOpenDayId(null)}
-                  />
-                )}
-              </div>
-            </article>
-          )
-        })}
-      </section>
+      <div className="sticky-action trip-sticky">
+        <span className="selection-count">
+          {activeDay ? `Gün ${activeDay.dayIndex}` : 'Gün seçilmedi'}
+        </span>
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={openAddForm}
+          disabled={!activeDay}
+          aria-controls="add-activity-form"
+          aria-expanded={showAddForm}
+        >
+          Güne durak ekle
+        </button>
+      </div>
     </div>
   )
 }

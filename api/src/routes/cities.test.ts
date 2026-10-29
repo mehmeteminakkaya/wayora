@@ -43,3 +43,58 @@ describe('şehir keşif API', () => {
     expect(response.body.error.code).toBe('CITY_NOT_FOUND')
   })
 })
+
+describe('şehir arama API', () => {
+  it('şehir adı, ülke ve takma adla şehir bulur', async () => {
+    const byAlias = await request(appWithoutCityTables())
+      .get('/api/cities/search')
+      .query({ q: 'constantinople' })
+    expect(byAlias.status).toBe(200)
+    expect(byAlias.body.cities[0]).toMatchObject({ slug: 'istanbul', name: 'İstanbul' })
+
+    const byCountry = await request(appWithoutCityTables())
+      .get('/api/cities/search')
+      .query({ q: 'italya' })
+    expect(byCountry.status).toBe(200)
+    expect(byCountry.body.cities).toEqual(
+      expect.arrayContaining([expect.objectContaining({ slug: 'roma' })]),
+    )
+  })
+
+  it('deneyim adı ve etiketlerinde arar, şehir bilgisini ekler', async () => {
+    const response = await request(appWithoutCityTables())
+      .get('/api/cities/search')
+      .query({ q: 'gastronomi' })
+
+    expect(response.status).toBe(200)
+    expect(response.body.cities).toHaveLength(0)
+    expect(response.body.experiences.length).toBeGreaterThan(0)
+    expect(response.body.experiences[0]).toMatchObject({
+      citySlug: expect.any(String),
+      cityName: expect.any(String),
+      name: expect.any(String),
+      estimatedCost: expect.any(Number),
+    })
+  })
+
+  it('Türkçe karakterlerden bağımsız eşleşir', async () => {
+    const response = await request(appWithoutCityTables())
+      .get('/api/cities/search')
+      .query({ q: 'muze' })
+
+    expect(response.status).toBe(200)
+    expect(response.body.experiences.length).toBeGreaterThan(0)
+  })
+
+  it('boş aramada boş listeler, uzun aramada 400 döner', async () => {
+    const empty = await request(appWithoutCityTables()).get('/api/cities/search')
+    expect(empty.status).toBe(200)
+    expect(empty.body).toEqual({ cities: [], experiences: [] })
+
+    const tooLong = await request(appWithoutCityTables())
+      .get('/api/cities/search')
+      .query({ q: 'a'.repeat(81) })
+    expect(tooLong.status).toBe(400)
+    expect(tooLong.body.error.code).toBe('VALIDATION_ERROR')
+  })
+})

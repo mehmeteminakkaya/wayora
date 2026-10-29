@@ -1,22 +1,77 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Search } from 'lucide-react'
 import { api } from '../api'
-import type { CitySummary } from '../api'
+import type { CityDetail, CityExperience, CitySummary } from '../api'
+import { Photo } from '../components/Photo'
 import { formatMoney } from '../lib/format'
+import { categoryLabel, cityPhoto, cityPhotoLabel, normalizeCityKey } from '../lib/photos'
 
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toLocaleUpperCase('tr-TR') ?? '')
-    .join('')
+type CategoryFilter = 'all' | 'food' | 'museum' | 'nature' | 'nightlife'
+type SortKey = 'recommended' | 'price-asc' | 'price-desc' | 'name'
+
+const CATEGORY_FILTERS: Array<{ value: CategoryFilter; label: string }> = [
+  { value: 'all', label: 'Tümü' },
+  { value: 'food', label: 'Yemek' },
+  { value: 'museum', label: 'Müze' },
+  { value: 'nature', label: 'Doğa' },
+  { value: 'nightlife', label: 'Gece' },
+]
+
+const NIGHT_TERMS = ['gece', 'gosteri', 'bar', 'muzik', 'aksam']
+
+function isNightExperience(experience: CityExperience): boolean {
+  if ((experience.category as string) === 'nightlife') return true
+  const tags = experience.tags.map((tag) => normalizeCityKey(tag))
+  return NIGHT_TERMS.some((term) => tags.includes(term))
+}
+
+function matchesCategory(experience: CityExperience, filter: CategoryFilter): boolean {
+  if (filter === 'all') return true
+  if (filter === 'nightlife') return isNightExperience(experience)
+  return experience.category === filter
+}
+
+function experienceSearchText(experience: CityExperience): string {
+  return normalizeCityKey(
+    [
+      experience.name,
+      experience.description,
+      experience.neighborhood ?? '',
+      experience.address ?? '',
+      experience.category,
+      categoryLabel(experience.category),
+      ...experience.tags,
+    ].join(' '),
+  )
+}
+
+function citySearchText(city: CitySummary): string {
+  return normalizeCityKey(
+    [city.name, city.country, city.summary, city.bestSeason ?? '', ...city.tags].join(' '),
+  )
+}
+
+function priceText(value: number, currency: string): string {
+  return value === 0 ? 'Ücretsiz' : formatMoney(value, currency)
+}
+
+type CityResult = {
+  city: CitySummary
+  matchedExperiences: CityExperience[]
 }
 
 export function ExplorePage() {
   const [cities, setCities] = useState<CitySummary[]>([])
+  const [details, setDetails] = useState<Record<string, CityDetail>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [query, setQuery] = useState('')
+  const [category, setCategory] = useState<CategoryFilter>('all')
+  const [sort, setSort] = useState<SortKey>('recommended')
+  const [detailsLoading, setDetailsLoading] = useState(false)
+  const [detailsError, setDetailsError] = useState(false)
+  const detailsRequested = useRef(false)
 
   useEffect(() => {
     let active = true
@@ -36,6 +91,78 @@ export function ExplorePage() {
     }
   }, [])
 
+  function ensureDetails() {
+    if (detailsRequested.current || cities.length === 0) return
+    detailsRequested.current = true
+    setDetailsLoading(true)
+    setDetailsError(false)
+    Promise.allSettled(cities.map((city) => api.getCity(city.slug)))
+      .then((results) => {
+        const next: Record<string, CityDetail> = {}
+        let failed = false
+        results.forEach((result, index) => {
+          const city = cities[index]
+          if (result.status === 'fulfilled') {
+            next[city.slug] = result.value.city
+          } else {
+            failed = true
+          }
+        })
+        setDetails((current) => ({ ...current, ...next }))
+        setDetailsError(failed)
+      })
+      .finally(() => {
+        setDetailsLoading(false)
+      })
+  }
+
+  const normalizedQuery = normalizeCityKey(query.trim())
+
+  const results = useMemo(() => {
+    const filtered: CityResult[] = []
+
+    cities.forEach((city) => {
+      const detail = details[city.slug]
+      const experiences = detail?.experiences ?? []
+      const cityMatchesQuery =
+        normalizedQuery.length === 0 || citySearchText(city).includes(normalizedQuery)
+      const matchedExperiences =
+        normalizedQuery.length === 0
+          ? []
+          : experiences.filter(
+              (experience) =>
+                experienceSearchText(experience).includes(normalizedQuery) &&
+                matchesCategory(experience, category),
+            )
+      const matchesFilter =
+        category === 'all' ||
+        !detail ||
+        experiences.some((experience) => matchesCategory(experience, category))
+
+      if ((cityMatchesQuery || matchedExperiences.length > 0) && matchesFilter) {
+        filtered.push({ city, matchedExperiences })
+      }
+    })
+
+    if (sort === 'price-asc') {
+      filtered.sort(
+        (a, b) =>
+          a.city.averageCost - b.city.averageCost ||
+          a.city.name.localeCompare(b.city.name, 'tr'),
+      )
+    } else if (sort === 'price-desc') {
+      filtered.sort(
+        (a, b) =>
+          b.city.averageCost - a.city.averageCost ||
+          a.city.name.localeCompare(b.city.name, 'tr'),
+      )
+    } else if (sort === 'name') {
+      filtered.sort((a, b) => a.city.name.localeCompare(b.city.name, 'tr'))
+    }
+
+    return filtered
+  }, [cities, details, normalizedQuery, category, sort])
+
   if (loading) {
     return (
       <div className="center-state" role="status">
@@ -45,21 +172,50 @@ export function ExplorePage() {
     )
   }
 
+  const waitingForDetails = detailsLoading && Object.keys(details).length === 0
+  const showEmpty = !waitingForDetails && results.length === 0
+
+  function clearFilters() {
+    setQuery('')
+    setCategory('all')
+  }
+
   return (
-    <div className="page-shell explore-page">
-      <header className="explore-heading">
-        <div>
-          <p className="eyebrow">KEŞİF / 10 ŞEHİR</p>
-          <h1>Şehri cebine sığdır.</h1>
-          <p>
-            Her şehir için müzeler, sokaklar, yemek durakları ve günübirlik rotalar. Fiyatlar
-            kişi başı tahmini; planını kendi bütçene göre katmanla.
-          </p>
+    <div className="page">
+      <header className="explore-head">
+        <h1 className="explore-title">Keşfet</h1>
+
+        <div className="search-box">
+          <Search size={20} strokeWidth={1.75} aria-hidden="true" />
+          <input
+            className="input"
+            type="search"
+            value={query}
+            placeholder="Şehir veya deneyim ara"
+            aria-label="Şehir veya deneyim ara"
+            autoComplete="off"
+            onChange={(event) => {
+              setQuery(event.target.value)
+              ensureDetails()
+            }}
+          />
         </div>
-        <div className="explore-stamp" aria-label="Katalog özeti">
-          <span className="stamp">10 ŞEHİR</span>
-          <span className="stamp olive">100 DENEYİM</span>
-          <span className="mono">FİYATLAR / EUR</span>
+
+        <div className="chip-row" role="group" aria-label="Kategori filtresi">
+          {CATEGORY_FILTERS.map((item) => (
+            <button
+              key={item.value}
+              type="button"
+              className={category === item.value ? 'chip is-active' : 'chip'}
+              aria-pressed={category === item.value}
+              onClick={() => {
+                setCategory(item.value)
+                ensureDetails()
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
         </div>
       </header>
 
@@ -69,40 +225,80 @@ export function ExplorePage() {
         </p>
       )}
 
-      <div className="city-guide-grid">
-        {cities.map((city) => (
-          <Link className="city-guide-card" to={`/kesfet/${city.slug}`} key={city.slug}>
-            <div className="city-guide-top">
-              <span className="city-monogram" aria-hidden="true">
-                {initials(city.name)}
-              </span>
-              <span className="stamp">{city.experienceCount} DENEYİM</span>
-            </div>
-            <h2>{city.name}</h2>
-            <p className="city-guide-country">
-              {city.country} · {city.bestSeason ?? 'Yıl boyu'}
-            </p>
-            <p className="city-guide-summary">{city.summary}</p>
-            <div className="city-guide-meta">
-              <span>{formatMoney(city.averageCost, city.currency)} ortalama</span>
-              <span>{city.minCost === 0 ? 'ücretsiz seçenek var' : 'bütçe dostu'}</span>
-            </div>
-            <div className="tag-row" aria-label="Öne çıkan etiketler">
-              {city.tags.slice(0, 3).map((tag) => (
-                <span className="tag" key={tag}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <span className="city-guide-link">Rehberi aç</span>
-          </Link>
-        ))}
+      {detailsError && (
+        <p className="notice" role="status">
+          Bazı deneyim bilgileri yüklenemedi; arama şehir bilgileriyle sınırlı.
+        </p>
+      )}
+
+      <div className="explore-tools-row" style={{ marginBottom: 16 }}>
+        <p className="label" aria-live="polite">
+          {waitingForDetails ? 'ARANIYOR' : `${results.length} ŞEHİR`}
+        </p>
+        <select
+          className="sort-select"
+          value={sort}
+          aria-label="Şehirleri sırala"
+          onChange={(event) => setSort(event.target.value as SortKey)}
+        >
+          <option value="recommended">Önerilen sıra</option>
+          <option value="price-asc">Fiyat: düşükten yükseğe</option>
+          <option value="price-desc">Fiyat: yüksekten düşüğe</option>
+          <option value="name">İsim: A-Z</option>
+        </select>
       </div>
 
-      <p className="explore-disclaimer">
-        Fiyatlar 2026 sonbaharı için yaklaşık kişi başı değerlerdir. Müze saatleri, bilet
-        koşulları ve sezonluk kapanışlar için resmî siteyi kontrol et.
-      </p>
+      {waitingForDetails ? (
+        <div className="center-state" role="status">
+          <span className="spinner" aria-hidden="true" />
+          <span>Deneyimler aranıyor…</span>
+        </div>
+      ) : showEmpty ? (
+        <section className="empty-state" aria-live="polite">
+          <h2>Sonuç bulunamadı.</h2>
+          <p>
+            {query.trim()
+              ? `"${query.trim()}" için şehir veya deneyim bulunamadı.`
+              : 'Bu kategoride şehir bulunamadı.'}{' '}
+            Farklı bir arama dene veya filtreleri temizle.
+          </p>
+          <button className="btn btn-secondary" type="button" onClick={clearFilters}>
+            Filtreleri temizle
+          </button>
+        </section>
+      ) : (
+        <div className="city-grid">
+          {results.map(({ city, matchedExperiences }) => (
+            <Link className="city-card" to={`/kesfet/${city.slug}`} key={city.slug}>
+              <Photo
+                className="city-card-media"
+                src={cityPhoto(city.name)}
+                alt={`${city.name} şehir fotoğrafı`}
+                label={cityPhotoLabel(city.name)}
+              />
+              <div className="city-card-body">
+                <div className="city-card-title-row">
+                  <h2 className="city-card-title">{city.name}</h2>
+                  <span className="city-card-country">{city.country}</span>
+                </div>
+                <p className="city-card-meta">
+                  {city.experienceCount} deneyim · ort.{' '}
+                  {priceText(city.averageDailyCost, city.currency)}/gün ·{' '}
+                  {city.bestSeason ?? 'Yıl boyu'}
+                </p>
+                {matchedExperiences.length > 0 && (
+                  <p className="small muted">
+                    Eşleşen: {matchedExperiences.slice(0, 2).map((item) => item.name).join(' · ')}
+                    {matchedExperiences.length > 2
+                      ? ` ve ${matchedExperiences.length - 2} deneyim daha`
+                      : ''}
+                  </p>
+                )}
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

@@ -1195,12 +1195,28 @@ p {
 }
 
 .experience-row {
+  position: relative;
   display: grid;
   grid-template-columns: 88px minmax(0, 1fr) 44px;
   gap: 12px;
   align-items: start;
   padding: 16px 0;
   border-bottom: 1px solid var(--line);
+}
+
+/* Satirin tamami baglantinin tiklama alani olsun: once yalnizca 107x20'lik
+   baslik metni tiklanabiliyordu, kartin govdesine tiklayinca hicbir sey
+   olmuyordu. Gorunum degismez. */
+.experience-row h3 a::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+}
+
+/* Satir sonundaki secim butonu bu kaplamanin ustunde kalmali. */
+.experience-row .select-button {
+  position: relative;
+  z-index: 1;
 }
 
 .experience-thumb {
@@ -1710,7 +1726,9 @@ p {
 .timeline-item {
   display: grid;
   grid-template-columns: 52px minmax(0, 1fr) auto;
-  gap: 8px;
+  /* Sutun bosluğu, zaman cizgisinin noktasini (7px) barindiracak kadar genis
+     olmali; 8px'te nokta baslik metninin uzerine biniyordu. */
+  gap: 8px 16px;
   padding: 14px 0;
   border-bottom: 1px solid var(--line);
 }

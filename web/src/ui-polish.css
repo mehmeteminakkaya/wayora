@@ -1,0 +1,473 @@
+/* Final cross-page UI polish. Component tokens live in index.css. */
+
+html {
+  scrollbar-gutter: stable;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+.page {
+  padding-right: clamp(16px, 4vw, 32px);
+  padding-left: clamp(16px, 4vw, 32px);
+  padding-bottom: 64px;
+}
+
+.page-heading,
+.explore-head,
+.section-head {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.page-heading > :last-child,
+.section-head > :last-child {
+  flex-shrink: 0;
+}
+
+.btn {
+  min-width: 0;
+  max-width: 100%;
+  padding-right: 20px;
+  padding-left: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.btn svg {
+  flex: 0 0 auto;
+}
+
+.btn:focus-visible,
+.icon-btn:focus-visible,
+.chip:focus-visible,
+.select-button:focus-visible,
+.day-tab:focus-visible,
+.topbar-link:focus-visible,
+.bottom-nav a:focus-visible,
+.event-link:focus-visible,
+.event-add:focus-visible,
+.profile-row:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.btn-primary:hover {
+  background: #292929;
+}
+
+.btn-secondary:hover {
+  border-color: var(--ink);
+  background: #efefec;
+}
+
+.btn-ghost {
+  min-height: 44px;
+  padding-right: 10px;
+  padding-left: 10px;
+  border-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.btn-ghost:hover {
+  border-color: var(--line);
+  background: var(--surface);
+}
+
+.btn-danger:hover {
+  background: #fff4f2;
+}
+
+.btn[disabled],
+.btn[aria-busy='true'] {
+  transform: none;
+}
+
+.btn-sm {
+  padding-right: 14px;
+  padding-left: 14px;
+}
+
+.icon-btn {
+  flex: 0 0 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+.icon-btn:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+}
+
+.topbar-inner {
+  min-height: 60px;
+  padding-right: 16px;
+  padding-left: 16px;
+}
+
+.logo {
+  letter-spacing: -0.045em;
+}
+
+.topbar-login {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  text-decoration: none;
+}
+
+.topbar-login:hover {
+  border-color: var(--line);
+  background: var(--bg);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--ink);
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: #86878b;
+  opacity: 1;
+}
+
+.notice {
+  border-left: 3px solid var(--ink-2);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.notice.error {
+  border-left-color: var(--stop);
+}
+
+.notice.success {
+  border-left-color: var(--go);
+}
+
+.city-card,
+.trip-card,
+.profile-card,
+.summary-card,
+.discovery-panel {
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+
+.city-card:focus-within,
+.trip-card:focus-within,
+.profile-card:focus-within,
+.summary-card:focus-within,
+.discovery-panel:focus-within {
+  border-color: var(--ink);
+}
+
+.trip-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.trip-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.trip-card-actions {
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.city-card-title-row {
+  gap: 12px;
+}
+
+.city-card-title {
+  min-width: 0;
+}
+
+.city-card-country {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.experience-row {
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+
+.select-button {
+  flex: 0 0 44px;
+}
+
+.day-tabs {
+  gap: 6px;
+  padding-bottom: 2px;
+}
+
+.day-tab {
+  min-width: 76px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.day-tab span {
+  white-space: nowrap;
+}
+
+.timeline-item {
+  border-radius: var(--radius-control);
+}
+
+.sticky-action {
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  gap: 12px;
+}
+
+.sticky-action .btn {
+  min-width: 0;
+  padding-right: 18px;
+  padding-left: 18px;
+}
+
+.bottom-nav {
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -8px 24px rgba(18, 18, 18, 0.04);
+}
+
+.bottom-nav a {
+  color: var(--ink-2);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.bottom-nav a.is-active {
+  color: var(--ink);
+}
+
+.auth-card,
+.auth-page .summary-card {
+  width: 100%;
+  max-width: 440px;
+  padding: clamp(20px, 5vw, 32px);
+}
+
+.auth-card h1 {
+  margin-bottom: 6px;
+}
+
+.auth-sub {
+  max-width: 34ch;
+  margin-bottom: 20px;
+}
+
+.auth-links,
+.profile-actions {
+  gap: 10px;
+}
+
+.auth-links a,
+.landing-footer-links a {
+  text-underline-offset: 4px;
+}
+
+.onboarding-progress {
+  padding-bottom: 4px;
+}
+
+.chip-row,
+.filter-row {
+  scroll-padding-inline: 16px;
+}
+
+.city-events .discovery-panel {
+  padding: clamp(14px, 4vw, 20px);
+}
+
+.event-body h4,
+.event-meta {
+  overflow-wrap: anywhere;
+}
+
+.empty-state {
+  padding: 32px 16px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .city-card:hover,
+  .trip-card:hover,
+  .profile-row:hover,
+  .experience-row:hover {
+    border-color: var(--ink-2);
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar-inner {
+    min-height: 56px;
+  }
+
+  .page {
+    padding-top: 20px;
+  }
+
+  .city-hero,
+  .experience-hero {
+    margin-right: -16px;
+    margin-left: -16px;
+  }
+
+  .page-heading {
+    padding-top: 16px;
+  }
+
+  .page-heading .btn {
+    width: 100%;
+  }
+
+  .city-card-body,
+  .trip-card-body {
+    padding: 14px;
+  }
+
+  .trip-card h2 {
+    font-size: 21px;
+    line-height: 27px;
+  }
+
+  .sticky-action {
+    min-height: 72px;
+  }
+
+  .sticky-action .btn {
+    flex: 0 0 auto;
+  }
+
+  .hero-search .btn,
+  .auth-form .btn,
+  .wizard-actions .btn,
+  .form-actions .btn {
+    width: 100%;
+  }
+
+  .form-actions,
+  .wizard-actions,
+  .onboarding-foot {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .form-actions .btn,
+  .wizard-actions .btn,
+  .onboarding-foot .btn {
+    width: 100%;
+  }
+
+  .onboarding-foot .section-link {
+    justify-self: start;
+  }
+
+  .sheet-foot .btn {
+    width: auto;
+  }
+
+  .day-tabs {
+    margin-right: -16px;
+    margin-left: -16px;
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .day-tab {
+    min-width: 72px;
+  }
+
+  .event-row {
+    grid-template-columns: 56px minmax(0, 1fr) 44px;
+  }
+
+  .event-image {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (max-width: 420px) {
+  .btn {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .profile-card,
+  .summary-card,
+  .discovery-panel {
+    padding: 14px;
+  }
+
+  .sticky-action {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .sticky-action .selection-summary-button {
+    font-size: 12px;
+  }
+
+  .sticky-action .btn {
+    padding-right: 12px;
+    padding-left: 12px;
+    font-size: 14px;
+  }
+
+  .city-hero-body,
+  .experience-hero-body {
+    padding: 14px;
+  }
+}
+
+@media (min-width: 721px) {
+  .city-events .section-head h2 {
+    font-size: 30px;
+    line-height: 36px;
+  }
+
+  .event-row {
+    grid-template-columns: 64px minmax(0, 1fr) 44px;
+  }
+
+  .sticky-action {
+    justify-content: flex-end;
+  }
+
+  .trip-card-actions {
+    padding-top: 12px;
+  }
+}

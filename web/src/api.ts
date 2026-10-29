@@ -73,6 +73,7 @@ export type GenerationMeta = {
   model: string
   fallback: boolean
   latencyMs: number
+  webSearch?: boolean
 }
 
 export type DiscoveryStatus = {

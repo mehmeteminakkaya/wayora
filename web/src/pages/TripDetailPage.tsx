@@ -280,7 +280,9 @@ export function TripDetailPage() {
               tone: 'warning',
               text: 'Plan daha genel hazırlandı. Durakları düzenleyebilir ya da yeniden hazırlayabilirsin.',
             }
-          : { tone: 'success', text: 'Plan hazır.' },
+          : result.meta.webSearch
+            ? { tone: 'success', text: 'Plan hazır · güncel web kaynakları kullanıldı.' }
+            : { tone: 'success', text: 'Plan hazır.' },
       )
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Plan oluşturulamadı')

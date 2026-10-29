@@ -172,6 +172,7 @@ COOKIE_NAME=wayora_session
 LLM_PROVIDER=offline
 # DEEPSEEK_API_KEY=...
 DEEPSEEK_MODEL=deepseek-chat
+DEEPSEEK_WEB_SEARCH=true
 LLM_MODEL_FAST=gemini-2.0-flash
 LLM_MODEL_SMART=gemini-2.5-pro
 LLM_TIMEOUT_MS=20000
@@ -197,7 +198,13 @@ DeepSeek örneği:
 LLM_PROVIDER=deepseek
 DEEPSEEK_API_KEY=...
 DEEPSEEK_MODEL=deepseek-chat
+DEEPSEEK_WEB_SEARCH=true
 ```
+
+`DEEPSEEK_WEB_SEARCH=true` olduğunda plan üretiminden önce DeepSeek Search API'den
+şehir/tarih/ilgi alanına uygun web sonuçları alınır. Sonuçlar modele **güvenilmeyen
+araştırma bağlamı** olarak verilir; katalog dışı yer üretilmesine izin verilmez. Arama
+başarısız olursa plan yine katalogla üretilir.
 
 ### Ücretsiz canlı keşif (opsiyonel)
 
@@ -496,7 +503,9 @@ zod doğrulaması + aday kimlik filtresi
 ```
 
 - `offline` varsayılan ve ücretsizdir; demo/test için deterministiktir.
+- DeepSeek Search & Fetch API ile isteğe bağlı canlı web araştırması yapılabilir.
 - LLM'e yalnızca aday deneyimler verilir; olmayan yer kimlikleri atılır.
+- Aynı katalog yeri aynı rotada tekrar ettirilmez.
 - Toplam maliyet backend'de hesaplanır; bütçe aşımı UI'da uyarı olarak gösterilir.
 - Üretim uzun sürebileceği için arayüzde sahte yüzde yerine gerçek aşama metni gösterilir.
 - Sağlayıcı hatasında kullanıcı girdileri korunur; rota kaydı oluştuysa mevcut kayda dönüş sunulur.
@@ -544,9 +553,9 @@ Son doğrulanan sonuçlar:
 
 | Kontrol | Sonuç |
 | :--- | ---: |
-| API testleri | 59 / 59 |
+| API testleri | 61 / 61 |
 | Web testleri | 4 / 4 |
-| Toplam Vitest | 63 / 63 |
+| Toplam Vitest | 65 / 65 |
 | Lint | geçti |
 | Typecheck | geçti |
 | Production build | geçti |

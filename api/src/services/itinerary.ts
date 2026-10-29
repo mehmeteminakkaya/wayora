@@ -345,18 +345,32 @@ export function normalizeLlmPlan(
       continue
     }
 
-    const activities = rawDay.activities.map((activity) => {
-      // Halüsinasyon kontrolü: aday listesinde olmayan yer kimliği kabul edilmez.
-      const place = activity.googlePlaceId ? byId.get(activity.googlePlaceId) : undefined
-      return {
-        title: place?.name ?? activity.title,
-        category: place?.category ?? activity.category,
-        startTime: activity.startTime,
-        endTime: activity.endTime,
-        estimatedCost: roundMoney(activity.estimatedCost),
-        googlePlaceId: place?.googlePlaceId ?? null,
-      } satisfies PlannedActivity
-    })
+    const activities = rawDay.activities
+      .map((activity) => {
+        // Halüsinasyon kontrolü: aday listesinde olmayan yer kimliği kabul edilmez.
+        const place = activity.googlePlaceId ? byId.get(activity.googlePlaceId) : undefined
+        return {
+          title: place?.name ?? activity.title,
+          category: place?.category ?? activity.category,
+          startTime: activity.startTime,
+          endTime: activity.endTime,
+          estimatedCost: roundMoney(activity.estimatedCost),
+          googlePlaceId: place?.googlePlaceId ?? null,
+        } satisfies PlannedActivity
+      })
+      .filter((activity, index, list) => {
+        // Aynı gün içinde aynı katalog yerini iki kez göstermeyi engelle.
+        const key = activity.googlePlaceId ?? activity.title.toLocaleLowerCase('tr-TR')
+        return list.findIndex((candidate) => {
+          const candidateKey = candidate.googlePlaceId ?? candidate.title.toLocaleLowerCase('tr-TR')
+          return candidateKey === key
+        }) === index
+      })
+
+    if (activities.length === 0) {
+      days.push(fallback.days[day - 1]!)
+      continue
+    }
 
     days.push({ dayIndex: day, date: isoDate(date), activities })
   }

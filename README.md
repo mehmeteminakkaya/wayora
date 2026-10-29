@@ -544,9 +544,9 @@ Son doğrulanan sonuçlar:
 
 | Kontrol | Sonuç |
 | :--- | ---: |
-| API testleri | 58 / 58 |
+| API testleri | 59 / 59 |
 | Web testleri | 4 / 4 |
-| Toplam Vitest | 62 / 62 |
+| Toplam Vitest | 63 / 63 |
 | Lint | geçti |
 | Typecheck | geçti |
 | Production build | geçti |

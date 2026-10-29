@@ -128,6 +128,39 @@ describe('LLM çıktısı doğrulama', () => {
     )
   })
 
+  it('aynı gün içinde aynı katalog yerini iki kez göstermez', () => {
+    const place = candidates[0]!
+    const raw = {
+      days: [
+        {
+          dayIndex: 1,
+          activities: [
+            {
+              title: place.name,
+              category: place.category,
+              startTime: '09:00',
+              endTime: '11:00',
+              estimatedCost: 12,
+              googlePlaceId: place.googlePlaceId,
+            },
+            {
+              title: place.name,
+              category: place.category,
+              startTime: '14:00',
+              endTime: '16:00',
+              estimatedCost: 10,
+              googlePlaceId: place.googlePlaceId,
+            },
+          ],
+        },
+      ],
+      tips: [],
+    }
+
+    const plan = normalizeLlmPlan(raw, input, candidates)
+    expect(plan.days[0]?.activities).toHaveLength(1)
+  })
+
   it('markdown kod bloğundaki JSON’u ayrıştırır, bozuk JSON’da null döner', () => {
     expect(parseLlmPlan('```json\n{"days":[],"tips":[]}\n```')).toBeNull()
     expect(parseLlmPlan('bu JSON değil')).toBeNull()

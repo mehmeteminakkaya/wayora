@@ -1,7 +1,7 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../api'
 import type { BudgetLevel, Pace, PreferenceInput, TravelStyle } from '../api'
 
@@ -47,6 +47,8 @@ const STEP_TITLES = ['İlgi alanları', 'Bütçe', 'Tempo']
 
 export function OnboardingPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const returnTo = (location.state as { from?: string } | null)?.from ?? '/trips'
   const [form, setForm] = useState<PreferenceInput>(DEFAULTS)
   const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -129,7 +131,7 @@ export function OnboardingPage() {
     setError(null)
     try {
       await api.savePreferences(form)
-      navigate('/trips')
+      navigate(returnTo, { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Tercihler kaydedilemedi')
     } finally {
@@ -148,8 +150,8 @@ export function OnboardingPage() {
         </div>
         <Link
           className="section-link"
-          to="/trips"
-          aria-label="Tercihleri atlayıp rotalara git"
+          to={returnTo}
+          aria-label="Tercihleri atlayıp devam et"
           style={{
             display: 'inline-flex',
             minWidth: 44,

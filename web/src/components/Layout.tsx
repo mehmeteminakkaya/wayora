@@ -1,6 +1,6 @@
 import { Compass, Map, Plus, UserRound } from 'lucide-react'
 import { useEffect } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation, useNavigationType } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
@@ -11,6 +11,7 @@ const mobileClass = ({ isActive }: { isActive: boolean }) => (isActive ? 'is-act
 export function Layout() {
   const { user } = useAuth()
   const location = useLocation()
+  const navigationType = useNavigationType()
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register'
   const isLanding = location.pathname === '/'
   const isExplore = location.pathname === '/kesfet'
@@ -19,13 +20,13 @@ export function Layout() {
   const showBottomNav = !!user && !isAuthPage && (isExplore || isTrips || isProfile)
 
   useEffect(() => {
-    if (navigator.userAgent.includes('jsdom')) return
+    if (navigationType === 'POP' || navigator.userAgent.includes('jsdom')) return
     try {
       window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
     } catch {
       // Scroll API'si bulunmayan ortamlarda sessizce devam et.
     }
-  }, [location.pathname])
+  }, [location.pathname, navigationType])
 
   return (
     <div className={`app-shell${showBottomNav ? ' has-bottom-nav' : ''}`}>
@@ -39,40 +40,44 @@ export function Layout() {
             WAYORA
           </Link>
 
-          <nav className="topbar-nav" aria-label="Ana menü">
-            <NavLink to="/kesfet" className={navClass}>
-              Keşfet
-            </NavLink>
-            {user ? (
-              <>
-                <NavLink to="/trips" className={navClass}>
-                  Rotalarım
-                </NavLink>
-                <NavLink to="/trips/new" className={navClass}>
-                  Planla
-                </NavLink>
-                <NavLink to="/profil" className={navClass}>
-                  Profil
-                </NavLink>
-              </>
-            ) : (
-              <NavLink to="/login" className={navClass}>
-                Giriş yap
+          {!isAuthPage && (
+            <nav className="topbar-nav" aria-label="Ana menü">
+              <NavLink to="/kesfet" className={navClass}>
+                Keşfet
               </NavLink>
-            )}
-          </nav>
+              {user ? (
+                <>
+                  <NavLink to="/trips" className={navClass}>
+                    Rotalarım
+                  </NavLink>
+                  <NavLink to="/trips/new" className={navClass}>
+                    Planla
+                  </NavLink>
+                  <NavLink to="/profil" className={navClass}>
+                    Profil
+                  </NavLink>
+                </>
+              ) : (
+                <NavLink to="/login" className={navClass}>
+                  Giriş yap
+                </NavLink>
+              )}
+            </nav>
+          )}
 
-          <div className="topbar-actions">
-            {user ? (
-              <Link className="icon-btn" to="/profil" aria-label="Profil">
-                <UserRound size={22} strokeWidth={1.75} />
-              </Link>
-            ) : (
-              <Link className="topbar-login" to="/login">
-                Giriş yap
-              </Link>
-            )}
-          </div>
+          {!isAuthPage && (
+            <div className="topbar-actions">
+              {user ? (
+                <Link className="icon-btn" to="/profil" aria-label="Profil">
+                  <UserRound size={22} strokeWidth={1.75} />
+                </Link>
+              ) : (
+                <Link className="topbar-login" to="/login">
+                  Giriş yap
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </header>
 

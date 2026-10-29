@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import { api } from '../api'
 import type { CityDetail, CityExperience, CitySummary } from '../api'
 import { Photo } from '../components/Photo'
+import { CardsSkeleton } from '../components/Skeletons'
 import { formatMoney } from '../lib/format'
 import { categoryLabel, cityPhoto, cityPhotoLabel, normalizeCityKey } from '../lib/photos'
 
@@ -62,16 +63,46 @@ type CityResult = {
 }
 
 export function ExplorePage() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [cities, setCities] = useState<CitySummary[]>([])
   const [details, setDetails] = useState<Record<string, CityDetail>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [query, setQuery] = useState('')
-  const [category, setCategory] = useState<CategoryFilter>('all')
-  const [sort, setSort] = useState<SortKey>('recommended')
+  const [reloadKey, setReloadKey] = useState(0)
   const [detailsLoading, setDetailsLoading] = useState(false)
   const [detailsError, setDetailsError] = useState(false)
   const detailsRequested = useRef(false)
+  const restoreScroll = useRef(true)
+
+  const query = searchParams.get('q') ?? ''
+  const rawCategory = searchParams.get('category') as CategoryFilter | null
+  const category: CategoryFilter = CATEGORY_FILTERS.some((item) => item.value === rawCategory)
+    ? (rawCategory as CategoryFilter)
+    : 'all'
+  const rawSort = searchParams.get('sort') as SortKey | null
+  const sort: SortKey =
+    rawSort === 'price-asc' || rawSort === 'price-desc' || rawSort === 'name'
+      ? rawSort
+      : 'recommended'
+
+  function updateParam(key: string, value: string) {
+    const next = new URLSearchParams(searchParams)
+    if (value) next.set(key, value)
+    else next.delete(key)
+    setSearchParams(next, { replace: true })
+  }
+
+  function setQuery(value: string) {
+    updateParam('q', value)
+  }
+
+  function setCategory(value: CategoryFilter) {
+    updateParam('category', value === 'all' ? '' : value)
+  }
+
+  function setSort(value: SortKey) {
+    updateParam('sort', value === 'recommended' ? '' : value)
+  }
 
   useEffect(() => {
     let active = true
@@ -89,7 +120,16 @@ export function ExplorePage() {
     return () => {
       active = false
     }
-  }, [])
+  }, [reloadKey])
+
+  useEffect(() => {
+    if (loading || !restoreScroll.current) return
+    const saved = sessionStorage.getItem('wayora.explore.scroll')
+    restoreScroll.current = false
+    if (!saved) return
+    sessionStorage.removeItem('wayora.explore.scroll')
+    window.requestAnimationFrame(() => window.scrollTo({ top: Number(saved), behavior: 'auto' }))
+  }, [loading])
 
   function ensureDetails() {
     if (detailsRequested.current || cities.length === 0) return
@@ -165,9 +205,13 @@ export function ExplorePage() {
 
   if (loading) {
     return (
-      <div className="center-state" role="status">
-        <span className="spinner" aria-hidden="true" />
-        <span>Şehirler hazırlanıyor…</span>
+      <div className="page">
+        <header className="explore-head">
+          <h1 className="explore-title">Keşfet</h1>
+          <div className="skeleton skeleton-line" style={{ height: 48 }} />
+          <div className="skeleton skeleton-line short" />
+        </header>
+        <CardsSkeleton count={3} />
       </div>
     )
   }
@@ -176,8 +220,7 @@ export function ExplorePage() {
   const showEmpty = !waitingForDetails && results.length === 0
 
   function clearFilters() {
-    setQuery('')
-    setCategory('all')
+    setSearchParams(new URLSearchParams(), { replace: true })
   }
 
   return (
@@ -220,9 +263,20 @@ export function ExplorePage() {
       </header>
 
       {error && (
-        <p className="notice error" role="alert">
-          {error}
-        </p>
+        <div className="notice error" role="alert">
+          <p>{error}</p>
+          <button
+            className="btn btn-secondary btn-sm"
+            type="button"
+            onClick={() => {
+              setError(null)
+              setLoading(true)
+              setReloadKey((value) => value + 1)
+            }}
+          >
+            Tekrar dene
+          </button>
+        </div>
       )}
 
       {detailsError && (
@@ -249,10 +303,7 @@ export function ExplorePage() {
       </div>
 
       {waitingForDetails ? (
-        <div className="center-state" role="status">
-          <span className="spinner" aria-hidden="true" />
-          <span>Deneyimler aranıyor…</span>
-        </div>
+        <CardsSkeleton count={2} />
       ) : showEmpty ? (
         <section className="empty-state" aria-live="polite">
           <h2>Sonuç bulunamadı.</h2>
@@ -269,7 +320,13 @@ export function ExplorePage() {
       ) : (
         <div className="city-grid">
           {results.map(({ city, matchedExperiences }) => (
-            <Link className="city-card" to={`/kesfet/${city.slug}`} key={city.slug}>
+            <Link
+              className="city-card"
+              to={`/kesfet/${city.slug}`}
+              state={{ fromExplore: true }}
+              onClick={() => sessionStorage.setItem('wayora.explore.scroll', String(window.scrollY))}
+              key={city.slug}
+            >
               <Photo
                 className="city-card-media"
                 src={cityPhoto(city.name)}

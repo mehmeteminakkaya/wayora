@@ -22,13 +22,16 @@ web/src/
   Tüm istekler `credentials: 'include'` ile gider.
 - **Auth:** Korumalı sayfalar `ProtectedRoute` altında. `useAuth()` dışında oturum durumu tutma.
 - **Durum:** Sunucu verisi için yerel state + `useEffect` yeterli; global state ekleme.
-- **Tasarım dili:** `docs/DESIGN_SYSTEM.md` ve `index.css` tokenları tek kaynaktır.
-  - Fontlar: Anton (display), Public Sans (gövde), IBM Plex Mono (veri), Caveat (el yazısı not).
-  - Renkler: putty, krem, mürekkep, terracotta, damga kırmızısı, zeytin. Gradient yok.
-  - Radius yok; 2px çizgi, sert offset gölge, fotoğraf çerçevesi, damga ve el yazısı not.
-  - Başlıkta emoji, hazır ikon kütüphanesi (Lucide vb.) ve shadcn varsayılanı yok.
-  - Scroll animasyonu, cursor efekti, hover'da kaybolan buton yok.
-  - Hover yalnızca renk ve çerçeve değiştirir; buton yerinden oynamaz.
+- **Tasarım dili:** `docs/DESIGN_SYSTEM.md`, `docs/DESIGN_V2.md` ve `index.css` tokenları tek kaynaktır.
+  - Fontlar: Overpass (başlık/gövde), Overpass Mono (veri). Türkçe latin-ext doğrulanır.
+  - Renkler: krem `#F3F3F1`, beyaz yüzey, mürekkep `#121212`, ikincil `#55575C`,
+    ayraç `#DEDED9`, vurgu `#FFC400`. Koyu tema, gradient ve vinyet yok.
+  - Radius ailesi: kontrol 4 px, yüzey 8 px, bottom sheet 12 px. Gölge yalnızca
+    bottom sheet ve sürüklenen satırda.
+  - Lucide ikonları 1,75 çizgiyle kullanılır; emoji ve shadcn varsayılanı yok.
+  - Hareket yalnızca durum değişimini açıklar; scroll animasyonu, cursor efekti ve
+    dekoratif sürekli animasyon yok. `prefers-reduced-motion` korunur.
+  - Hover yalnızca renk/çerçeve değiştirir; dokunmatikte hover'a bağlı işlev yok.
 - **Erişilebilirlik:** Her form alanı `<label>` ile bağlı, butonlar `type` belirtir, ikon butonlarda
   `aria-label` bulunur, odak halkası korunur. Renk tek başına anlam taşımaz. Dokunma hedefi 44px.
 - **Metin:** Kullanıcıya görünen her metin Türkçe; hata mesajları eyleme dönük. Em dash kullanma;

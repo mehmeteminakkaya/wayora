@@ -1,0 +1,16 @@
+{
+  "filteredUrl": "?q=berlin&category=museum&sort=name",
+  "restoredSearch": "?q=berlin&category=museum&sort=name",
+  "restoredCards": 1,
+  "beforeScroll": 500,
+  "afterScroll": 500,
+  "cityFilter": {
+    "filter": "Yemek",
+    "rows": 1
+  },
+  "cityBack": {
+    "search": "?filter=food",
+    "rows": 1
+  },
+  "errors": []
+}

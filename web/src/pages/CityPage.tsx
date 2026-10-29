@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, Check, Plus } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { ArrowLeft, Check, Plus, X } from 'lucide-react'
 import { api } from '../api'
 import type { CityDetail, CityExperience } from '../api'
+import { BottomSheet } from '../components/BottomSheet'
 import { Photo } from '../components/Photo'
+import { DetailSkeleton } from '../components/Skeletons'
 import { formatMoney } from '../lib/format'
 import {
   categoryLabel,
@@ -60,11 +62,46 @@ function shortDescription(text: string, maxLength = 84): string {
 
 export function CityPage() {
   const { slug } = useParams<{ slug: string }>()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const fromExplore = Boolean(
+    (location.state as { fromExplore?: boolean } | null)?.fromExplore,
+  )
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [selectedIds, setSelectedIds] = useState<string[]>(() => [
+    ...new Set((searchParams.get('selected') ?? '').split(',').filter(Boolean)),
+  ])
   const [city, setCity] = useState<CityDetail | null>(null)
   const [requestedSlug, setRequestedSlug] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [filter, setFilter] = useState<CityFilter>('all')
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const rawFilter = searchParams.get('filter') as CityFilter | null
+  const filter: CityFilter = FILTERS.some((item) => item.value === rawFilter)
+    ? (rawFilter as CityFilter)
+    : 'all'
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const restoreFocusRef = useRef<HTMLButtonElement>(null)
+  const closeSheet = useCallback(() => {
+    setSheetOpen(false)
+    window.setTimeout(() => restoreFocusRef.current?.focus(), 0)
+  }, [])
+
+  useEffect(() => {
+    const current = (searchParams.get('selected') ?? '').split(',').filter(Boolean)
+    const next = selectedIds.join(',')
+    if (current.join(',') === next) return
+    const params = new URLSearchParams(searchParams)
+    if (selectedIds.length > 0) params.set('selected', next)
+    else params.delete('selected')
+    setSearchParams(params, { replace: true })
+  }, [selectedIds, searchParams, setSearchParams])
+
+  useEffect(() => {
+    if (selectedIds.length === 0 && sheetOpen) {
+      // Seçimlerin tamamı kaldırıldığında açık özeti kapat.
+      // oxlint-disable-next-line react/set-state-in-effect
+      setSheetOpen(false)
+    }
+  }, [selectedIds.length, sheetOpen])
 
   useEffect(() => {
     if (!slug) return
@@ -117,27 +154,27 @@ export function CityPage() {
   }
 
   if (loading) {
-    return (
-      <div className="center-state" role="status">
-        <span className="spinner" aria-hidden="true" />
-        <span>Rehber açılıyor…</span>
-      </div>
-    )
+    return <DetailSkeleton />
   }
 
   if (error || !city) {
     return (
       <div className="page narrow">
-        <Link className="back-link" to="/kesfet">
+        <button className="back-link" type="button" onClick={goBack}>
           <ArrowLeft size={18} strokeWidth={1.75} aria-hidden="true" />
           Keşfet
-        </Link>
+        </button>
         <p className="notice error" role="alert">
           {error ?? 'Şehir bulunamadı'}
         </p>
-        <Link className="btn btn-secondary" to="/kesfet">
-          Tüm şehirlere dön
-        </Link>
+        <div className="form-actions">
+          <button className="btn btn-secondary" type="button" onClick={() => window.location.reload()}>
+            Tekrar dene
+          </button>
+          <Link className="btn btn-ghost" to="/kesfet">
+            Tüm şehirlere dön
+          </Link>
+        </div>
       </div>
     )
   }
@@ -149,18 +186,34 @@ export function CityPage() {
   const createTripPath = `/trips/new?destination=${encodeURIComponent(city.name)}&experiences=${encodeURIComponent(selectedIds.join(','))}`
   const hasSelection = selectedIds.length > 0
 
+  function setFilter(value: CityFilter) {
+    setSearchParams(
+      (currentParams) => {
+        if (value === 'all') currentParams.delete('filter')
+        else currentParams.set('filter', value)
+        return currentParams
+      },
+      { replace: true },
+    )
+  }
+
   function toggleExperience(id: string) {
     setSelectedIds((current) =>
       current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
     )
   }
 
+  function goBack() {
+    if (fromExplore) navigate(-1)
+    else navigate('/kesfet')
+  }
+
   return (
     <div className={`page${hasSelection ? ' with-sticky-action' : ''}`}>
-      <Link className="back-link" to="/kesfet">
+      <button className="back-link" type="button" onClick={goBack}>
         <ArrowLeft size={18} strokeWidth={1.75} aria-hidden="true" />
         Keşfet
-      </Link>
+      </button>
 
       <header className="city-hero">
         <Photo
@@ -169,6 +222,7 @@ export function CityPage() {
           src={cityPhoto(city.name)}
           alt={`${city.name} şehir fotoğrafı`}
           label={cityPhotoLabel(city.name)}
+          priority
         />
         <div className="city-hero-body">
           <p className="label">{city.country}</p>
@@ -203,23 +257,33 @@ export function CityPage() {
           Bu filtreyle eşleşen deneyim yok. Başka bir filtre seçmeyi dene.
         </p>
       ) : (
+        <>
+        <p className="helper" style={{ marginTop: 12 }}>
+          Küçük görseller kategori temsilidir; mekânın kendi fotoğrafı değildir.
+        </p>
         <div className="experience-list">
           {visibleExperiences.map((experience) => {
             const selected = selectedIds.includes(experience.id)
             const detailPath = `/kesfet/${city.slug}/${experience.slug}`
             return (
               <article className="experience-row" key={experience.id}>
-                <Link to={detailPath} aria-label={`${experience.name} detayını aç`}>
+                <Link
+                  to={detailPath}
+                  state={{ fromCity: true }}
+                  aria-label={`${experience.name} detayını aç`}
+                >
                   <Photo
                     className="experience-thumb"
                     src={categoryPhoto(experience.category)}
-                    alt={`${experience.name}, ${categoryLabel(experience.category)}`}
+                    alt={`Kategori görseli: ${categoryLabel(experience.category)}`}
                     label={categoryLabel(experience.category)}
                   />
                 </Link>
                 <div className="experience-row-body">
                   <h3>
-                    <Link to={detailPath}>{experience.name}</Link>
+                    <Link to={detailPath} state={{ fromCity: true }}>
+                      {experience.name}
+                    </Link>
                   </h3>
                   <p>{shortDescription(experience.description)}</p>
                   <div className="meta-line">
@@ -233,7 +297,7 @@ export function CityPage() {
                         <span className="dot" aria-hidden="true">
                           ·
                         </span>
-                        <span>{experience.rating.toFixed(1)} / 5</span>
+                        <span>Katalog {experience.rating.toFixed(1)}</span>
                       </>
                     )}
                   </div>
@@ -259,20 +323,73 @@ export function CityPage() {
             )
           })}
         </div>
+        </>
       )}
 
       {hasSelection && (
         <div className="sticky-action" aria-live="polite">
-          <span className="selection-count">
-            {selectedIds.length} durak seçili
-            <br />
-            {priceText(selectedTotal, city.currency)} kişi başı
-          </span>
+          <button
+            className="selection-summary-button"
+            type="button"
+            ref={restoreFocusRef}
+            aria-haspopup="dialog"
+            aria-expanded={sheetOpen}
+            onClick={() => setSheetOpen(true)}
+          >
+            <span>
+              {selectedIds.length} durak seçili
+              <br />
+              {priceText(selectedTotal, city.currency)} kişi başı
+            </span>
+            <span aria-hidden="true">Özeti aç</span>
+          </button>
           <Link className="btn btn-primary" to={createTripPath}>
-            {city.name} rotası oluştur
+            Rotanı oluştur
           </Link>
         </div>
       )}
+
+      <BottomSheet
+        open={sheetOpen}
+        title="Seçtiğin duraklar"
+        onClose={closeSheet}
+        footer={
+          <>
+            <span className="selection-count">
+              {selectedExperiences.length} durak · {priceText(selectedTotal, city.currency)} kişi başı
+            </span>
+            <Link className="btn btn-primary" to={createTripPath}>
+              Rotanı oluştur
+            </Link>
+          </>
+        }
+      >
+        <div className="sheet-summary">
+          <span className="small muted">Tahmini kişi başı toplam</span>
+          <strong>{priceText(selectedTotal, city.currency)}</strong>
+        </div>
+        <div className="sheet-list">
+          {selectedExperiences.map((experience) => (
+            <div className="sheet-item" key={experience.id}>
+              <div>
+                <h3>{experience.name}</h3>
+                <p>
+                  {formatDuration(experience.durationMinutes)} ·{' '}
+                  {priceText(experience.estimatedCost, experience.currency)}
+                </p>
+              </div>
+              <button
+                className="icon-btn"
+                type="button"
+                aria-label={`${experience.name} seçimini kaldır`}
+                onClick={() => toggleExperience(experience.id)}
+              >
+                <X size={20} strokeWidth={1.75} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </BottomSheet>
     </div>
   )
 }

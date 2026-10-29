@@ -4,8 +4,13 @@
     "name": "Berlin"
   },
   "selection": {
-    "count": "2 durak seçili€55 kişi başı",
+    "count": "2 durak seçili\n€55 kişi başı\nÖzeti aç",
     "href": "/trips/new?destination=%C4%B0stanbul&experiences=484cf6e8-875d-4ccb-b61e-680d364eb359%2C14206431-539c-412c-8e75-cf95cdfb16f8"
+  },
+  "sheet": {
+    "title": "Seçtiğin duraklar",
+    "items": 2,
+    "total": "€55"
   },
   "prefilled": {
     "path": "/trips/new",
@@ -14,7 +19,7 @@
     "selectedNotice": true
   },
   "trip": {
-    "path": "/trips/6aa00a4a-0a62-4c3a-a15d-5a9ec8c2399c",
+    "path": "/trips/3470ba5c-cdd6-42a8-b55a-a3083464b2ed",
     "heading": "İstanbul rotası",
     "days": 3,
     "activities": 2,
@@ -22,12 +27,12 @@
     "overflow": false
   },
   "secondDay": {
-    "active": "026 Kas",
+    "active": "026 Kas · 1",
     "activities": 1
   },
   "trips": {
     "path": "/trips",
-    "cards": 16,
+    "cards": 7,
     "overflow": false
   },
   "profile": {

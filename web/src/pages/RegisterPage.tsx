@@ -1,12 +1,14 @@
 import { UserPlus } from 'lucide-react'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 
 export function RegisterPage() {
   const { register } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = (location.state as { from?: string } | null)?.from ?? '/trips'
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -24,7 +26,7 @@ export function RegisterPage() {
     setError(null)
     try {
       await register({ email, password, name: name.trim() || undefined })
-      navigate('/onboarding', { replace: true })
+      navigate('/onboarding', { replace: true, state: { from } })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Hesap oluşturulamadı')
     } finally {

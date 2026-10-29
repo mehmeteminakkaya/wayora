@@ -90,6 +90,7 @@ export function NewTripPage() {
   const [notes, setNotes] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [phase, setPhase] = useState<'idle' | 'saving' | 'planning'>('idle')
   const [createdTripId, setCreatedTripId] = useState<string | null>(null)
 
   const dateFlexible = preset === 'flex'
@@ -168,6 +169,7 @@ export function NewTripPage() {
     if (busy || createdTripId) return
 
     setBusy(true)
+    setPhase('saving')
     setError(null)
 
     let tripId: string | null = null
@@ -185,6 +187,7 @@ export function NewTripPage() {
 
       tripId = trip.id
       setCreatedTripId(trip.id)
+      setPhase('planning')
 
       if (selectedExperienceIds.length > 0) {
         await api.importExperiences(trip.id, selectedExperienceIds)
@@ -193,12 +196,15 @@ export function NewTripPage() {
       }
       navigate(`/trips/${trip.id}`)
     } catch (err) {
+      setPhase('idle')
       setError(
         tripId
-          ? 'Rota oluşturuldu ama plan hazırlanamadı. Rotayı açıp yeniden deneyebilirsin.'
+          ? selectedExperienceIds.length > 0
+            ? 'Rota kaydedildi ama seçili duraklar aktarılamadı. Seçimlerin duruyor; rotayı açıp yeniden deneyebilirsin.'
+            : 'Rota oluşturuldu ama plan hazırlanamadı. Girdilerin duruyor; rotayı açıp yeniden deneyebilirsin.'
           : err instanceof Error
             ? err.message
-            : 'Rota oluşturulamadı.',
+            : 'Rota oluşturulamadı. Girdilerin duruyor; tekrar deneyebilirsin.',
       )
     } finally {
       setBusy(false)
@@ -353,7 +359,7 @@ export function NewTripPage() {
             <div className="wizard-step is-active">
               <div className="form-row">
                 <label className="field">
-                  <span>Bütçe (opsiyonel)</span>
+                  <span>Toplam bütçe (opsiyonel)</span>
                   <input
                     className="input"
                     type="number"
@@ -364,7 +370,11 @@ export function NewTripPage() {
                     value={budget}
                     onChange={(event) => setBudget(event.target.value)}
                     placeholder="Örn. 500"
+                    aria-describedby="budget-hint"
                   />
+                  <span className="helper" id="budget-hint">
+                    Tüm gezi için toplam bütçe. Konaklama ve şehirler arası ulaşım dahil değil.
+                  </span>
                 </label>
 
                 <label className="field">
@@ -419,7 +429,7 @@ export function NewTripPage() {
                   <strong>{dayCount} gün</strong>
                 </div>
                 <div className="summary-row">
-                  <span>Bütçe</span>
+                  <span>Toplam bütçe</span>
                   <strong>
                     {budget === ''
                       ? 'Belirtilmedi'
@@ -491,6 +501,19 @@ export function NewTripPage() {
             </div>
           )}
 
+          {phase !== 'idle' && (
+            <div className="wizard-status" role="status" aria-live="polite">
+              <span className="spinner" aria-hidden="true" />
+              <span>
+                {phase === 'saving'
+                  ? 'Rota kaydediliyor...'
+                  : selectedExperienceIds.length > 0
+                    ? 'Seçtiğin duraklar rotaya aktarılıyor...'
+                    : 'Plan hazırlanıyor...'}
+              </span>
+            </div>
+          )}
+
           <div className="wizard-actions">
             {step > 1 ? (
               <button
@@ -514,7 +537,11 @@ export function NewTripPage() {
               aria-busy={busy}
             >
               {busy
-                ? 'Plan hazırlanıyor...'
+                ? phase === 'saving'
+                  ? 'Rota kaydediliyor...'
+                  : selectedExperienceIds.length > 0
+                    ? 'Duraklar aktarılıyor...'
+                    : 'Plan hazırlanıyor...'
                 : createdTripId
                   ? 'Rota oluşturuldu'
                   : step < 3

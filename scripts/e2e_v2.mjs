@@ -98,8 +98,17 @@ await shot('v2-city-istanbul-mobile')
 await evaluate(`document.querySelectorAll('.experience-row .select-button')[0].click()`)
 await evaluate(`document.querySelectorAll('.experience-row .select-button')[1].click()`)
 await waitFor(`!!document.querySelector('.sticky-action')`, 'selection bar')
-const selection = await evaluate(`({ count: document.querySelector('.sticky-action .selection-count')?.textContent, href: document.querySelector('.sticky-action a')?.getAttribute('href') })`)
-await clickText('.sticky-action a', 'rotası oluştur')
+const selection = await evaluate(`({ count: document.querySelector('.selection-summary-button')?.innerText, href: document.querySelector('.sticky-action a')?.getAttribute('href') })`)
+await evaluate(`document.querySelector('.selection-summary-button')?.click()`)
+await waitFor(`!!document.querySelector('[role="dialog"]')`, 'selection sheet')
+const sheet = await evaluate(`({
+  title: document.querySelector('[role="dialog"] h2')?.textContent,
+  items: document.querySelectorAll('.sheet-item').length,
+  total: document.querySelector('.sheet-summary strong')?.textContent,
+})`)
+await evaluate(`document.querySelector('[role="dialog"] .icon-btn')?.click()`)
+await waitFor(`!document.querySelector('[role="dialog"]')`, 'selection sheet closed')
+await clickText('.sticky-action a', 'Rotanı oluştur')
 await waitFor(`location.pathname === '/login'`, 'login required')
 await fill('input[name=email]', 'e2e-1792740709@example.com')
 await fill('input[name=password]', 'parola123')
@@ -156,7 +165,7 @@ await waitFor(`!!document.querySelector('a[href="/login"]')`, 'logout complete')
 const logout = await evaluate(`({ path: location.pathname, loginLink: !!document.querySelector('a[href="/login"]') })`)
 await shot('v2-landing-auth-mobile')
 
-const report = { search, selection, prefilled, trip, secondDay, trips, profile, logout, errors }
+const report = { search, selection, sheet, prefilled, trip, secondDay, trips, profile, logout, errors }
 console.log(JSON.stringify(report, null, 2))
 writeFileSync('docs/audit/v2-e2e.json', JSON.stringify(report, null, 2))
 
@@ -164,6 +173,7 @@ const failures = []
 if (search.cards !== 1) failures.push('search')
 if (selection.count?.includes('2 durak') !== true) failures.push('selection')
 if (!selection.href?.includes('/trips/new?')) failures.push('selectionLink')
+if (sheet.items !== 2 || !sheet.title?.includes('Seçtiğin')) failures.push('selectionSheet')
 if (prefilled.destination !== 'İstanbul') failures.push('prefill')
 if (!prefilled.search.includes('experiences=')) failures.push('experiencesQuery')
 if (trip.days < 3 || trip.activities < 2) failures.push('importedTrip')

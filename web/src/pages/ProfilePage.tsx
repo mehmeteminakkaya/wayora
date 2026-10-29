@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import { api } from '../api'
 import type { BudgetLevel, Pace, Preference, TravelStyle } from '../api'
+import { DetailSkeleton } from '../components/Skeletons'
 import { useAuth } from '../auth/AuthContext'
 
 const BUDGET_LABELS: Record<BudgetLevel, string> = {
@@ -54,12 +55,7 @@ export function ProfilePage() {
   }, [user])
 
   if (loading) {
-    return (
-      <div className="center-state" role="status">
-        <span className="spinner" aria-hidden="true" />
-        <span>Hesap yükleniyor…</span>
-      </div>
-    )
+    return <DetailSkeleton />
   }
 
   if (!user) {

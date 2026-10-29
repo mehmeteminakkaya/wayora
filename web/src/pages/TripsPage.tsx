@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { api } from '../api'
 import type { Trip, TripStatus } from '../api'
 import { Photo } from '../components/Photo'
+import { CardsSkeleton } from '../components/Skeletons'
 import { formatMoney, formatShortDate, todayIso, tripDayCount } from '../lib/format'
 import { cityPhoto, cityPhotoLabel } from '../lib/photos'
 
@@ -194,6 +195,7 @@ export function TripsPage() {
   const [trips, setTrips] = useState<Trip[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [reloadKey, setReloadKey] = useState(0)
   const [activeTab, setActiveTab] = useState<TripGroup>('upcoming')
   const [confirmId, setConfirmId] = useState<string | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -219,7 +221,7 @@ export function TripsPage() {
     return () => {
       active = false
     }
-  }, [today])
+  }, [today, reloadKey])
 
   const groups = useMemo(() => groupTrips(trips, today), [trips, today])
   const visibleTrips = groups[activeTab]
@@ -264,9 +266,20 @@ export function TripsPage() {
       </header>
 
       {error && (
-        <p className="notice error" role="alert">
-          {error}
-        </p>
+        <div className="notice error" role="alert">
+          <p>{error}</p>
+          <button
+            className="btn btn-secondary btn-sm"
+            type="button"
+            onClick={() => {
+              setError(null)
+              setLoading(true)
+              setReloadKey((value) => value + 1)
+            }}
+          >
+            Tekrar dene
+          </button>
+        </div>
       )}
 
       <div className="tabs" role="tablist" aria-label="Rota durumu">
@@ -297,10 +310,7 @@ export function TripsPage() {
 
       <div id="trips-panel" role="tabpanel" aria-labelledby={`trips-tab-${activeTab}`}>
         {loading ? (
-          <div className="center-state" role="status">
-            <span className="spinner" aria-hidden="true" />
-            <span>Rotalar yükleniyor...</span>
-          </div>
+          <CardsSkeleton count={2} />
         ) : trips.length === 0 ? (
           <div className="section">
             <section className="empty-state">

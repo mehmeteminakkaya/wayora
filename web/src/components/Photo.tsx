@@ -7,9 +7,10 @@ type PhotoProps = {
   label: string
   className?: string
   children?: ReactNode
+  priority?: boolean
 }
 
-export function Photo({ src, alt, label, className = '', children }: PhotoProps) {
+export function Photo({ src, alt, label, className = '', children, priority = false }: PhotoProps) {
   const [failed, setFailed] = useState(false)
   if (!src || failed) {
     return (
@@ -24,7 +25,8 @@ export function Photo({ src, alt, label, className = '', children }: PhotoProps)
       <img
         src={src}
         alt={alt}
-        loading="lazy"
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : 'auto'}
         decoding="async"
         draggable={false}
         onError={() => setFailed(true)}

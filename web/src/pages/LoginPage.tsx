@@ -123,6 +123,7 @@ export function LoginPage() {
           <span>Hesabın yok mu?</span>
           <Link
             to="/register"
+            state={{ from }}
             style={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
           >
             Hesap aç

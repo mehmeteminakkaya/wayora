@@ -2,6 +2,7 @@ import { ArrowRight, Search } from 'lucide-react'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../auth/AuthContext'
 import { Photo } from '../components/Photo'
 import { cityPhoto, cityPhotoLabel, citySlug } from '../lib/photos'
 
@@ -41,6 +42,7 @@ const SAMPLE_STOPS = [
 
 export function LandingPage() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [destination, setDestination] = useState('')
 
   function handleSearch(event: FormEvent<HTMLFormElement>) {
@@ -81,12 +83,17 @@ export function LandingPage() {
               />
             </div>
             <button className="btn btn-primary btn-block" type="submit">
-              Planı başlat
+              {user ? 'Rotanı planla' : 'Planı başlat'}
               <ArrowRight size={20} strokeWidth={1.75} aria-hidden="true" />
             </button>
           </form>
 
           <p className="hero-stat">10 şehir · 100 deneyim · ücretsiz</p>
+          {user && (
+            <Link className="section-link" to="/trips">
+              Rotalarıma dön
+            </Link>
+          )}
         </div>
 
         <div className="landing-hero-media">
@@ -94,6 +101,7 @@ export function LandingPage() {
             src={cityPhoto('Berlin')}
             alt="Berlin'de sokak ve şehir görünümü"
             label={cityPhotoLabel('Berlin')}
+            priority
           />
         </div>
       </section>

@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { GripVertical } from 'lucide-react'
 import { api } from '../api'
 import type { Activity, ActivityCategory, CreateActivityInput, Trip } from '../api'
+import { DetailSkeleton } from '../components/Skeletons'
 import { CATEGORY_LABELS, formatMoney, formatShortDate } from '../lib/format'
 import { cityCoords } from '../lib/photos'
 
@@ -217,6 +218,18 @@ export function TripDetailPage() {
   const [deletingActivityId, setDeletingActivityId] = useState<string | null>(null)
   const [draggedActivityId, setDraggedActivityId] = useState<string | null>(null)
   const [dropTargetId, setDropTargetId] = useState<string | null>(null)
+  const [reorderStatus, setReorderStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
+  const dayTabRefs = useRef<Record<string, HTMLButtonElement | null>>({})
+
+  useEffect(() => {
+    if (!selectedDayId) return
+    const tab = dayTabRefs.current[selectedDayId]
+    if (!tab) return
+    const reduced = window.matchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false
+    tab.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest', inline: 'center' })
+  }, [selectedDayId])
 
   useEffect(() => {
     let active = true
@@ -329,14 +342,7 @@ export function TripDetailPage() {
   }
 
   if (loading) {
-    return (
-      <div className="page">
-        <div className="center-state" role="status">
-          <span className="spinner" aria-hidden="true" />
-          <span>Rota yükleniyor...</span>
-        </div>
-      </div>
-    )
+    return <DetailSkeleton />
   }
 
   if (!trip) {
@@ -345,9 +351,18 @@ export function TripDetailPage() {
         <section className="empty-state">
           <h1>Rota bulunamadı.</h1>
           <p>{error ?? 'Bu rota silinmiş ya da başka bir hesaba ait olabilir.'}</p>
-          <Link className="btn btn-primary" to="/trips">
-            Rotalarıma dön
-          </Link>
+          <div className="form-actions">
+            <button
+              className="btn btn-secondary"
+              type="button"
+              onClick={() => window.location.reload()}
+            >
+              Tekrar dene
+            </button>
+            <Link className="btn btn-ghost" to="/trips">
+              Rotalarıma dön
+            </Link>
+          </div>
         </section>
       </div>
     )
@@ -376,6 +391,7 @@ export function TripDetailPage() {
 
   async function persistReorder(reordered: Activity[]) {
     if (!activeDay) return
+    setReorderStatus('saving')
     setTrip((current) =>
       current
         ? {
@@ -391,7 +407,10 @@ export function TripDetailPage() {
       await Promise.all(
         reordered.map((activity, index) => api.reorderActivity(activity.id, index)),
       )
+      setReorderStatus('saved')
+      window.setTimeout(() => setReorderStatus('idle'), 1800)
     } catch (err) {
+      setReorderStatus('error')
       setError(
         err instanceof Error
           ? `Sıra kaydedilemedi: ${err.message}`
@@ -445,7 +464,10 @@ export function TripDetailPage() {
         <h1>{trip.title}</h1>
         <p className="trip-header-meta">
           {formatShortDate(trip.startDate)} - {formatShortDate(trip.endDate)} · {trip.days.length}{' '}
-          gün · {trip.budget === null ? 'Bütçe belirtilmedi' : formatMoney(trip.budget, trip.currency)}
+          gün ·{' '}
+          {trip.budget === null
+            ? 'Toplam bütçe belirtilmedi'
+            : `Toplam bütçe ${formatMoney(trip.budget, trip.currency)}`}
         </p>
         {trip.notes && <p className="helper">{trip.notes}</p>}
 
@@ -546,6 +568,20 @@ export function TripDetailPage() {
         </p>
       )}
 
+      {reorderStatus !== 'idle' && (
+        <p
+          className={reorderStatus === 'error' ? 'notice error' : 'notice'}
+          role="status"
+          aria-live="polite"
+        >
+          {reorderStatus === 'saving'
+            ? 'Durak sırası kaydediliyor...'
+            : reorderStatus === 'saved'
+              ? 'Durak sırası kaydedildi.'
+              : 'Durak sırası kaydedilemedi. Tekrar deneyebilirsin.'}
+        </p>
+      )}
+
       {overBudget && remaining !== null && (
         <p className="notice">
           Tahmini durak maliyeti bütçeyi {formatMoney(Math.abs(remaining), trip.currency)} aşıyor.
@@ -584,20 +620,30 @@ export function TripDetailPage() {
               return (
                 <button
                   key={day.id}
+                  ref={(element) => {
+                    dayTabRefs.current[day.id] = element
+                  }}
                   className={active ? 'day-tab is-active' : 'day-tab'}
                   type="button"
                   aria-pressed={active}
+                  aria-label={`Gün ${day.dayIndex}, ${formatDayShort(day.date)}, ${day.activities.length} durak`}
                   onClick={() => selectDay(day.id)}
                 >
                   <strong>{String(day.dayIndex).padStart(2, '0')}</strong>
-                  <span>{formatDayShort(day.date)}</span>
+                  <span>
+                    {formatDayShort(day.date)} · {day.activities.length}
+                  </span>
                 </button>
               )
             })}
           </div>
 
           {activeDay && (
-            <section aria-label={`${formatDayShort(activeDay.date)} planı`}>
+            <section
+              key={activeDay.id}
+              className="day-content"
+              aria-label={`${formatDayShort(activeDay.date)} planı`}
+            >
               <div className="day-board">
                 <span>GÜN {String(activeDay.dayIndex).padStart(2, '0')}</span>
                 <span>{activeDay.activities.length} DURAK</span>

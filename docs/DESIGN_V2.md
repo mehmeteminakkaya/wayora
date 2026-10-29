@@ -77,6 +77,41 @@ kurallar tek referanstır. Eski Rotasyon tasarımı geçersizdir.
   çizelgesi, sürükle sırala, sabit "güne durak ekle".
 - Profil: kullanıcı bilgisi, tercihler, hesap işlemleri.
 
+## Merkezi motion ve katman tokenları
+
+- Süreler: `--duration-fast: 120ms`, `--duration-base: 180ms`, `--duration-slow: 260ms`.
+- Easing: `--ease-standard: cubic-bezier(0.2, 0, 0, 1)`,
+  `--ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1)`.
+- Katmanlar: header 100, alt menü 200, bottom sheet 300.
+- Alt menü 64 px + safe area; sabit eylem çubuğu 72 px + safe area.
+- Yükselen yüzeylerde `--shadow-sheet`; sürüklenen satırda `--shadow-drag`. Diğer kartlarda gölge yok.
+- `prefers-reduced-motion` tüm geçişleri ve giriş animasyonlarını kapatır; bilgi kaybı olmaz.
+
+## Üç imza etkileşim
+
+- **Rota çizgisi:** timeline satırları dikey çizgi ve durak noktalarıyla bağlanır; gün içeriği
+  değişince kısa bir `day-in` geçişi çalışır. Sıralama değişikliği anında görünür ve API'ye kaydedilir.
+- **Seçimden plana:** şehir sayfasında seçim URL'de `selected` parametresiyle tutulur. Alt özet
+  açılır panelde seçimleri ve kişi başı toplamı gösterir. Seçim kaldırma, hızlı dokunuşlarda
+  fonksiyonel state ile doğru sayılır. CTA seçimleri yeni rota akışına taşır.
+- **Gün şeridi:** gün numarası, tarih ve durak sayısı görünür; aktif gün otomatik olarak yatay
+  şeritte görünür tutulur. Aktif gün değişince içerik aynı `day-in` hareketiyle gelir.
+
+## Durumlar ve dürüstlük
+
+- Keşfet, şehir, deneyim, rotalar, rota detayı ve profilde skeleton yükleme durumu vardır.
+- Boş sonuç, hata, tekrar dene, işlem sürüyor, başarı ve başarısızlık durumları ayrı metinlerle
+  gösterilir.
+- Seçim özeti açılır paneli `role=dialog`, `aria-modal`, odak tuzağı, Escape ve gövde scroll
+  kilidi kullanır.
+- Deneyim detayında şehir arşivi görseli kullanıldığı açıkça belirtilir. Şehir listesindeki
+  küçük görsellerin kategori temsili olduğu belirtilir.
+- Katalog puanı “Katalog puanı” olarak etiketlenir; kullanıcı yorumu gibi sunulmaz.
+- Fiyatlar tahmini kişi başı; rota bütçesi toplam gezi bütçesi olarak açıklanır. Canlı açık/kapalı
+  durumu, kesin transfer süresi ve rezervasyon uygunluğu iddia edilmez.
+- Gerçek Google OAuth, e-posta sıfırlama ve Mapbox/MapLibre anahtarı bağlı değildir; sahte başarı
+  üretilmez.
+
 ## V2'de yasak
 
 - Krem, terracotta, kâğıt dokusu, tane, damga, el yazısı, döndürülmüş kart, gölge, gradient,

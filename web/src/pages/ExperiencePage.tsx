@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { api } from '../api'
 import type { CityDetail } from '../api'
 import { Photo } from '../components/Photo'
+import { DetailSkeleton } from '../components/Skeletons'
 import { formatMoney } from '../lib/format'
 import { categoryLabel, cityCoords, cityPhoto, cityPhotoLabel } from '../lib/photos'
 
@@ -42,7 +43,7 @@ function MapBlock({ cityName }: { cityName: string }) {
         />
       </div>
       <p className="small muted" style={{ marginTop: 8 }}>
-        Harita yüklenmezse{' '}
+        Harita şehir merkezini gösterir. Yüklenmezse{' '}
         <a className="section-link" href={mapLink} target="_blank" rel="noreferrer">
           OpenStreetMap&apos;te aç
         </a>
@@ -61,6 +62,9 @@ export function ExperiencePage() {
   }>()
   const citySlug = params.citySlug ?? params.slug
   const experienceSlug = params.experienceSlug ?? params.experience
+  const location = useLocation()
+  const navigate = useNavigate()
+  const fromCity = Boolean((location.state as { fromCity?: boolean } | null)?.fromCity)
   const [city, setCity] = useState<CityDetail | null>(null)
   const [requestedSlug, setRequestedSlug] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -106,12 +110,7 @@ export function ExperiencePage() {
   }
 
   if (loading) {
-    return (
-      <div className="center-state" role="status">
-        <span className="spinner" aria-hidden="true" />
-        <span>Deneyim açılıyor…</span>
-      </div>
-    )
+    return <DetailSkeleton />
   }
 
   if (error || !city) {
@@ -121,10 +120,13 @@ export function ExperiencePage() {
           <ArrowLeft size={18} strokeWidth={1.75} aria-hidden="true" />
           Keşfet
         </Link>
-        <p className="notice error" role="alert">
-          {error ?? 'Deneyim yüklenemedi'}
-        </p>
-        <Link className="btn btn-secondary" to="/kesfet">
+        <div className="notice error" role="alert">
+          <p>{error ?? 'Deneyim yüklenemedi'}</p>
+          <button className="btn btn-secondary btn-sm" type="button" onClick={() => window.location.reload()}>
+            Tekrar dene
+          </button>
+        </div>
+        <Link className="btn btn-ghost" to="/kesfet">
           Tüm şehirlere dön
         </Link>
       </div>
@@ -153,13 +155,17 @@ export function ExperiencePage() {
 
   const area = experience.neighborhood ?? experience.address
   const transportText = area ? `${city.name} · ${area}` : city.name
+  const goBack = () => {
+    if (fromCity) navigate(-1)
+    else navigate(`/kesfet/${city.slug}`)
+  }
 
   return (
     <div className="page with-sticky-action">
-      <Link className="back-link" to={`/kesfet/${city.slug}`}>
+      <button className="back-link" type="button" onClick={goBack}>
         <ArrowLeft size={18} strokeWidth={1.75} aria-hidden="true" />
         {city.name}
-      </Link>
+      </button>
 
       <header className="experience-hero">
         <Photo
@@ -168,10 +174,12 @@ export function ExperiencePage() {
           src={cityPhoto(city.name)}
           alt={`${city.name} şehir fotoğrafı`}
           label={cityPhotoLabel(city.name)}
+          priority
         />
         <div className="experience-hero-body city-hero-body">
           <p className="label">{categoryLabel(experience.category)}</p>
           <h1 className="experience-detail-title">{experience.name}</h1>
+          <span className="image-context">ŞEHİR ARŞİVİ · MEKÂNIN KENDİ FOTOĞRAFI DEĞİL</span>
           <p className="experience-detail-meta">
             <span>{city.name}</span>
             <span className="dot" aria-hidden="true">
@@ -187,13 +195,14 @@ export function ExperiencePage() {
               <strong>{formatDuration(experience.durationMinutes)}</strong>
             </div>
             <div className="fact">
-              <span className="label">Fiyat</span>
+              <span className="label">Tahmini fiyat</span>
               <strong>{priceText(experience.estimatedCost, experience.currency)}</strong>
+              <span className="helper">{experience.priceNote ?? 'kişi başı tahmini'}</span>
             </div>
             <div className="fact">
-              <span className="label">Puan</span>
+              <span className="label">Katalog puanı</span>
               <strong>
-                {experience.rating !== null ? `${experience.rating.toFixed(1)} / 5` : 'Puan yok'}
+                {experience.rating !== null ? experience.rating.toFixed(1) : 'Puan yok'}
               </strong>
             </div>
             <div className="fact">

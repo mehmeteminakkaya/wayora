@@ -75,6 +75,52 @@ export type GenerationMeta = {
   latencyMs: number
 }
 
+export type DiscoveryStatus = {
+  providers: {
+    ticketmaster: 'configured' | 'missing'
+    duffel: 'configured' | 'missing'
+  }
+}
+
+export type EventOffer = {
+  id: string
+  name: string
+  url: string | null
+  imageUrl: string | null
+  startDate: string | null
+  startTime: string | null
+  venue: string | null
+  city: string | null
+  priceMin: number | null
+  priceMax: number | null
+  currency: string | null
+  status: string | null
+}
+
+export type FlightOffer = {
+  id: string
+  airline: string | null
+  airlineCode: string | null
+  price: number
+  currency: string
+  expiresAt: string | null
+  duration: string | null
+  stops: number
+  from: string | null
+  to: string | null
+  departureAt: string | null
+  arrivalAt: string | null
+}
+
+export type FlightSearchResult = {
+  mode: 'test' | 'live'
+  offers: FlightOffer[]
+  provider: 'duffel'
+  origin: string
+  destination: string
+  disclaimer: string
+}
+
 export type CitySummary = {
   slug: string
   name: string
@@ -247,4 +293,30 @@ export const api = {
     }),
 
   deleteActivity: (id: string) => request<void>(`/api/activities/${id}`, { method: 'DELETE' }),
+
+  getDiscoveryStatus: () => request<DiscoveryStatus>('/api/discovery/status'),
+
+  listEvents: (city: string, startDate: string, endDate: string) => {
+    const params = new URLSearchParams({ city, startDate, endDate })
+    return request<{ events: EventOffer[]; provider: 'ticketmaster' }>(
+      `/api/discovery/events?${params.toString()}`,
+    )
+  },
+
+  searchFlights: (input: {
+    origin: string
+    destination: string
+    departureDate: string
+    returnDate?: string
+    adults?: number
+  }) => {
+    const params = new URLSearchParams({
+      origin: input.origin,
+      destination: input.destination,
+      departureDate: input.departureDate,
+    })
+    if (input.returnDate) params.set('returnDate', input.returnDate)
+    if (input.adults) params.set('adults', String(input.adults))
+    return request<FlightSearchResult>(`/api/discovery/flights?${params.toString()}`)
+  },
 }

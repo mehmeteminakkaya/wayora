@@ -115,7 +115,19 @@ if (tripHref) {
     timelineLine: getComputedStyle(document.querySelector('.timeline'), '::before').content,
   })`)
   await shot('polish-trip-320')
-  const report = { explore320, summary, sheet, city430, trip320, errors }
+  const liveDiscovery = await evaluate(`(() => {
+    const section = document.querySelector('.live-discovery');
+    const panels = [...document.querySelectorAll('.discovery-panel')].map((panel) => panel.innerText.slice(0, 180));
+    return {
+      exists: !!section,
+      panels,
+      overflow: document.documentElement.scrollWidth > window.innerWidth + 2,
+    };
+  })()`)
+  await evaluate(`document.querySelector('.live-discovery')?.scrollIntoView({ block: 'start' })`)
+  await new Promise((resolve) => setTimeout(resolve, 300))
+  await shot('polish-live-discovery-320')
+  const report = { explore320, summary, sheet, city430, trip320, liveDiscovery, errors }
   console.log(JSON.stringify(report, null, 2))
   writeFileSync('docs/audit/polish-mobile.json', JSON.stringify(report, null, 2))
 }

@@ -29,6 +29,11 @@ const envSchema = z
 
     // Kötüye kullanım / maliyet koruması
     AI_DAILY_LIMIT: z.coerce.number().int().positive().default(10),
+
+    // Ücretsiz keşif sağlayıcıları. Anahtar yoksa ilgili özellik kapalı kalır.
+    TICKETMASTER_API_KEY: z.string().optional(),
+    DUFFEL_ACCESS_TOKEN: z.string().optional(),
+    DISCOVERY_TIMEOUT_MS: z.coerce.number().int().positive().max(30_000).default(10_000),
   })
   .superRefine((env, ctx) => {
     if (env.NODE_ENV === 'production' && env.JWT_SECRET === DEV_JWT_SECRET) {

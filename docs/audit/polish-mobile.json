@@ -18,5 +18,13 @@
     "stickyOverflow": false,
     "timelineLine": "\"\""
   },
+  "liveDiscovery": {
+    "exists": true,
+    "panels": [
+      "TICKETMASTER DISCOVERY\n\nEtkinlikler\n\nCanlı etkinlikler bu ortamda yapılandırılmadı. Anahtar eklendiğinde şehirdeki etkinlikler burada görünür.\n\nEtkinlik verisi Ticketmaster Discove",
+      "DUFFEL\n\nUçuş fikri\n\nUçuş denemeleri bu ortamda yapılandırılmadı. Test token'ı eklendiğinde burada görünür.\n\nUçuşlar Duffel test ortamından gelir; gerçek fiyat veya rezervasyon deği"
+    ],
+    "overflow": false
+  },
   "errors": []
 }

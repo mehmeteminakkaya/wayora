@@ -19,7 +19,7 @@
     "selectedNotice": true
   },
   "trip": {
-    "path": "/trips/3470ba5c-cdd6-42a8-b55a-a3083464b2ed",
+    "path": "/trips/d2495ad5-f10b-4606-96ce-9b835a3457ee",
     "heading": "İstanbul rotası",
     "days": 3,
     "activities": 2,
@@ -27,12 +27,12 @@
     "overflow": false
   },
   "secondDay": {
-    "active": "026 Kas · 1",
+    "active": "027 Kas · 1",
     "activities": 1
   },
   "trips": {
     "path": "/trips",
-    "cards": 7,
+    "cards": 9,
     "overflow": false
   },
   "profile": {

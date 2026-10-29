@@ -53,7 +53,8 @@ Mevcut sürümde kullanıcı:
 4. Seçimlerini yeni rota akışına taşır; gerekirse giriş yapar ve kaldığı yerden devam eder.
 5. Tarih, toplam bütçe ve tempo bilgisini belirler.
 6. Oluşan rotayı gün şeridinde gezer; durak ekler, siler ve sıralamayı değiştirir.
-7. Tercihlerini profilden günceller; rotalarını yaklaşan, taslak ve geçmiş olarak görür.
+7. Rota detayında Ticketmaster etkinliklerini ve Duffel test uçuşlarını görür.
+8. Tercihlerini profilden günceller; rotalarını yaklaşan, taslak ve geçmiş olarak görür.
 
 ## Öne çıkanlar
 
@@ -69,6 +70,9 @@ Mevcut sürümde kullanıcı:
   durak ekleme/silme ve sürükleme, klavye ve butonlarla sıralama.
 - Rotalarım ekranında yaklaşan, taslak ve geçmiş rotalar; silme onayı.
 - Profilde kayıtlı tercihleri görüntüleme ve düzenleme.
+- **Canlı keşif:** Ticketmaster Discovery ile şehir etkinlikleri; Duffel test token'ı
+  varsa uçuş fikri. Anahtar yoksa bölüm uydurma veri üretmez, yapılandırma notu gösterir.
+  Otel/rezervasyon satışı bu sürümde yoktur.
 
 ### Dayanıklılık
 
@@ -163,11 +167,42 @@ LLM_MODEL_FAST=gemini-2.0-flash
 LLM_MODEL_SMART=gemini-2.5-pro
 LLM_TIMEOUT_MS=20000
 AI_DAILY_LIMIT=10
+
+# Opsiyonel ücretsiz keşif sağlayıcıları
+# TICKETMASTER_API_KEY=       # Discovery, günde 5.000 çağrı
+# DUFFEL_ACCESS_TOKEN=        # duffel_test_... ile test modu
+DISCOVERY_TIMEOUT_MS=10000
 ```
+
+Canlı keşif sağlayıcıları opsiyoneldir; anahtar yoksa uygulamanın ana yolculuğu çalışmaya
+devam eder. Ticketmaster anahtarı yalnızca etkinlik keşfi içindir; bilet satın alma Partner
+API'si gerektirir. Duffel test token'ı sahte fiyat üretir, gerçek rezervasyon yapmaz.
 
 Production'da en az `JWT_SECRET` değiştirilmeli ve HTTPS için `COOKIE_SECURE=true`
 kullanılmalıdır. Gemini/OpenAI kullanmak için `LLM_PROVIDER` ve ilgili API anahtarı ayarlanır.
 Anahtar yoksa uygulama offline modda çalışmaya devam eder.
+
+### Ücretsiz canlı keşif (opsiyonel)
+
+Rota detayındaki “Canlı keşif” bölümü iki sağlayıcıyı destekler:
+
+- **Ticketmaster Discovery:** ücretsiz developer anahtarı; varsayılan kota günde 5.000 çağrı.
+  Etkinlik keşfi ve bilet sayfası bağlantısı sağlar, bilet satın almaz.
+- **Duffel test modu:** ücretsiz `duffel_test_...` token'ı; sahte uçuş fiyatları üretir.
+  Gerçek rezervasyon veya canlı fiyat değildir.
+
+```dotenv
+# api/.env
+TICKETMASTER_API_KEY=...
+DUFFEL_ACCESS_TOKEN=duffel_test_...
+DISCOVERY_TIMEOUT_MS=10000
+```
+
+Anahtarlar yoksa bölüm sahte veri üretmez; yapılandırma notu gösterir. Ticketmaster anahtarı:
+https://developer.ticketmaster.com · Duffel test hesabı: https://app.duffel.com/join
+
+Otel arama, canlı bilet satın alma ve ödeme bu sürümde yoktur. Bu özellikler partner
+sözleşmesi, ödeme ve iade süreçleri gerektirir; ayrı bir faz olarak planlanmıştır.
 
 ## Demo akışı
 
@@ -211,6 +246,8 @@ Yerel veritabanını sıfırlamadan tekrar denemek için yeni bir e-posta ile ka
 - **Veritabanı:** Prisma 7 + `@prisma/adapter-pg`; yerelde `prisma dev`.
 - **Auth:** JWT, HttpOnly cookie; token tarayıcıda localStorage'a yazılmaz.
 - **Harita:** anahtarsız OpenStreetMap embed; embed yüklenmezse dış bağlantı gösterilir.
+- **Canlı keşif:** Ticketmaster Discovery ve Duffel test token'ı opsiyonel; anahtar yoksa
+  uygulama offline çalışır ve sahte veri üretmez.
 - **Tasarım:** saf CSS + merkezi tokenlar; Tailwind/UI kit yok.
 - **AI:** offline varsayılan; Gemini/OpenAI adaptörleri opsiyonel.
 
@@ -315,6 +352,14 @@ web/src/
 | `GET` | `/api/cities/_meta/count` | Katalog sayıları |
 | `GET` | `/api/places/search?q=&destination=` | Yer arama (opsiyonel Google Places proxy) |
 | `GET` | `/api/places/:googlePlaceId` | Yer detayı |
+| `GET` | `/api/discovery/status` | Ticketmaster/Duffel yapılandırma durumu |
+| `GET` | `/api/discovery/events?city=&startDate=&endDate=` | Ticketmaster etkinlik keşfi |
+| `GET` | `/api/discovery/flights?origin=&destination=&departureDate=&returnDate=` | Duffel uçuş araması (oturum gerekli) |
+
+`/api/discovery/events` herkese açıktır; `/api/discovery/flights` oturum ister ve
+`DUFFEL_ACCESS_TOKEN` yoksa 503 `DUFFEL_NOT_CONFIGURED` döner. Anahtarlar hiçbir zaman
+frontend'e gönderilmez. Ticketmaster yanıtları 5 dakika, Duffel yanıtları 5 dakika
+bellekte cache'lenir; keşif endpoint'leri IP başına saatte 120 istekle sınırlıdır.
 
 Şehir endpoint'leri herkese açıktır. Kullanıcı verisi döndüren tüm endpoint'ler
 `requireAuth` ile korunur; başka kullanıcının kaynağı **404** döner.
@@ -460,9 +505,9 @@ Son doğrulanan sonuçlar:
 
 | Kontrol | Sonuç |
 | :--- | ---: |
-| API testleri | 51 / 51 |
+| API testleri | 57 / 57 |
 | Web testleri | 4 / 4 |
-| Toplam Vitest | 55 / 55 |
+| Toplam Vitest | 61 / 61 |
 | Lint | geçti |
 | Typecheck | geçti |
 | Production build | geçti |
@@ -484,6 +529,8 @@ Kapsanan akışlar:
 
 - API: kayıt, giriş, tercihler, katalog, rota oluşturma, offline plan, aktivite ekleme/silme,
   sahiplik kontrolü, çıkış, silme.
+- Keşif: Ticketmaster etkinlik normalizasyonu, Duffel uçuş normalizasyonu, anahtarsız
+  sağlayıcı durumu ve uçuş aramasında oturum koruması.
 - V2: arama, deneyim seçimi, seçim özeti, giriş sonrası dönüş, rota oluşturma, gün değiştirme,
   rotalarım, profil, çıkış, konsol hataları.
 - Navigasyon: keşif arama/filtre/sıralama ve scroll geri dönüşü, şehir filtresi ve deneyim
@@ -516,6 +563,9 @@ Bu sürümde bilinçli olarak kapsam dışında bırakılanlar:
 - Google OAuth ve gerçek şifre sıfırlama sağlayıcısı.
 - Canlı rezervasyon, bilet satın alma ve ödeme.
 - Canlı açık/kapalı durumu, kesin fiyat veya transfer süresi.
+- Ticketmaster bilet satın alma; yalnızca Discovery keşfi bağlı, Partner/Commerce erişimi yok.
+- Duffel canlı uçuş/otel satışı; yalnızca test token'ı ile uçuş fikri gösterilir.
+- Otel arama; Booking.com Demand API partner başvurusu gerektirir.
 - Kullanıcı yorumu/puanı; katalog puanı editoryal veridir.
 - MapLibre/Mapbox marker senkronizasyonu; mevcut OSM embed şehir merkezini gösterir.
 - PWA/offline harita ve bulut deploy.
@@ -539,6 +589,7 @@ Bu maddeler tamamlanmış gibi gösterilmez; arayüz gerekli yerlerde fallback v
 | Konu | Dosya |
 | :--- | :--- |
 | Ürün kapsamı | [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md), [`docs/specs/001-mvp/spec.md`](docs/specs/001-mvp/spec.md) |
+| Canlı keşif kapsamı | [`docs/specs/002-live-discovery/spec.md`](docs/specs/002-live-discovery/spec.md) |
 | Mimari | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | Şehir kataloğu | [`docs/CITY_CATALOG.md`](docs/CITY_CATALOG.md) |
 | Tasarım | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md), [`docs/DESIGN_V2.md`](docs/DESIGN_V2.md) |

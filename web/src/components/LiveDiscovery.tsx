@@ -1,0 +1,301 @@
+import { useEffect, useState } from 'react'
+import type { FormEvent } from 'react'
+import { CalendarDays, ExternalLink, Plane, Ticket } from 'lucide-react'
+import { api } from '../api'
+import type { DiscoveryStatus, EventOffer, FlightSearchResult } from '../api'
+import { formatMoney, formatShortDate } from '../lib/format'
+
+type LiveDiscoveryProps = {
+  city: string
+  startDate: string
+  endDate: string
+}
+
+function eventDate(event: EventOffer): string {
+  if (!event.startDate) return 'Tarih belirtilmedi'
+  const date = event.startDate.includes('T') ? event.startDate.slice(0, 10) : event.startDate
+  return `${formatShortDate(date)}${event.startTime ? ` · ${event.startTime}` : ''}`
+}
+
+function eventPrice(event: EventOffer): string {
+  if (event.priceMin === null || event.priceMax === null || !event.currency) {
+    return 'Fiyat bilgisi yok'
+  }
+  if (event.priceMin === event.priceMax) return formatMoney(event.priceMin, event.currency)
+  return `${formatMoney(event.priceMin, event.currency)} - ${formatMoney(event.priceMax, event.currency)}`
+}
+
+function flightTime(value: string | null): string {
+  if (!value) return '--:--'
+  return value.slice(11, 16)
+}
+
+function flightDate(value: string | null): string {
+  if (!value) return 'Tarih yok'
+  return formatShortDate(value.slice(0, 10))
+}
+
+export function LiveDiscovery({ city, startDate, endDate }: LiveDiscoveryProps) {
+  const [status, setStatus] = useState<DiscoveryStatus | null>(null)
+  const [statusError, setStatusError] = useState<string | null>(null)
+  const [events, setEvents] = useState<EventOffer[]>([])
+  const [eventsLoading, setEventsLoading] = useState(false)
+  const [eventsError, setEventsError] = useState<string | null>(null)
+  const [eventsLoaded, setEventsLoaded] = useState(false)
+  const [origin, setOrigin] = useState('IST')
+  const [flights, setFlights] = useState<FlightSearchResult | null>(null)
+  const [flightsLoading, setFlightsLoading] = useState(false)
+  const [flightsError, setFlightsError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+    api
+      .getDiscoveryStatus()
+      .then((result) => {
+        if (!active) return
+        setStatus(result)
+        if (result.providers.ticketmaster === 'configured') {
+          setEventsLoading(true)
+          api
+            .listEvents(city, startDate, endDate)
+            .then((response) => {
+              if (active) setEvents(response.events)
+            })
+            .catch((error) => {
+              if (active) {
+                setEventsError(
+                  error instanceof Error ? error.message : 'Etkinlikler yüklenemedi.',
+                )
+              }
+            })
+            .finally(() => {
+              if (!active) return
+              setEventsLoading(false)
+              setEventsLoaded(true)
+            })
+        } else {
+          setEventsLoaded(true)
+        }
+      })
+      .catch((error) => {
+        if (active) {
+          setStatusError(error instanceof Error ? error.message : 'Keşif servisi yüklenemedi.')
+        }
+      })
+    return () => {
+      active = false
+    }
+  }, [city, endDate, startDate])
+
+  async function handleFlightSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setFlightsLoading(true)
+    setFlightsError(null)
+    try {
+      const result = await api.searchFlights({
+        origin: origin.trim().toUpperCase(),
+        destination: city,
+        departureDate: startDate,
+        returnDate: endDate,
+      })
+      setFlights(result)
+    } catch (error) {
+      setFlights(null)
+      setFlightsError(error instanceof Error ? error.message : 'Uçuşlar yüklenemedi.')
+    } finally {
+      setFlightsLoading(false)
+    }
+  }
+
+  const ticketmasterMissing = status?.providers.ticketmaster === 'missing'
+  const duffelMissing = status?.providers.duffel === 'missing'
+  const statusPending = !status && !statusError
+
+  return (
+    <section className="live-discovery" aria-labelledby="live-discovery-title">
+      <div className="section-head">
+        <div>
+          <p className="label">CANLI KEŞİF</p>
+          <h2 id="live-discovery-title">Şehrin gündemi</h2>
+        </div>
+        <span className="provider-label">Harici sağlayıcı</span>
+      </div>
+
+      {statusError && (
+        <p className="notice error" role="alert">
+          {statusError}
+        </p>
+      )}
+
+      <div className="discovery-grid">
+        <article className="discovery-panel" aria-labelledby="events-title">
+          <div className="discovery-panel-head">
+            <div>
+              <p className="label">TICKETMASTER DISCOVERY</p>
+              <h3 id="events-title">Etkinlikler</h3>
+            </div>
+            <Ticket size={22} strokeWidth={1.75} aria-hidden="true" />
+          </div>
+
+          {statusError ? (
+            <p className="discovery-empty">Sağlayıcı durumu alınamadı.</p>
+          ) : statusPending ? (
+            <div className="discovery-skeleton" role="status" aria-label="Etkinlikler yükleniyor">
+              <span className="skeleton-line medium" />
+              <span className="skeleton-line" />
+              <span className="skeleton-line short" />
+            </div>
+          ) : ticketmasterMissing ? (
+            <p className="discovery-empty">
+              Canlı etkinlikler bu ortamda yapılandırılmadı. Anahtar eklendiğinde şehirdeki
+              etkinlikler burada görünür.
+            </p>
+          ) : eventsLoading ? (
+            <div className="discovery-skeleton" role="status" aria-label="Etkinlikler yükleniyor">
+              <span className="skeleton-line medium" />
+              <span className="skeleton-line" />
+              <span className="skeleton-line short" />
+            </div>
+          ) : eventsError ? (
+            <p className="notice error" role="alert">
+              {eventsError}
+            </p>
+          ) : eventsLoaded && events.length === 0 ? (
+            <p className="discovery-empty">
+              Bu tarihler için yaklaşan etkinlik bulunamadı.
+            </p>
+          ) : (
+            <ul className="event-list">
+              {events.map((event) => (
+                <li className="event-row" key={event.id}>
+                  {event.imageUrl && (
+                    <img
+                      className="event-image"
+                      src={event.imageUrl}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      onError={(event) => {
+                        event.currentTarget.style.display = 'none'
+                      }}
+                    />
+                  )}
+                  <div className="event-body">
+                    <h4>{event.name}</h4>
+                    <p className="event-meta">
+                      <CalendarDays size={14} strokeWidth={1.75} aria-hidden="true" />
+                      {eventDate(event)}
+                      {event.venue ? ` · ${event.venue}` : ''}
+                    </p>
+                    <p className="event-price">{eventPrice(event)}</p>
+                  </div>
+                  {event.url && (
+                    <a
+                      className="event-link"
+                      href={event.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${event.name} bilet sayfasını aç`}
+                    >
+                      <ExternalLink size={18} strokeWidth={1.75} />
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="source-note">
+            Etkinlik verisi Ticketmaster Discovery'dan gelir. Fiyat ve müsaitlik sağlayıcıda
+            değişebilir; bilet işlemi Ticketmaster üzerinde tamamlanır.
+          </p>
+        </article>
+
+        <article className="discovery-panel" aria-labelledby="flights-title">
+          <div className="discovery-panel-head">
+            <div>
+              <p className="label">DUFFEL</p>
+              <h3 id="flights-title">Uçuş fikri</h3>
+            </div>
+            <Plane size={22} strokeWidth={1.75} aria-hidden="true" />
+          </div>
+
+          {statusError ? (
+            <p className="discovery-empty">Sağlayıcı durumu alınamadı.</p>
+          ) : statusPending ? (
+            <div className="discovery-skeleton" role="status" aria-label="Uçuş servisi yükleniyor">
+              <span className="skeleton-line medium" />
+              <span className="skeleton-line short" />
+            </div>
+          ) : duffelMissing ? (
+            <p className="discovery-empty">
+              Uçuş denemeleri bu ortamda yapılandırılmadı. Test token'ı eklendiğinde burada
+              görünür.
+            </p>
+          ) : (
+            <form className="flight-form" onSubmit={handleFlightSearch}>
+              <label className="field">
+                <span>Kalkış havalimanı</span>
+                <input
+                  className="input"
+                  type="text"
+                  name="origin"
+                  value={origin}
+                  onChange={(event) => setOrigin(event.target.value.toUpperCase().slice(0, 3))}
+                  placeholder="IST"
+                  maxLength={3}
+                  autoComplete="off"
+                  aria-label="Kalkış havalimanı kodu"
+                />
+              </label>
+              <button className="btn btn-secondary" type="submit" disabled={flightsLoading}>
+                {flightsLoading ? 'Aranıyor...' : 'Uçuşları ara'}
+              </button>
+            </form>
+          )}
+
+          {flightsError && (
+            <p className="notice error" role="alert">
+              {flightsError}
+            </p>
+          )}
+
+          {flights && (
+            <>
+              {flights.mode === 'test' && (
+                <p className="test-label">Duffel test verisi · gerçek bilet değildir</p>
+              )}
+              {flights.offers.length === 0 ? (
+                <p className="discovery-empty">Bu tarihler için uçuş bulunamadı.</p>
+              ) : (
+                <ul className="flight-list">
+                  {flights.offers.map((offer) => (
+                    <li className="flight-row" key={offer.id}>
+                      <div>
+                        <strong>{offer.airline ?? 'Havayolu'}</strong>
+                        <span>
+                          {flightDate(offer.departureAt)} · {flightTime(offer.departureAt)} →{' '}
+                          {flightTime(offer.arrivalAt)}
+                        </span>
+                        <span>
+                          {offer.from} → {offer.to} · {offer.stops === 0 ? 'Direkt' : `${offer.stops} aktarma`}
+                        </span>
+                      </div>
+                      <strong className="flight-price">
+                        {formatMoney(offer.price, offer.currency)}
+                      </strong>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <p className="source-note">{flights.disclaimer}</p>
+            </>
+          )}
+          <p className="source-note">
+            Uçuş yanıtı Duffel'dan gelir. Test modunda fiyatlar gerçek değildir; bu sürümde
+            rezervasyon oluşturulmaz.
+          </p>
+        </article>
+      </div>
+    </section>
+  )
+}

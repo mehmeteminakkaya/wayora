@@ -5,6 +5,7 @@ import { GripVertical } from 'lucide-react'
 import { api } from '../api'
 import type { Activity, ActivityCategory, CreateActivityInput, Trip } from '../api'
 import { DetailSkeleton } from '../components/Skeletons'
+import { LiveDiscovery } from '../components/LiveDiscovery'
 import { CATEGORY_LABELS, formatMoney, formatShortDate } from '../lib/format'
 import { cityCoords } from '../lib/photos'
 
@@ -899,6 +900,8 @@ export function TripDetailPage() {
           </ul>
         </section>
       )}
+
+      <LiveDiscovery city={trip.destination} startDate={trip.startDate} endDate={trip.endDate} />
 
       <div className="sticky-action trip-sticky">
         <span className="selection-count">

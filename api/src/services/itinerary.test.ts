@@ -210,4 +210,45 @@ describe('LLM yönlendirme ve fallback', () => {
     expect(meta).toMatchObject({ provider: 'gemini', fallback: false, model: 'smart' })
     expect(plan.days[0]?.activities[0]?.title).toBe(place.name)
   })
+
+  it('DeepSeek yanıtını ayrıştırıp plana dönüştürür', async () => {
+    const place = candidates[0]!
+    const llmBody = {
+      days: [
+        {
+          dayIndex: 1,
+          activities: [
+            {
+              title: place.name,
+              category: place.category,
+              startTime: '10:00',
+              endTime: '12:00',
+              estimatedCost: 18,
+              googlePlaceId: place.googlePlaceId,
+            },
+          ],
+        },
+      ],
+      tips: ['Müze saatlerini kontrol edin'],
+    }
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({ choices: [{ message: { content: JSON.stringify(llmBody) } }] }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+      ),
+    )
+
+    const { plan, meta } = await generateItinerary(input, candidates, {
+      ...offlineConfig,
+      LLM_PROVIDER: 'deepseek',
+      DEEPSEEK_API_KEY: 'test-key',
+      DEEPSEEK_MODEL: 'deepseek-chat',
+    })
+
+    expect(meta).toMatchObject({ provider: 'deepseek', fallback: false, model: 'deepseek-chat' })
+    expect(plan.days[0]?.activities[0]?.title).toBe(place.name)
+  })
 })

@@ -3,12 +3,24 @@
   "services": {
     "web": {
       "root": "web/",
-      "framework": "vite"
+      "framework": "vite",
+      "rewrites": [
+        {
+          "source": "/(.*)",
+          "destination": "/index.html"
+        }
+      ]
     },
     "api": {
       "root": "api/",
       "framework": "express",
-      "entrypoint": "app.ts"
+      "entrypoint": "app.mts",
+      "buildCommand": "npm run db:generate",
+      "functions": {
+        "app.mts": {
+          "includeFiles": "package.json"
+        }
+      }
     }
   },
   "rewrites": [

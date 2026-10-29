@@ -20,9 +20,11 @@ const envSchema = z
     COOKIE_SECURE: z.enum(['true', 'false']).optional(),
 
     // LLM yönlendirme (Week 10: gateway / model routing / fallback)
-    LLM_PROVIDER: z.enum(['offline', 'gemini', 'openai']).default('offline'),
+    LLM_PROVIDER: z.enum(['offline', 'gemini', 'openai', 'deepseek']).default('offline'),
     GEMINI_API_KEY: z.string().optional(),
     OPENAI_API_KEY: z.string().optional(),
+    DEEPSEEK_API_KEY: z.string().optional(),
+    DEEPSEEK_MODEL: z.string().default('deepseek-chat'),
     LLM_MODEL_FAST: z.string().default('gemini-2.0-flash'),
     LLM_MODEL_SMART: z.string().default('gemini-2.5-pro'),
     LLM_TIMEOUT_MS: z.coerce.number().int().positive().max(60_000).default(20_000),
@@ -62,6 +64,13 @@ const envSchema = z
         code: 'custom',
         path: ['OPENAI_API_KEY'],
         message: 'LLM_PROVIDER=openai için OPENAI_API_KEY gerekli',
+      })
+    }
+    if (env.LLM_PROVIDER === 'deepseek' && !env.DEEPSEEK_API_KEY) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['DEEPSEEK_API_KEY'],
+        message: 'LLM_PROVIDER=deepseek için DEEPSEEK_API_KEY gerekli',
       })
     }
   })

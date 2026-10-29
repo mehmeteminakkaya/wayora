@@ -20,4 +20,8 @@ const app = createApp({
   },
 })
 
-export default app
+// Vercel'in Node handler sözleşmesi için açık bir default export.
+// Express uygulaması callable olsa da bu sarmalayıcı export tipini netleştirir.
+export default function handler(req: Parameters<typeof app>[0], res: Parameters<typeof app>[1]) {
+  app(req, res)
+}

@@ -1,4 +1,5 @@
-import { CalendarDays, ExternalLink } from 'lucide-react'
+import { useState } from 'react'
+import { CalendarDays, CalendarPlus, ExternalLink } from 'lucide-react'
 import type { EventOffer } from '../api'
 import { formatMoney, formatShortDate } from '../lib/format'
 
@@ -17,11 +18,85 @@ function eventPrice(event: EventOffer): string {
   return `${formatMoney(event.priceMin, event.currency)} - ${formatMoney(event.priceMax, event.currency)}`
 }
 
+function EventImage({ event }: { event: EventOffer }) {
+  const [failed, setFailed] = useState(false)
+  if (!event.imageUrl || failed) {
+    return (
+      <div className="event-image event-image-fallback" aria-hidden="true">
+        <CalendarDays size={22} strokeWidth={1.5} />
+      </div>
+    )
+  }
+  return (
+    <div className="event-image">
+      <img
+        src={event.imageUrl}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailed(true)}
+      />
+    </div>
+  )
+}
+
+function EventFeedRow({
+  event,
+  onAdd,
+  canAdd,
+}: {
+  event: EventOffer
+  onAdd?: (event: EventOffer) => void
+  canAdd?: (event: EventOffer) => boolean
+}) {
+  const addAvailable = Boolean(onAdd && (!canAdd || canAdd(event)))
+  return (
+    <li className="event-row">
+      <EventImage event={event} />
+      <div className="event-body">
+        <h4>{event.name}</h4>
+        <p className="event-meta">
+          <CalendarDays size={14} strokeWidth={1.75} aria-hidden="true" />
+          {eventDate(event)}
+          {event.venue ? ` · ${event.venue}` : ''}
+        </p>
+        <p className="event-price">{eventPrice(event)}</p>
+      </div>
+      <div className="event-actions">
+        {event.url && (
+          <a
+            className="event-link"
+            href={event.url}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`${event.name} bilet sayfasını aç`}
+          >
+            <ExternalLink size={18} strokeWidth={1.75} />
+          </a>
+        )}
+        {addAvailable && (
+          <button
+            className="event-add"
+            type="button"
+            aria-label={`${event.name} etkinliğini güne ekle`}
+            title="Aktif güne ekle"
+            onClick={() => onAdd?.(event)}
+          >
+            <CalendarPlus size={18} strokeWidth={1.75} />
+          </button>
+        )}
+      </div>
+    </li>
+  )
+}
+
 type EventFeedProps = {
   events: EventOffer[]
   loading?: boolean
   error?: string | null
   emptyText?: string
+  onAdd?: (event: EventOffer) => void
+  canAdd?: (event: EventOffer) => boolean
 }
 
 export function EventFeed({
@@ -29,6 +104,8 @@ export function EventFeed({
   loading = false,
   error = null,
   emptyText = 'Bu tarihler için yaklaşan etkinlik bulunamadı.',
+  onAdd,
+  canAdd,
 }: EventFeedProps) {
   if (loading) {
     return (
@@ -55,40 +132,7 @@ export function EventFeed({
   return (
     <ul className="event-list">
       {events.map((event) => (
-        <li className="event-row" key={event.id}>
-          {event.imageUrl && (
-            <img
-              className="event-image"
-              src={event.imageUrl}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              onError={(imageEvent) => {
-                imageEvent.currentTarget.style.display = 'none'
-              }}
-            />
-          )}
-          <div className="event-body">
-            <h4>{event.name}</h4>
-            <p className="event-meta">
-              <CalendarDays size={14} strokeWidth={1.75} aria-hidden="true" />
-              {eventDate(event)}
-              {event.venue ? ` · ${event.venue}` : ''}
-            </p>
-            <p className="event-price">{eventPrice(event)}</p>
-          </div>
-          {event.url && (
-            <a
-              className="event-link"
-              href={event.url}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`${event.name} bilet sayfasını aç`}
-            >
-              <ExternalLink size={18} strokeWidth={1.75} />
-            </a>
-          )}
-        </li>
+        <EventFeedRow event={event} key={event.id} onAdd={onAdd} canAdd={canAdd} />
       ))}
     </ul>
   )

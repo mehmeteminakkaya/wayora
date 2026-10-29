@@ -3,7 +3,7 @@ import type { FormEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { GripVertical } from 'lucide-react'
 import { api } from '../api'
-import type { Activity, ActivityCategory, CreateActivityInput, Trip } from '../api'
+import type { Activity, ActivityCategory, CreateActivityInput, EventOffer, Trip } from '../api'
 import { DetailSkeleton } from '../components/Skeletons'
 import { LiveDiscovery } from '../components/LiveDiscovery'
 import { CATEGORY_LABELS, formatMoney, formatShortDate } from '../lib/format'
@@ -315,6 +315,48 @@ export function TripDetailPage() {
         : current,
     )
     setShowAddForm(false)
+  }
+
+  async function handleAddEvent(event: EventOffer) {
+    if (!trip || !activeDay) return
+    const day = trip.days.find((item) => item.date === event.startDate)
+    if (!day) {
+      setPlanNotice({
+        tone: 'warning',
+        text: 'Bu etkinlik seçili günün tarihine ait değil. Önce doğru günü seç.',
+      })
+      return
+    }
+
+    try {
+      const { activity } = await api.addActivity(trip.id, day.id, {
+        title: event.name,
+        category: 'other',
+        startTime: event.startTime?.slice(0, 5) ?? null,
+        endTime: null,
+        estimatedCost: event.priceMin,
+        notes: event.url ? `Ticketmaster: ${event.url}` : 'Ticketmaster etkinliği',
+      })
+      setTrip((current) =>
+        current
+          ? {
+              ...current,
+              days: current.days.map((item) =>
+                item.id === day.id
+                  ? { ...item, activities: [...item.activities, activity] }
+                  : item,
+              ),
+            }
+          : current,
+      )
+      setSelectedDayId(day.id)
+      setPlanNotice({ tone: 'success', text: 'Etkinlik rotaya eklendi.' })
+    } catch (err) {
+      setPlanNotice({
+        tone: 'warning',
+        text: err instanceof Error ? err.message : 'Etkinlik rotaya eklenemedi.',
+      })
+    }
   }
 
   async function handleDeleteActivity(activity: Activity) {
@@ -901,7 +943,13 @@ export function TripDetailPage() {
         </section>
       )}
 
-      <LiveDiscovery city={trip.destination} startDate={trip.startDate} endDate={trip.endDate} />
+      <LiveDiscovery
+        city={trip.destination}
+        startDate={trip.startDate}
+        endDate={trip.endDate}
+        activeDate={activeDay?.date}
+        onAddEvent={(event) => void handleAddEvent(event)}
+      />
 
       <div className="sticky-action trip-sticky">
         <span className="selection-count">

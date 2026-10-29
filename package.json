@@ -2,6 +2,7 @@
   "name": "wayora",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "description": "AI destekli seyahat planlama platformu (JOB-191)",
   "workspaces": [
     "web",

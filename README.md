@@ -170,6 +170,8 @@ JWT_EXPIRES_IN=7d
 COOKIE_NAME=wayora_session
 
 LLM_PROVIDER=offline
+# DEEPSEEK_API_KEY=...
+DEEPSEEK_MODEL=deepseek-chat
 LLM_MODEL_FAST=gemini-2.0-flash
 LLM_MODEL_SMART=gemini-2.5-pro
 LLM_TIMEOUT_MS=20000
@@ -186,8 +188,16 @@ devam eder. Ticketmaster anahtarı yalnızca etkinlik keşfi içindir; bilet sat
 API'si gerektirir. Duffel test token'ı sahte fiyat üretir, gerçek rezervasyon yapmaz.
 
 Production'da en az `JWT_SECRET` değiştirilmeli ve HTTPS için `COOKIE_SECURE=true`
-kullanılmalıdır. Gemini/OpenAI kullanmak için `LLM_PROVIDER` ve ilgili API anahtarı ayarlanır.
-Anahtar yoksa uygulama offline modda çalışmaya devam eder.
+kullanılmalıdır. Gemini/OpenAI/DeepSeek kullanmak için `LLM_PROVIDER` ve ilgili API anahtarı
+ayarlanır. Anahtar yoksa uygulama offline modda çalışmaya devam eder.
+
+DeepSeek örneği:
+
+```dotenv
+LLM_PROVIDER=deepseek
+DEEPSEEK_API_KEY=...
+DEEPSEEK_MODEL=deepseek-chat
+```
 
 ### Ücretsiz canlı keşif (opsiyonel)
 
@@ -210,6 +220,27 @@ https://developer.ticketmaster.com · Duffel test hesabı: https://app.duffel.co
 
 Otel arama, canlı bilet satın alma ve ödeme bu sürümde yoktur. Bu özellikler partner
 sözleşmesi, ödeme ve iade süreçleri gerektirir; ayrı bir faz olarak planlanmıştır.
+
+## Canlı ortam
+
+- **Web + API:** https://wayora-ten.vercel.app
+- **Vercel projesi:** `bsyilmazs-projects/wayora`
+- **Veritabanı:** Neon Serverless PostgreSQL (Vercel Marketplace)
+- **Mimari:** Vercel Services; `web/` Vite servisi, `api/` Express servisi
+- **API sağlık:** https://wayora-ten.vercel.app/api/health
+
+Canlı ortamda Prisma migration'ları uygulanmış ve 10 şehir / 100 deneyim kataloğu
+seed edilmiştir. API anahtarları ve veritabanı URL'si Vercel Environment Variables
+üzerinden yönetilir; repoda tutulmaz.
+
+Yeniden deploy:
+
+```bash
+vercel deploy --prod
+```
+
+> Marketplace veritabanını değiştirirken migration'ları unutma:
+> `npm run db:deploy -w api` ve katalog seed'i.
 
 ## Demo akışı
 
@@ -238,11 +269,11 @@ Yerel veritabanını sıfırlamadan tekrar denemek için yeni bir e-posta ile ka
                                                           (yerel prisma dev)
                                                                    │
                                                                    ▼
-                                                     ┌───────────────────────────┐
-                                                     │ itinerary service         │
-                                                     │ offline · Gemini · OpenAI │
-                                                     │ doğrulama + fallback      │
-                                                     └───────────────────────────┘
+                                                     ┌──────────────────────────────────┐
+                                                     │ itinerary service                │
+                                                     │ offline · Gemini · OpenAI        │
+                                                     │ DeepSeek · doğrulama + fallback │
+                                                     └──────────────────────────────────┘
 ```
 
 ### Kararlar
@@ -256,7 +287,7 @@ Yerel veritabanını sıfırlamadan tekrar denemek için yeni bir e-posta ile ka
 - **Canlı keşif:** Ticketmaster Discovery ve Duffel test token'ı opsiyonel; anahtar yoksa
   uygulama offline çalışır ve sahte veri üretmez.
 - **Tasarım:** saf CSS + merkezi tokenlar; Tailwind/UI kit yok.
-- **AI:** offline varsayılan; Gemini/OpenAI adaptörleri opsiyonel.
+- **AI:** offline varsayılan; Gemini/OpenAI/DeepSeek adaptörleri opsiyonel.
 
 ## Frontend
 
@@ -454,7 +485,8 @@ Aday deneyimler (şehir kataloğu)
    │
    ├── LLM_PROVIDER=offline  → deterministik offline üretici
    ├── LLM_PROVIDER=gemini   → Gemini
-   └── LLM_PROVIDER=openai   → OpenAI
+   ├── LLM_PROVIDER=openai   → OpenAI
+   └── LLM_PROVIDER=deepseek → DeepSeek
    │
    ▼
 zod doğrulaması + aday kimlik filtresi
@@ -512,9 +544,9 @@ Son doğrulanan sonuçlar:
 
 | Kontrol | Sonuç |
 | :--- | ---: |
-| API testleri | 57 / 57 |
+| API testleri | 58 / 58 |
 | Web testleri | 4 / 4 |
-| Toplam Vitest | 61 / 61 |
+| Toplam Vitest | 62 / 62 |
 | Lint | geçti |
 | Typecheck | geçti |
 | Production build | geçti |

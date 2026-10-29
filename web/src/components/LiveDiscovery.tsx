@@ -10,6 +10,8 @@ type LiveDiscoveryProps = {
   city: string
   startDate: string
   endDate: string
+  activeDate?: string
+  onAddEvent?: (event: EventOffer) => void
 }
 
 function flightTime(value: string | null): string {
@@ -22,7 +24,13 @@ function flightDate(value: string | null): string {
   return formatShortDate(value.slice(0, 10))
 }
 
-export function LiveDiscovery({ city, startDate, endDate }: LiveDiscoveryProps) {
+export function LiveDiscovery({
+  city,
+  startDate,
+  endDate,
+  activeDate,
+  onAddEvent,
+}: LiveDiscoveryProps) {
   const [status, setStatus] = useState<DiscoveryStatus | null>(null)
   const [statusError, setStatusError] = useState<string | null>(null)
   const [events, setEvents] = useState<EventOffer[]>([])
@@ -138,6 +146,8 @@ export function LiveDiscovery({ city, startDate, endDate }: LiveDiscoveryProps) 
               events={events}
               loading={eventsLoading || !eventsLoaded}
               error={eventsError}
+              onAdd={onAddEvent}
+              canAdd={(event) => Boolean(activeDate && event.startDate === activeDate)}
             />
           )}
           <p className="source-note">

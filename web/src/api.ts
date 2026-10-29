@@ -69,7 +69,7 @@ export type Trip = {
 }
 
 export type GenerationMeta = {
-  provider: 'offline' | 'gemini' | 'openai'
+  provider: 'offline' | 'gemini' | 'openai' | 'deepseek'
   model: string
   fallback: boolean
   latencyMs: number

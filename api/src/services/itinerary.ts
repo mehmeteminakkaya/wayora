@@ -42,16 +42,18 @@ export type ItineraryPlan = {
 }
 
 export type LlmConfig = {
-  LLM_PROVIDER: 'offline' | 'gemini' | 'openai'
+  LLM_PROVIDER: 'offline' | 'gemini' | 'openai' | 'deepseek'
   GEMINI_API_KEY?: string
   OPENAI_API_KEY?: string
+  DEEPSEEK_API_KEY?: string
+  DEEPSEEK_MODEL?: string
   LLM_MODEL_FAST: string
   LLM_MODEL_SMART: string
   LLM_TIMEOUT_MS: number
 }
 
 export type GenerationMeta = {
-  provider: 'offline' | 'gemini' | 'openai'
+  provider: 'offline' | 'gemini' | 'openai' | 'deepseek'
   model: string
   fallback: boolean
   latencyMs: number
@@ -61,6 +63,9 @@ export type GenerationMeta = {
 export type LlmTask = 'itinerary' | 'quick_tip'
 
 export function routeModel(task: LlmTask, config: LlmConfig): string {
+  if (config.LLM_PROVIDER === 'deepseek') {
+    return config.DEEPSEEK_MODEL ?? 'deepseek-chat'
+  }
   return task === 'itinerary' ? config.LLM_MODEL_SMART : config.LLM_MODEL_FAST
 }
 
@@ -418,6 +423,31 @@ async function callOpenAi(prompt: string, config: LlmConfig): Promise<string> {
   return text
 }
 
+async function callDeepSeek(prompt: string, config: LlmConfig): Promise<string> {
+  const model = routeModel('itinerary', config)
+  const key = config.DEEPSEEK_API_KEY
+  if (!key) throw new Error('DEEPSEEK_API_KEY yok')
+  const response = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${key}` },
+    body: JSON.stringify({
+      model,
+      temperature: 0.4,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: prompt },
+      ],
+    }),
+    signal: AbortSignal.timeout(config.LLM_TIMEOUT_MS),
+  })
+  if (!response.ok) throw new Error(`DeepSeek HTTP ${response.status}`)
+  const data = (await response.json()) as { choices?: Array<{ message?: { content?: string } }> }
+  const text = data.choices?.[0]?.message?.content
+  if (!text) throw new Error('DeepSeek boş yanıt döndü')
+  return text
+}
+
 export async function generateItinerary(
   input: ItineraryInput,
   candidates: PlaceCandidate[],
@@ -442,7 +472,12 @@ export async function generateItinerary(
 
   try {
     const prompt = buildPrompt(input, candidates)
-    const text = provider === 'gemini' ? await callGemini(prompt, config) : await callOpenAi(prompt, config)
+    const text =
+      provider === 'gemini'
+        ? await callGemini(prompt, config)
+        : provider === 'deepseek'
+          ? await callDeepSeek(prompt, config)
+          : await callOpenAi(prompt, config)
     const parsed = parseLlmPlan(text)
     if (!parsed) throw new Error('LLM yanıtı şemaya uymadı')
 

@@ -2,6 +2,11 @@
   "explore320": {
     "overflow": false
   },
+  "cityEvents": {
+    "count": 6,
+    "firstTitle": "Cirque du Soleil ALIZÉ",
+    "overflow": false
+  },
   "summary": {
     "text": "2 durak seçili\n€24 kişi başı\nÖzeti aç",
     "overflow": false

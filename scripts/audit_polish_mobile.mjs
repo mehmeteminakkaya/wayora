@@ -78,6 +78,15 @@ const explore320 = await evaluate(`({ overflow: document.documentElement.scrollW
 
 await navigate('/kesfet/berlin')
 await waitFor(`document.querySelectorAll('.experience-row').length === 10`, 'city 320')
+await waitFor(`document.querySelectorAll('.city-events .event-row').length > 0`, 'city live events')
+const cityEvents = await evaluate(`({
+  count: document.querySelectorAll('.city-events .event-row').length,
+  firstTitle: document.querySelector('.city-events .event-row h4')?.textContent ?? null,
+  overflow: document.documentElement.scrollWidth > window.innerWidth + 2,
+})`)
+await evaluate(`window.scrollTo({ top: (document.querySelector('.city-events')?.getBoundingClientRect().top ?? 0) + window.scrollY - 8, behavior: 'auto' })`)
+await new Promise((resolve) => setTimeout(resolve, 900))
+await shot('polish-city-events-320')
 await evaluate(`document.querySelectorAll('.experience-row .select-button')[0].click()`)
 await evaluate(`document.querySelectorAll('.experience-row .select-button')[1].click()`)
 await waitFor(`!!document.querySelector('.sticky-action')`, 'sticky summary 320')
@@ -127,7 +136,7 @@ if (tripHref) {
   await evaluate(`document.querySelector('.live-discovery')?.scrollIntoView({ block: 'start' })`)
   await new Promise((resolve) => setTimeout(resolve, 300))
   await shot('polish-live-discovery-320')
-  const report = { explore320, summary, sheet, city430, trip320, liveDiscovery, errors }
+  const report = { explore320, cityEvents, summary, sheet, city430, trip320, liveDiscovery, errors }
   console.log(JSON.stringify(report, null, 2))
   writeFileSync('docs/audit/polish-mobile.json', JSON.stringify(report, null, 2))
 }

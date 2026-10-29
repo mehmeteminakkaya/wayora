@@ -12,7 +12,7 @@ sağlayıcılarla sınırlı bir keşif katmanı eklenir.
 - Duffel test token'ı ile uçuş teklifi arama.
 - Sağlayıcı anahtarları yalnızca backend'de.
 - Anahtar yoksa özellik kapalı; uydurma etkinlik/uçuş fiyatı üretilmez.
-- Rota detayında “Canlı keşif” bölümü.
+- Şehir sayfasında ve rota detayında “Canlı keşif” bölümü.
 
 ## Kapsam dışı
 

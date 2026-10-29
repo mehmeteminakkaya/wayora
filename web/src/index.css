@@ -2665,6 +2665,23 @@ p {
   border-top: 1px solid var(--line);
 }
 
+.city-events {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.city-events .section-head {
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.city-events .section-head h2 {
+  margin: 2px 0 0;
+  font-size: 26px;
+  line-height: 31px;
+}
+
 .live-discovery .section-head {
   align-items: flex-start;
   margin-bottom: 16px;

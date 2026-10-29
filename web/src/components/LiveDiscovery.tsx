@@ -1,29 +1,15 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
-import { CalendarDays, ExternalLink, Plane, Ticket } from 'lucide-react'
+import { Plane, Ticket } from 'lucide-react'
 import { api } from '../api'
 import type { DiscoveryStatus, EventOffer, FlightSearchResult } from '../api'
 import { formatMoney, formatShortDate } from '../lib/format'
+import { EventFeed } from './EventFeed'
 
 type LiveDiscoveryProps = {
   city: string
   startDate: string
   endDate: string
-}
-
-function eventDate(event: EventOffer): string {
-  if (!event.startDate) return 'Tarih belirtilmedi'
-  const date = event.startDate.includes('T') ? event.startDate.slice(0, 10) : event.startDate
-  const time = event.startTime?.slice(0, 5)
-  return `${formatShortDate(date)}${time ? ` · ${time}` : ''}`
-}
-
-function eventPrice(event: EventOffer): string {
-  if (event.priceMin === null || event.priceMax === null || !event.currency) {
-    return 'Fiyat bilgisi yok'
-  }
-  if (event.priceMin === event.priceMax) return formatMoney(event.priceMin, event.currency)
-  return `${formatMoney(event.priceMin, event.currency)} - ${formatMoney(event.priceMax, event.currency)}`
 }
 
 function flightTime(value: string | null): string {
@@ -141,69 +127,18 @@ export function LiveDiscovery({ city, startDate, endDate }: LiveDiscoveryProps) 
           {statusError ? (
             <p className="discovery-empty">Sağlayıcı durumu alınamadı.</p>
           ) : statusPending ? (
-            <div className="discovery-skeleton" role="status" aria-label="Etkinlikler yükleniyor">
-              <span className="skeleton-line medium" />
-              <span className="skeleton-line" />
-              <span className="skeleton-line short" />
-            </div>
+            <EventFeed events={[]} loading />
           ) : ticketmasterMissing ? (
             <p className="discovery-empty">
               Canlı etkinlikler bu ortamda yapılandırılmadı. Anahtar eklendiğinde şehirdeki
               etkinlikler burada görünür.
             </p>
-          ) : eventsLoading ? (
-            <div className="discovery-skeleton" role="status" aria-label="Etkinlikler yükleniyor">
-              <span className="skeleton-line medium" />
-              <span className="skeleton-line" />
-              <span className="skeleton-line short" />
-            </div>
-          ) : eventsError ? (
-            <p className="notice error" role="alert">
-              {eventsError}
-            </p>
-          ) : eventsLoaded && events.length === 0 ? (
-            <p className="discovery-empty">
-              Bu tarihler için yaklaşan etkinlik bulunamadı.
-            </p>
           ) : (
-            <ul className="event-list">
-              {events.map((event) => (
-                <li className="event-row" key={event.id}>
-                  {event.imageUrl && (
-                    <img
-                      className="event-image"
-                      src={event.imageUrl}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      onError={(event) => {
-                        event.currentTarget.style.display = 'none'
-                      }}
-                    />
-                  )}
-                  <div className="event-body">
-                    <h4>{event.name}</h4>
-                    <p className="event-meta">
-                      <CalendarDays size={14} strokeWidth={1.75} aria-hidden="true" />
-                      {eventDate(event)}
-                      {event.venue ? ` · ${event.venue}` : ''}
-                    </p>
-                    <p className="event-price">{eventPrice(event)}</p>
-                  </div>
-                  {event.url && (
-                    <a
-                      className="event-link"
-                      href={event.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${event.name} bilet sayfasını aç`}
-                    >
-                      <ExternalLink size={18} strokeWidth={1.75} />
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <EventFeed
+              events={events}
+              loading={eventsLoading || !eventsLoaded}
+              error={eventsError}
+            />
           )}
           <p className="source-note">
             Etkinlik verisi Ticketmaster Discovery'dan gelir. Fiyat ve müsaitlik sağlayıcıda

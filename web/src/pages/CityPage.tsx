@@ -4,6 +4,7 @@ import { ArrowLeft, Check, Plus, X } from 'lucide-react'
 import { api } from '../api'
 import type { CityDetail, CityExperience } from '../api'
 import { BottomSheet } from '../components/BottomSheet'
+import { CityEvents } from '../components/CityEvents'
 import { Photo } from '../components/Photo'
 import { DetailSkeleton } from '../components/Skeletons'
 import { formatMoney } from '../lib/format'
@@ -325,6 +326,8 @@ export function CityPage() {
         </div>
         </>
       )}
+
+      <CityEvents city={city.name} />
 
       {hasSelection && (
         <div className="sticky-action" aria-live="polite">

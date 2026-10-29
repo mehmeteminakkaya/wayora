@@ -68,11 +68,13 @@ Mevcut sürümde kullanıcı:
 - 3 adımlı yeni rota sihirbazı: şehir → tarih → bütçe/tempo.
 - Rota detayında gün sekmeleri, gün panosu, dikey rota çizgisi, liste/harita görünümü,
   durak ekleme/silme ve sürükleme, klavye ve butonlarla sıralama.
+- Şehir sayfasında ve rota detayında Ticketmaster ile canlı etkinlik keşfi; rota detayında
+  Duffel test token'ı varsa uçuş fikri.
 - Rotalarım ekranında yaklaşan, taslak ve geçmiş rotalar; silme onayı.
 - Profilde kayıtlı tercihleri görüntüleme ve düzenleme.
-- **Canlı keşif:** Ticketmaster Discovery ile şehir etkinlikleri; Duffel test token'ı
-  varsa uçuş fikri. Anahtar yoksa bölüm uydurma veri üretmez, yapılandırma notu gösterir.
-  Otel/rezervasyon satışı bu sürümde yoktur.
+- **Canlı keşif:** Ticketmaster Discovery ile şehir sayfasında ve rota detayında
+  şehir etkinlikleri; Duffel test token'ı varsa uçuş fikri. Anahtar yoksa bölüm uydurma
+  veri üretmez, yapılandırma notu gösterir. Otel/rezervasyon satışı bu sürümde yoktur.
 
 ### Dayanıklılık
 
@@ -189,7 +191,7 @@ Anahtar yoksa uygulama offline modda çalışmaya devam eder.
 
 ### Ücretsiz canlı keşif (opsiyonel)
 
-Rota detayındaki “Canlı keşif” bölümü iki sağlayıcıyı destekler:
+Rota detayındaki ve şehir sayfasındaki “Canlı keşif” bölümü iki sağlayıcıyı destekler:
 
 - **Ticketmaster Discovery:** ücretsiz developer anahtarı; varsayılan kota günde 5.000 çağrı.
   Etkinlik keşfi ve bilet sayfası bağlantısı sağlar, bilet satın almaz.

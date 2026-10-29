@@ -101,9 +101,9 @@ p {
 
 .icon-btn {
   flex: 0 0 44px;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-control);
-  background: var(--surface);
+  background: transparent;
   transition:
     background-color var(--duration-fast) var(--ease-standard),
     border-color var(--duration-fast) var(--ease-standard),
@@ -257,7 +257,6 @@ p {
 
 .bottom-nav {
   border-top: 1px solid var(--line);
-  box-shadow: 0 -8px 24px rgba(18, 18, 18, 0.04);
 }
 
 .bottom-nav a {

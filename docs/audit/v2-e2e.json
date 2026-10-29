@@ -14,7 +14,7 @@
     "selectedNotice": true
   },
   "trip": {
-    "path": "/trips/f52c025c-b568-4862-b5ab-eaf2f5fce2cf",
+    "path": "/trips/6aa00a4a-0a62-4c3a-a15d-5a9ec8c2399c",
     "heading": "İstanbul rotası",
     "days": 3,
     "activities": 2,
@@ -27,7 +27,7 @@
   },
   "trips": {
     "path": "/trips",
-    "cards": 15,
+    "cards": 16,
     "overflow": false
   },
   "profile": {

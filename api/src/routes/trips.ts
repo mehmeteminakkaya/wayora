@@ -69,7 +69,7 @@ const updateActivitySchema = createActivitySchema
   .partial()
   .extend({
     // Sürükle-bırak sıralama; yalnızca aynı gün içindeki sıra değişir.
-    order: z.number().int('Sıra tam sayı olmalı').nonnegative('Sıra negatif olamaz'),
+    order: z.number().int('Sıra tam sayı olmalı').nonnegative('Sıra negatif olamaz').optional(),
   })
   .refine((value) => Object.keys(value).length > 0, 'Güncellenecek en az bir alan gerekli')
 

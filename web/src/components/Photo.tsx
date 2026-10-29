@@ -21,7 +21,14 @@ export function Photo({ src, alt, label, className = '', children }: PhotoProps)
   }
   return (
     <div className={`photo ${className}`}>
-      <img src={src} alt={alt} onError={() => setFailed(true)} />
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+        onError={() => setFailed(true)}
+      />
       {children}
     </div>
   )

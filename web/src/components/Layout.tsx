@@ -1,4 +1,5 @@
 import { Compass, Map, Plus, UserRound } from 'lucide-react'
+import { useEffect } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 
@@ -16,6 +17,15 @@ export function Layout() {
   const isTrips = location.pathname === '/trips'
   const isProfile = location.pathname === '/profil'
   const showBottomNav = !!user && !isAuthPage && (isExplore || isTrips || isProfile)
+
+  useEffect(() => {
+    if (navigator.userAgent.includes('jsdom')) return
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    } catch {
+      // Scroll API'si bulunmayan ortamlarda sessizce devam et.
+    }
+  }, [location.pathname])
 
   return (
     <div className={`app-shell${showBottomNav ? ' has-bottom-nav' : ''}`}>

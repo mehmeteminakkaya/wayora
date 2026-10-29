@@ -374,6 +374,32 @@ export function TripDetailPage() {
     setShowAddForm(true)
   }
 
+  async function persistReorder(reordered: Activity[]) {
+    if (!activeDay) return
+    setTrip((current) =>
+      current
+        ? {
+            ...current,
+            days: current.days.map((day) =>
+              day.id === activeDay.id ? { ...day, activities: reordered } : day,
+            ),
+          }
+        : current,
+    )
+
+    try {
+      await Promise.all(
+        reordered.map((activity, index) => api.reorderActivity(activity.id, index)),
+      )
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? `Sıra kaydedilemedi: ${err.message}`
+          : 'Sıra kaydedilemedi. Sayfayı yenileyip tekrar dene.',
+      )
+    }
+  }
+
   async function handleDrop(targetId: string) {
     if (!activeDay || !draggedActivityId || draggedActivityId === targetId) {
       setDraggedActivityId(null)
@@ -389,31 +415,21 @@ export function TripDetailPage() {
     const [moved] = reordered.splice(sourceIndex, 1)
     if (!moved) return
     reordered.splice(targetIndex, 0, moved)
-
-    setTrip((current) =>
-      current
-        ? {
-            ...current,
-            days: current.days.map((day) =>
-              day.id === activeDay.id ? { ...day, activities: reordered } : day,
-            ),
-          }
-        : current,
-    )
     setDraggedActivityId(null)
     setDropTargetId(null)
+    await persistReorder(reordered)
+  }
 
-    try {
-      await Promise.all(
-        reordered.map((activity, index) => api.reorderActivity(activity.id, index)),
-      )
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? `Sıra kaydedilemedi: ${err.message}`
-          : 'Sıra kaydedilemedi. Sayfayı yenileyip tekrar dene.',
-      )
-    }
+  async function handleMove(activityId: string, direction: -1 | 1) {
+    if (!activeDay) return
+    const index = activeDay.activities.findIndex((activity) => activity.id === activityId)
+    const target = index + direction
+    if (index < 0 || target < 0 || target >= activeDay.activities.length) return
+    const reordered = [...activeDay.activities]
+    const [moved] = reordered.splice(index, 1)
+    if (!moved) return
+    reordered.splice(target, 0, moved)
+    await persistReorder(reordered)
   }
 
   return (
@@ -668,6 +684,7 @@ export function TripDetailPage() {
                           <li
                             className={`timeline-item${draggedActivityId === activity.id ? ' is-dragging' : ''}${dropTargetId === activity.id ? ' is-drop-target' : ''}`}
                             key={activity.id}
+                            data-activity-id={activity.id}
                             draggable
                             onDragStart={() => {
                               setConfirmActivityId(null)
@@ -752,13 +769,52 @@ export function TripDetailPage() {
                                 </div>
                               ) : (
                                 <div className="row-actions">
-                                  <span
+                                  <button
                                     className="drag-handle"
-                                    title="Sürükleyerek sırala"
-                                    aria-hidden="true"
+                                    type="button"
+                                    title="Sürükle veya ok tuşlarıyla sırala"
+                                    aria-label={`${activity.title} durağını sırala`}
+                                    onKeyDown={(event) => {
+                                      if (event.key === 'ArrowUp') {
+                                        event.preventDefault()
+                                        void handleMove(activity.id, -1)
+                                      }
+                                      if (event.key === 'ArrowDown') {
+                                        event.preventDefault()
+                                        void handleMove(activity.id, 1)
+                                      }
+                                    }}
+                                    onPointerDown={(event) => {
+                                      if (event.pointerType === 'mouse') return
+                                      event.currentTarget.setPointerCapture(event.pointerId)
+                                      setDraggedActivityId(activity.id)
+                                    }}
+                                    onPointerMove={(event) => {
+                                      if (event.pointerType === 'mouse' || draggedActivityId !== activity.id) {
+                                        return
+                                      }
+                                      const row = document
+                                        .elementsFromPoint(event.clientX, event.clientY)
+                                        .find((element) => element.classList.contains('timeline-item'))
+                                      const targetId = row?.getAttribute('data-activity-id')
+                                      if (targetId && targetId !== activity.id) {
+                                        setDropTargetId(targetId)
+                                      }
+                                    }}
+                                    onPointerUp={(event) => {
+                                      if (event.pointerType === 'mouse') return
+                                      const targetId = dropTargetId
+                                      setDraggedActivityId(null)
+                                      setDropTargetId(null)
+                                      if (targetId) void handleDrop(targetId)
+                                    }}
+                                    onPointerCancel={() => {
+                                      setDraggedActivityId(null)
+                                      setDropTargetId(null)
+                                    }}
                                   >
                                     <GripVertical size={20} strokeWidth={1.75} />
-                                  </span>
+                                  </button>
                                   <button
                                     className="btn btn-ghost"
                                     type="button"

@@ -11,6 +11,7 @@ Tüm dosyalar Türkçedir ve projedeki gerçek kod, test ve sprint durumuyla hiz
 | [Wayora-Proje-Yonetimi.docx](Wayora-Proje-Yonetimi.docx) | Word | Proje yönetimi planı: hedefler, RACI, WBS, sprint takvimi, kaynak, kalite, risk, iletişim, KPI, kapanış |
 | [Wayora-User-Stories.docx](Wayora-User-Stories.docx) | Word | 20 user story, kabul kriterleri, öncelik, puan, sprint, durum ve test kanıtları |
 | [Wayora-Sunum.pptx](Wayora-Sunum.pptx) | PowerPoint | 14 slaytlık 16:9 sunum; ürün, mimari, AI, güvenlik, kalite, demo ve yol haritası |
+| [Wayora-V2-Full-Frontend-Raporu.pdf](Wayora-V2-Full-Frontend-Raporu.pdf) | PDF | V2 full frontend raporu: tüm ekranlar, tasarım sistemi, routing, state, erişilebilirlik ve testler |
 | [preview-rotasyon.png](preview-rotasyon.png) | Görsel | Masaüstü tasarım önizlemesi |
 | [preview-rotasyon-se.png](preview-rotasyon-se.png) | Görsel | 375x667 mobil uygulama önizlemesi |
 | [preview-rotasyon-mobile.png](preview-rotasyon-mobile.png) | Görsel | Mobil tam sayfa |

@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Wayora V2 · Full Frontend Raporu</title>
+    <style>
+      :root {
+        --ink: #121212;
+        --ink-2: #55575c;
+        --line: #deded9;
+        --bg: #f3f3f1;
+        --surface: #ffffff;
+        --signal: #ffc400;
+        --board: #141414;
+        --go: #1d7a4a;
+        --stop: #b42318;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-size: 10pt;
+        line-height: 1.55;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .page {
+        width: 186mm;
+        min-height: 0;
+        margin: 0 auto;
+        padding: 5mm 0 8mm;
+        page-break-after: always;
+      }
+      .page:last-child { page-break-after: auto; }
+      .cover {
+        display: flex;
+        height: 245mm;
+        min-height: 0;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .kicker {
+        margin: 0 0 4mm;
+        color: var(--ink);
+        font-family: Consolas, monospace;
+        font-size: 8pt;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 {
+        margin-bottom: 6mm;
+        font-family: "Arial Black", "Segoe UI", sans-serif;
+        font-size: 40pt;
+        line-height: 0.94;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+      }
+      h2 {
+        margin-bottom: 4mm;
+        font-family: "Arial Black", "Segoe UI", sans-serif;
+        font-size: 24pt;
+        line-height: 1;
+        letter-spacing: -0.025em;
+        text-transform: uppercase;
+      }
+      h3 {
+        margin-bottom: 2mm;
+        font-size: 12pt;
+        line-height: 1.25;
+      }
+      .lead {
+        max-width: 130mm;
+        color: var(--ink-2);
+        font-size: 12.5pt;
+        line-height: 1.5;
+      }
+      .small { font-size: 9pt; line-height: 1.45; }
+      .muted { color: var(--ink-2); }
+      .mono {
+        font-family: Consolas, monospace;
+        font-size: 8pt;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .rule { height: 2px; margin: 5mm 0; background: var(--ink); }
+      .thin-rule { height: 1px; margin: 4mm 0; background: var(--line); }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8mm;
+      }
+      .three-col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4mm;
+      }
+      .box {
+        padding: 4mm;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+      .box-dark {
+        padding: 4mm;
+        background: var(--board);
+        color: var(--signal);
+      }
+      .box-dark h3 { color: var(--signal); }
+      .box-dark p { color: #f3f3f1; }
+      .tag {
+        display: inline-block;
+        margin: 1mm 1mm 0 0;
+        padding: 1mm 2mm;
+        border: 1px solid var(--line);
+        color: var(--ink-2);
+        font-family: Consolas, monospace;
+        font-size: 7pt;
+        text-transform: uppercase;
+      }
+      .signal {
+        display: inline-block;
+        padding: 0.8mm 2mm;
+        background: var(--signal);
+        color: var(--ink);
+        font-family: Consolas, monospace;
+        font-size: 7pt;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .cover-bottom {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 10mm;
+        padding-top: 6mm;
+        border-top: 2px solid var(--ink);
+      }
+      .cover-mark {
+        color: var(--ink);
+        font-family: "Arial Black", "Segoe UI", sans-serif;
+        font-size: 35pt;
+        line-height: 0.85;
+        letter-spacing: 0.03em;
+      }
+      .toc {
+        display: grid;
+        grid-template-columns: 12mm 1fr;
+        gap: 2mm 4mm;
+        margin-top: 8mm;
+        font-size: 10pt;
+      }
+      .toc .num { color: var(--ink-2); font-family: Consolas, monospace; font-size: 8pt; }
+      .toc .item { padding-bottom: 2mm; border-bottom: 1px solid var(--line); }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 8.7pt;
+        line-height: 1.4;
+      }
+      th {
+        padding: 2mm 1.5mm;
+        border-bottom: 2px solid var(--ink);
+        text-align: left;
+        font-family: Consolas, monospace;
+        font-size: 7pt;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      td {
+        padding: 2mm 1.5mm;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      td:first-child { font-weight: 700; }
+      ul { margin: 0; padding-left: 5mm; }
+      li { margin-bottom: 1.3mm; }
+      .screen-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5mm;
+        align-items: start;
+        margin-top: 4mm;
+      }
+      .screen-grid.three {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .screen-grid .full { grid-column: 1 / -1; }
+      figure {
+        margin: 0;
+        page-break-inside: avoid;
+      }
+      figure img {
+        display: block;
+        width: 100%;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+      .mobile-shot img {
+        max-height: 88mm;
+        object-fit: contain;
+        object-position: top;
+      }
+      .desktop-shot img {
+        max-height: 64mm;
+        object-fit: contain;
+        object-position: top;
+      }
+      figcaption {
+        padding: 1.5mm 0 0;
+        color: var(--ink-2);
+        font-family: Consolas, monospace;
+        font-size: 7pt;
+        line-height: 1.3;
+        text-transform: uppercase;
+      }
+      .annot {
+        margin: 2mm 0 0;
+        color: var(--ink-2);
+        font-size: 8.5pt;
+        line-height: 1.4;
+      }
+      .page-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8mm;
+      }
+      .page-head h2 { margin-bottom: 2mm; }
+      .page-head .mono { text-align: right; }
+      .screen-section { margin-top: 4mm; }
+      .screen-section .section-label {
+        margin: 0 0 2mm;
+        font-family: Consolas, monospace;
+        font-size: 7.5pt;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .note {
+        margin: 4mm 0;
+        padding: 4mm;
+        border-left: 3px solid var(--signal);
+        background: var(--surface);
+        color: var(--ink-2);
+        font-size: 9pt;
+      }
+      .code {
+        padding: 3mm;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        font-family: Consolas, monospace;
+        font-size: 7.5pt;
+        line-height: 1.45;
+        white-space: pre-wrap;
+      }
+      .checklist {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4mm;
+      }
+      .checklist .box { min-height: 30mm; }
+      .checklist strong { color: var(--ink); }
+      .end-line {
+        display: none;
+      }
+      @media print {
+        .page { break-after: page; }
+        .page:last-child { break-after: auto; }
+        .screen-grid { break-inside: avoid; }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="page cover">
+      <div>
+        <p class="kicker">WAYORA / FULL FRONTEND RAPORU / 29 EKİM 2026</p>
+        <h1>Wayora V2<br />frontend.</h1>
+        <p class="lead">
+          Mobil öncelikli, 10 şehir ve 100 deneyim üzerine kurulu React uygulamasının
+          tasarım sistemi, ekranları, veri akışı, erişilebilirliği ve test durumu.
+        </p>
+        <div class="rule"></div>
+        <p class="mono">React 19 · TypeScript · Vite · React Router · Express · PostgreSQL</p>
+      </div>
+      <div class="cover-bottom">
+        <div>
+          <div class="cover-mark">WAYORA</div>
+          <p class="small muted" style="margin: 2mm 0 0">V2 ürün arayüzü</p>
+        </div>
+        <p class="mono" style="text-align: right; max-width: 74mm">
+          Kapsam: web/src<br />
+          51 API + 4 web testi<br />
+          Mobil E2E: 0 konsol hatası
+        </p>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">00 / İÇİNDEKİLER</p>
+          <h2>Bu raporda ne var?</h2>
+        </div>
+        <p class="mono">FRONTEND / V2</p>
+      </div>
+      <div class="toc">
+        <span class="num">01</span><span class="item">Ürün ve kullanıcı yolculuğu</span>
+        <span class="num">02</span><span class="item">Teknoloji, klasör yapısı ve routing</span>
+        <span class="num">03</span><span class="item">Auth, API istemcisi ve veri akışı</span>
+        <span class="num">04</span><span class="item">V2 tasarım sistemi ve bileşenler</span>
+        <span class="num">05</span><span class="item">Landing ve auth ekranları</span>
+        <span class="num">06</span><span class="item">Onboarding ve kişiselleştirme</span>
+        <span class="num">07</span><span class="item">Keşfet, şehir ve deneyim detayı</span>
+        <span class="num">08</span><span class="item">Rotalar, yeni rota ve rota detayı</span>
+        <span class="num">09</span><span class="item">Profil, 404 ve hata sınırı</span>
+        <span class="num">10</span><span class="item">Responsive, erişilebilirlik ve performans</span>
+        <span class="num">11</span><span class="item">Testler, audit ve bilinen sınırlar</span>
+      </div>
+      <div class="note">
+        Bu rapor mevcut V2 kodunu anlatır. Ekran görüntüleri 375x667 mobil ve 1440x900 masaüstü
+        boyutlarında alınmıştır. Tasarım kuralları için `docs/DESIGN_V2.md`; fotoğraf lisansları
+        için `docs/PHOTO_CREDITS.md` kaynaklarına bakın.
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 00</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">01 / ÜRÜN</p>
+          <h2>Ne çözüyoruz?</h2>
+        </div>
+        <p class="mono">10 ŞEHİR · 100 DENEYİM</p>
+      </div>
+      <p class="lead">
+        Wayora, bir şehirde ne yapılacağını seçmek, yaklaşık maliyeti görmek ve bu seçimleri
+        gün gün bir rotaya dönüştürmek için tasarlandı. V2, bunu bir dergi gibi değil, bir
+        seyahat aracı gibi yapıyor.
+      </p>
+      <div class="rule"></div>
+      <div class="three-col">
+        <div class="box"><span class="signal">01</span><h3>Keşfet</h3><p class="small muted">Şehir ve deneyimleri fotoğraf, fiyat, süre ve puanla karşılaştır.</p></div>
+        <div class="box"><span class="signal">02</span><h3>Seç</h3><p class="small muted">İlgini çeken durakları seç; tercihlerini ve bütçeni belirle.</p></div>
+        <div class="box"><span class="signal">03</span><h3>Planla</h3><p class="small muted">Günlere dağıt, sırala, sil; kalan bütçeyi takip et.</p></div>
+      </div>
+      <div class="two-col" style="margin-top: 6mm">
+        <div>
+          <h3>Ana kullanıcı yolculuğu</h3>
+          <ul class="small">
+            <li>Landing'de şehir ara veya Keşfet'e geç.</li>
+            <li>Şehir rehberinde deneyimleri filtrele ve seç.</li>
+            <li>Giriş yap; seçimler yeni rota ekranına taşınsın.</li>
+            <li>Tarih, bütçe ve tempoyu belirle.</li>
+            <li>Rota oluştur; durakları gün gün düzenle.</li>
+            <li>Rotayı sil veya yeniden planla.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Ölçülen ürün durumu</h3>
+          <table>
+            <tr><td>Şehir</td><td>10</td></tr>
+            <tr><td>Deneyim</td><td>100</td></tr>
+            <tr><td>Fotoğraf</td><td>16 lisanslı görsel</td></tr>
+            <tr><td>API testi</td><td>51 geçti</td></tr>
+            <tr><td>Web testi</td><td>4 geçti</td></tr>
+            <tr><td>V2 mobil E2E</td><td>0 konsol hatası</td></tr>
+          </table>
+        </div>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 01</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">02 / MİMARİ</p>
+          <h2>Frontend nasıl kuruldu?</h2>
+        </div>
+        <p class="mono">REACT 19 / VITE</p>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3>Klasör yapısı</h3>
+          <div class="code">web/src/
+  main.tsx          StrictMode, Router, AuthProvider
+  App.tsx           route tablosu
+  api.ts            tek HTTP istemcisi + tipler
+  auth/             AuthContext
+  components/       Layout, ProtectedRoute,
+                    Photo, ErrorBoundary
+  pages/            Landing, Auth, Onboarding,
+                    Explore, City, Experience,
+                    Trips, NewTrip, TripDetail, Profile
+  lib/              format, photos
+  index.css         V2 tokenları ve tüm UI</div>
+        </div>
+        <div>
+          <h3>Teknoloji seçimleri</h3>
+          <ul class="small">
+            <li>React 19 + TypeScript: sayfa bazlı yerel state.</li>
+            <li>Vite: hızlı geliştirme ve küçük üretim çıktısı.</li>
+            <li>React Router 7: public ve korumalı rotalar.</li>
+            <li>Context API: yalnızca auth durumu global.</li>
+            <li>Özel CSS: tasarım tokenları, harici UI kiti yok.</li>
+            <li>Lucide: tek ikon kaynağı.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="thin-rule"></div>
+      <h3>Route tablosu</h3>
+      <table>
+        <thead><tr><th>Route</th><th>Erişim</th><th>Ekran / davranış</th></tr></thead>
+        <tbody>
+          <tr><td>/</td><td>Public</td><td>Landing, arama ve şehir keşfi</td></tr>
+          <tr><td>/kesfet</td><td>Public</td><td>10 şehir, arama, filtre, sıralama</td></tr>
+          <tr><td>/kesfet/:slug</td><td>Public</td><td>Şehir rehberi ve deneyim seçimi</td></tr>
+          <tr><td>/kesfet/:slug/:experienceSlug</td><td>Public</td><td>Deneyim detayı, harita, plana ekle</td></tr>
+          <tr><td>/login, /register</td><td>Public</td><td>Oturum formları, yönlendirme</td></tr>
+          <tr><td>/onboarding</td><td>Protected</td><td>3 adımlı tercih akışı</td></tr>
+          <tr><td>/trips</td><td>Protected</td><td>Yaklaşan, taslak, geçmiş</td></tr>
+          <tr><td>/trips/new</td><td>Protected</td><td>3 adımlı rota sihirbazı</td></tr>
+          <tr><td>/trips/:id</td><td>Protected</td><td>Gün sekmeleri, timeline, harita</td></tr>
+          <tr><td>/profil</td><td>Protected</td><td>Hesap, tercihler, çıkış</td></tr>
+          <tr><td>*</td><td>Public</td><td>404</td></tr>
+        </tbody>
+      </table>
+      <p class="end-line">Wayora / Full frontend raporu / 02</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">03 / VERİ</p>
+          <h2>Auth ve API akışı.</h2>
+        </div>
+        <p class="mono">FETCH / HTTPONLY COOKIE</p>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3>AuthContext</h3>
+          <p class="small muted">
+            Açılışta `/api/auth/me` çağrılır. Kullanıcı varsa `user`, yoksa `null` olur.
+            `loading` bitene kadar korumalı rota spinner gösterir. Login ve register
+            kullanıcıyı state'e yazar; logout önce ana sayfaya geçer, sonra çerezi temizler.
+          </p>
+          <h3 style="margin-top: 5mm">ProtectedRoute</h3>
+          <p class="small muted">
+            Oturum yoksa `/login`'e `from` state'i ile yönlendirir. Query string korunur;
+            böylece şehir seçiminden gelen kullanıcı girişten sonra aynı forma döner.
+          </p>
+        </div>
+        <div>
+          <h3>API istemcisi</h3>
+          <p class="small muted">
+            Tüm istekler `api.ts` üzerinden, `credentials: 'include'` ile gider. HTTP hatası
+            `ApiError` olarak fırlatılır. Sayfalar doğrudan fetch çağırmaz.
+          </p>
+          <table>
+            <tr><td>Auth</td><td>register, login, logout, me</td></tr>
+            <tr><td>Tercih</td><td>getPreferences, savePreferences</td></tr>
+            <tr><td>Gezi</td><td>listTrips, getTrip, createTrip, deleteTrip</td></tr>
+            <tr><td>Plan</td><td>generateTrip, importExperiences</td></tr>
+            <tr><td>Aktivite</td><td>addActivity, deleteActivity, reorderActivity</td></tr>
+            <tr><td>Keşif</td><td>listCities, getCity, searchCities</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="rule"></div>
+      <div class="two-col">
+        <div class="box">
+          <h3>Veri kaynağı</h3>
+          <p class="small muted">City ve CityExperience tabloları 10 şehir / 100 deneyim içerir. Sunucu açılışında seed edilir; API boşsa statik katalogdan aynı cevabı üretir.</p>
+        </div>
+        <div class="box">
+          <h3>State sınırı</h3>
+          <p class="small muted">Global store yok. Auth dışındaki veriler sayfa içinde useEffect ve yerel state ile tutulur. Rota düzenlemede iyimser güncelleme kullanılır.</p>
+        </div>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 03</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">04 / TASARIM SİSTEMİ</p>
+          <h2>V2 kuralları.</h2>
+        </div>
+        <p class="mono">TOKENLAR / BİLEŞENLER</p>
+      </div>
+      <div class="three-col">
+        <div class="box"><span class="mono">BG</span><h3 style="margin-top: 2mm">#F3F3F1</h3><p class="small muted">Sayfa zemini</p></div>
+        <div class="box"><span class="mono">SURFACE</span><h3 style="margin-top: 2mm">#FFFFFF</h3><p class="small muted">Kart, form, sayfa</p></div>
+        <div class="box"><span class="mono">INK</span><h3 style="margin-top: 2mm">#121212</h3><p class="small muted">Metin, birincil buton</p></div>
+        <div class="box"><span class="mono">INK-2</span><h3 style="margin-top: 2mm">#55575C</h3><p class="small muted">İkincil metin</p></div>
+        <div class="box"><span class="mono">LINE</span><h3 style="margin-top: 2mm">#DEDED9</h3><p class="small muted">Kenarlık, ayraç</p></div>
+        <div class="box" style="background: var(--signal); border-color: var(--ink)"><span class="mono">SIGNAL</span><h3 style="margin-top: 2mm">#FFC400</h3><p class="small">Yalnızca aktif / seçili</p></div>
+      </div>
+      <div class="two-col" style="margin-top: 6mm">
+        <div>
+          <h3>Tipografi</h3>
+          <table>
+            <tr><td>Display</td><td>30/34 · 800</td></tr>
+            <tr><td>H1</td><td>24/30 · 800</td></tr>
+            <tr><td>H2</td><td>19/24 · 700</td></tr>
+            <tr><td>Gövde</td><td>16/24 · 400</td></tr>
+            <tr><td>Small</td><td>14/20 · 400</td></tr>
+            <tr><td>Label</td><td>12/16 · 700</td></tr>
+            <tr><td>Veri</td><td>Mono 14-18 · 600</td></tr>
+          </table>
+          <p class="small muted" style="margin-top: 3mm">Overpass gövde, Overpass Mono saat/fiyat/süre. Anton ürün ekranında kullanılmıyor.</p>
+        </div>
+        <div>
+          <h3>Bileşen kuralları</h3>
+          <ul class="small">
+            <li>Buton 48 px, 4 px radius; sarı buton yok.</li>
+            <li>Filtre çipi 36 px görünür, 44 px dokunma alanı.</li>
+            <li>Kart ve fotoğraf 8 px radius, 1 px çizgi, gölge yok.</li>
+            <li>Alt menü 64 px + safe area; aktifte 3 px sarı çizgi.</li>
+            <li>Detay ekranlarında 72 px sabit eylem çubuğu.</li>
+            <li>Siyah pano yalnızca gün özeti ve geri sayım.</li>
+            <li>Boşluk: 4, 8, 12, 16, 24, 32, 48.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 04</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">05 / LANDING</p>
+          <h2>İlk izlenim ve arama.</h2>
+        </div>
+        <p class="mono">PUBLIC / MOBILE FIRST</p>
+      </div>
+      <p class="small muted">
+        Landing, ürünü tek bir değer önerisiyle anlatır: şehri seç, günleri Wayora sıralasın.
+        Arama alanı doğrudan yeni rota formuna gider; giriş gerekiyorsa query string korunur.
+        Alt bölümlerde 3 adımlı açıklama, 10 şehirlik yatay ray ve Berlin örnek günü bulunur.
+      </p>
+      <div class="screen-grid">
+        <figure class="mobile-shot"><img src="audit/pdf-v2/landing-mobile-top.png" alt="Landing mobil üst" /><figcaption>Landing / mobil üst · 375 px</figcaption><p class="annot">Fotoğraf, başlık, arama ve tek ana CTA aynı akışta.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/landing-mobile-bottom.png" alt="Landing mobil alt" /><figcaption>Landing / mobil devam · 375 px</figcaption><p class="annot">Nasıl çalışır, şehir rayı ve örnek gün.</p></figure>
+        <figure class="full desktop-shot"><img src="audit/pdf-v2/landing-desktop.png" alt="Landing masaüstü" /><figcaption>Landing / masaüstü · 1440 px</figcaption><p class="annot">Masaüstünde iki kolonlu hero; aynı içerik daha geniş nefes alanıyla.</p></figure>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 05</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">06 / AUTH</p>
+          <h2>Giriş ve kayıt.</h2>
+        </div>
+        <p class="mono">FORM / SESSION</p>
+      </div>
+      <p class="small muted">
+        Giriş ve kayıt tek kartta toplanır; poster veya dekorasyon formun önüne geçmez.
+        Hatalar `role=alert` ile, bilgilendirmeler `role=status` ile gösterilir. Google ve
+        şifre sıfırlama sağlayıcısı bağlı olmadığı için sahte başarı üretilmez; açık bir
+        bilgilendirme gösterilir.
+      </p>
+      <div class="screen-grid">
+        <figure class="mobile-shot"><img src="audit/pdf-v2/login-mobile.png" alt="Giriş mobil" /><figcaption>Giriş / mobil</figcaption><p class="annot">E-posta, şifre, şifremi unuttum, Google ve kayıt bağlantısı.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/register-mobile.png" alt="Kayıt mobil" /><figcaption>Kayıt / mobil</figcaption><p class="annot">Ad, e-posta, şifre; 8 karakter doğrulaması.</p></figure>
+        <figure class="full desktop-shot"><img src="audit/pdf-v2/login-desktop.png" alt="Giriş masaüstü" /><figcaption>Giriş / masaüstü</figcaption><p class="annot">Masaüstünde ortalanmış 480 px kart; form odaklı.</p></figure>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 06</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">07 / ONBOARDING</p>
+          <h2>Üç adımda kişiselleştirme.</h2>
+        </div>
+        <p class="mono">İLGİ · BÜTÇE · TEMPO</p>
+      </div>
+      <p class="small muted">
+        Onboarding tek sayfada üç adım olarak çalışır. İlk adımda en az iki ilgi alanı seçilir;
+        ikinci adımda bütçe, üçüncü adımda tempo belirlenir. Adımlar arasında geri dönülebilir,
+        “Atla” ile tercihler atlanabilir. Kayıt `api.savePreferences` ile yapılır ve rotalara
+        yönlendirilir.
+      </p>
+      <div class="screen-grid three">
+        <figure class="mobile-shot"><img src="audit/pdf-v2/onboarding-step1.png" alt="Onboarding 1" /><figcaption>Adım 1 · İlgi</figcaption><p class="annot">10 çip; en az 2 seçim.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/onboarding-step2.png" alt="Onboarding 2" /><figcaption>Adım 2 · Bütçe</figcaption><p class="annot">Ekonomik, dengeli, konforlu.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/onboarding-step3.png" alt="Onboarding 3" /><figcaption>Adım 3 · Tempo</figcaption><p class="annot">Yavaş, orta, hızlı; travelStyle türetilir.</p></figure>
+      </div>
+      <div class="note">
+        Erişilebilirlik: her seçim `aria-pressed` taşır; ilerleme metni ekran okuyucuya açıktır;
+        hata `role=alert` ile duyurulur. Seçimler renk tek başına değil, metin ve durumla bellidir.
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 07</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">08 / KEŞFET</p>
+          <h2>Şehir ve deneyim keşfi.</h2>
+        </div>
+        <p class="mono">ARAMA / FİLTRE / SIRALAMA</p>
+      </div>
+      <p class="small muted">
+        Keşfet, 10 şehir özetini yükler. Arama ilk kullanımda şehir detaylarını da getirir;
+        böylece şehir adı, deneyim adı ve etiketler üzerinden arama yapılabilir. Kategori
+        çipleri Yemek, Müze, Doğa ve Gece; sıralama fiyat ve isim seçenekleriyle çalışır.
+      </p>
+      <div class="screen-grid">
+        <figure class="mobile-shot"><img src="audit/pdf-v2/explore-mobile.png" alt="Keşfet mobil" /><figcaption>Keşfet / mobil</figcaption><p class="annot">Arama, sarı seçili çip, 10 şehir ve fotoğraflı kart.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/city-mobile-top.png" alt="Şehir mobil üst" /><figcaption>Şehir / mobil üst</figcaption><p class="annot">4:3 hero, şehir özeti ve günlük ortalama.</p></figure>
+        <figure class="full desktop-shot"><img src="audit/pdf-v2/explore-desktop.png" alt="Keşfet masaüstü" /><figcaption>Keşfet / masaüstü</figcaption><p class="annot">Geniş ekranda kart grid'i ve aynı arama/filtre hiyerarşisi.</p></figure>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 08</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">09 / ŞEHİR</p>
+          <h2>Deneyimleri seç.</h2>
+        </div>
+        <p class="mono">FİLTRE / SEÇİM / CTA</p>
+      </div>
+      <p class="small muted">
+        Şehir sayfası `getCity(slug)` ile 10 deneyimi getirir. Ücretsiz, tarih, yemek ve gece
+        filtreleri uygulanır. Her deneyim satırında 88x88 fotoğraf, açıklama, süre, fiyat,
+        puan ve 44 px seçim butonu vardır. Seçim yapılınca sabit alt çubuk görünür; seçilen
+        kimlikler yeni rota URL'sine taşınır.
+      </p>
+      <div class="screen-grid">
+        <figure class="mobile-shot"><img src="audit/pdf-v2/city-mobile-list.png" alt="Şehir deneyim listesi" /><figcaption>Şehir / deneyim listesi</figcaption><p class="annot">Filtreler, fotoğraflı satırlar ve seçim butonları.</p></figure>
+        <figure class="full desktop-shot"><img src="audit/pdf-v2/city-desktop.png" alt="Şehir masaüstü" /><figcaption>Şehir / masaüstü</figcaption><p class="annot">Hero ve şehir bilgisi iki kolonda; deneyimler altta.</p></figure>
+      </div>
+      <div class="two-col" style="margin-top: 4mm">
+        <div class="box"><h3>Seçim akışı</h3><p class="small muted">Seçilen deneyim sayısı ve kişi başı toplam alt çubukta; CTA `/trips/new?destination=...&experiences=...` adresine gider.</p></div>
+        <div class="box"><h3>Boş durum</h3><p class="small muted">Filtre sonucu yoksa kullanıcıya filtreyi gevşetmesi söylenir; sayfa boş kalmaz.</p></div>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 09</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">10 / DENEYİM</p>
+          <h2>Detay ve plana ekleme.</h2>
+        </div>
+        <p class="mono">4:3 HERO / HARİTA / CTA</p>
+      </div>
+      <p class="small muted">
+        Deneyim detayı şehir verisinden seçilen slug'ı bulur. 4:3 hero, kategori, açıklama,
+        süre, fiyat, puan ve bölge fact kartlarıyla gösterilir. Harita OpenStreetMap embed
+        bileşenidir; yüklenemezse dış bağlantı fallback'i vardır. Sabit alt çubuk fiyatı ve
+        “Plana ekle” eylemini taşır.
+      </p>
+      <div class="screen-grid">
+        <figure class="mobile-shot"><img src="audit/pdf-v2/experience-mobile-top.png" alt="Deneyim mobil üst" /><figcaption>Deneyim / mobil üst</figcaption><p class="annot">Hero, başlık, bölge ve kısa açıklama.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/experience-mobile-mid.png" alt="Deneyim mobil orta" /><figcaption>Deneyim / mobil devam</figcaption><p class="annot">Fact kartları, harita ve pratik bilgiler.</p></figure>
+        <figure class="full desktop-shot"><img src="audit/pdf-v2/experience-desktop.png" alt="Deneyim masaüstü" /><figcaption>Deneyim / masaüstü</figcaption><p class="annot">Hero ve bilgi iki kolonda; sabit eylem geniş ekranda normal akışa döner.</p></figure>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 10</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">11 / ROTALAR</p>
+          <h2>Rota kütüphanesi.</h2>
+        </div>
+        <p class="mono">YAKLAŞAN / TASLAK / GEÇMİŞ</p>
+      </div>
+      <p class="small muted">
+        Rotalar tarih ve duruma göre üç gruba ayrılır. Planlı ve tarihi geçmemiş rotalar
+        yaklaşan; draft veya failed olanlar taslak; bitiş tarihi geçmiş olanlar geçmiş olur.
+        İlk yaklaşan kartta siyah geri sayım panosu vardır. Silme iki adımlı onay ister.
+      </p>
+      <div class="screen-grid">
+        <figure class="mobile-shot"><img src="audit/pdf-v2/trips-mobile.png" alt="Rotalar mobil" /><figcaption>Rotalarım / mobil</figcaption><p class="annot">Sekmeler, yaklaşan rota, geri sayım ve plan durumu.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/trip-detail-list-mobile.png" alt="Rota detayı liste" /><figcaption>Rota detayı / liste</figcaption><p class="annot">Gün sekmeleri, siyah gün panosu ve timeline.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/trip-detail-map-mobile.png" alt="Rota detayı harita" /><figcaption>Rota detayı / harita</figcaption><p class="annot">Liste/harita geçişi ve OSM fallback.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/trip-detail-timeline-mobile.png" alt="Rota detayı timeline" /><figcaption>Rota detayı / timeline</figcaption><p class="annot">Saat, durak, süre, fiyat ve sıralama tutamacı.</p></figure>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 11</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">12 / YENİ ROTA</p>
+          <h2>Üç adımlı sihirbaz.</h2>
+        </div>
+        <p class="mono">ŞEHİR / TARİH / BÜTÇE</p>
+      </div>
+      <p class="small muted">
+        Yeni rota ekranı şehir, tarih ve bütçe/tempo adımlarına ayrılır. `destination` ve
+        `experiences` query parametreleri korunur. Seçili deneyim varsa rota oluşturulunca
+        `/api/trips/:id/experiences` ile günlere dağıtılır; yoksa AI/offline plan üretilir.
+        Hatalar oluşturulan rota linkiyle birlikte gösterilir.
+      </p>
+      <div class="screen-grid three">
+        <figure class="mobile-shot"><img src="audit/pdf-v2/new-trip-step1.png" alt="Yeni rota 1" /><figcaption>Adım 1 · Şehir</figcaption><p class="annot">10 şehir datalist ve seçili deneyim sayısı.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/new-trip-step2.png" alt="Yeni rota 2" /><figcaption>Adım 2 · Tarih</figcaption><p class="annot">Hızlı tarih seçenekleri ve tarih aralığı.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/new-trip-step3.png" alt="Yeni rota 3" /><figcaption>Adım 3 · Bütçe</figcaption><p class="annot">Bütçe, para birimi, tempo ve özet.</p></figure>
+      </div>
+      <div class="note">
+        Seçili deneyimlerde plan üretilmez; seçim doğrudan rotaya aktarılır. Seçim yoksa
+        mevcut offline/LLM plan üreticisi çalışır. Bu ayrım kullanıcıya “seçimler günlere
+        dağıtılacak” bilgisiyle açıkça anlatılır.
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 12</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">13 / PROFİL</p>
+          <h2>Hesap ve tercihler.</h2>
+        </div>
+        <p class="mono">AUTH / PREFERENCE</p>
+      </div>
+      <p class="small muted">
+        Profil, AuthContext'teki kullanıcıyı ve `getPreferences` cevabını gösterir. Avatar
+        baş harften üretilir; ilgi alanları, bütçe, seyahat tarzı ve tempo listelenir.
+        Tercihleri düzenle, Rotalarım ve Keşfet bağlantıları bulunur. Çıkışta önce ana sayfaya
+        geçilir, sonra oturum API'si çağrılır.
+      </p>
+      <div class="screen-grid">
+        <figure class="mobile-shot"><img src="audit/pdf-v2/profile-mobile.png" alt="Profil mobil" /><figcaption>Profil / mobil</figcaption><p class="annot">Avatar, e-posta, tercih özeti ve hesap işlemleri.</p></figure>
+        <figure class="mobile-shot"><img src="audit/pdf-v2/notfound-mobile.png" alt="404 mobil" /><figcaption>404 / mobil</figcaption><p class="annot">Bilinmeyen route için sade dönüş ekranı.</p></figure>
+      </div>
+      <div class="rule"></div>
+      <h3>Hata sınırı</h3>
+      <p class="small muted">
+        ErrorBoundary beklenmeyen render hatalarını yakalar. Kullanıcı boş ekran yerine
+        “Sayfa açılamadı” mesajı ve “Sayfayı yenile” butonu görür. Teknik hata konsola yazılır;
+        kullanıcıya stack trace gösterilmez.
+      </p>
+      <p class="end-line">Wayora / Full frontend raporu / 13</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">14 / RESPONSIVE</p>
+          <h2>Mobil ve masaüstü.</h2>
+        </div>
+        <p class="mono">320-1440 PX</p>
+      </div>
+      <table>
+        <thead><tr><th>Alan</th><th>Mobil</th><th>Masaüstü</th></tr></thead>
+        <tbody>
+          <tr><td>Header</td><td>Logo + profil/giriş; nav gizli</td><td>Logo + Keşfet/Rotalarım/Planla/Profil</td></tr>
+          <tr><td>Alt menü</td><td>64 px + safe area, 4 sekme; detay ekranlarında gizli</td><td>Gizli</td></tr>
+          <tr><td>Landing</td><td>Tek kolon, fotoğraf üstte</td><td>İki kolon, 48 px boşluk</td></tr>
+          <tr><td>Keşfet</td><td>Tek kolon şehir kartı</td><td>2 kolon, ilk kart geniş</td></tr>
+          <tr><td>Şehir</td><td>Tam genişlik hero + liste</td><td>Hero ve bilgi iki kolon</td></tr>
+          <tr><td>Yeni rota</td><td>Tam genişlik adımlar</td><td>720 px odaklı sihirbaz</td></tr>
+          <tr><td>Dokunma</td><td>En az 44 x 44 px</td><td>Aynı hedefler korunur</td></tr>
+        </tbody>
+      </table>
+      <div class="three-col" style="margin-top: 5mm">
+        <div class="box"><h3>Güvenli alan</h3><p class="small muted">Header ve alt menüde `env(safe-area-inset-*)` kullanılır; iPhone home bar ve çentik hesaba katılır.</p></div>
+        <div class="box"><h3>Görsel oran</h3><p class="small muted">Şehir 16:10, deneyim 4:3, liste küçük resmi 1:1 88 px.</p></div>
+        <div class="box"><h3>Kaydırma</h3><p class="small muted">Şehir rayı yatay kaydırılır; sayfa dokümanında yatay taşma üretmez.</p></div>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 14</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">15 / ERİŞİLEBİLİRLİK</p>
+          <h2>Herkes kullanabilsin.</h2>
+        </div>
+        <p class="mono">WCAG HEDEFİ</p>
+      </div>
+      <div class="checklist">
+        <div class="box"><h3>Formlar</h3><p class="small muted">Her input label veya aria-label ile bağlı. Hatalar role=alert; bilgi role=status.</p></div>
+        <div class="box"><h3>Odak</h3><p class="small muted">:focus-visible 3 px sarı halka. Klavye ile tüm buton ve çipler erişilebilir.</p></div>
+        <div class="box"><h3>Durum</h3><p class="small muted">Seçili çiplerde aria-pressed; aktif sekmelerde aria-current veya aria-selected.</p></div>
+        <div class="box"><h3>Dokunma</h3><p class="small muted">Filtre çipleri 44 px dokunma alanı; alt menü 64 px satır; seçim butonu 44 px.</p></div>
+        <div class="box"><h3>Görsel</h3><p class="small muted">Photo bileşeni başarısız görselde etiketli gri placeholder gösterir; img alt metni vardır.</p></div>
+        <div class="box"><h3>Hareket</h3><p class="small muted">prefers-reduced-motion desteklenir; scroll animasyonu ve sürpriz geçiş yok.</p></div>
+        <div class="box"><h3>Sıralama</h3><p class="small muted">Sürükleme tutamacı butondur; yukarı/aşağı ok tuşlarıyla klavye sıralaması yapılır.</p></div>
+        <div class="box"><h3>Renk</h3><p class="small muted">Sarı yalnızca aktif/seçili; metin ve kenarlık da anlam taşır.</p></div>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 15</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">16 / PERFORMANS</p>
+          <h2>Hafif ve öngörülebilir.</h2>
+        </div>
+        <p class="mono">VITE BUILD</p>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3>Üretim çıktısı</h3>
+          <table>
+            <tr><td>JS</td><td>343 KB · 104 KB gzip</td></tr>
+            <tr><td>CSS</td><td>26 KB · 5 KB gzip</td></tr>
+            <tr><td>Görsel</td><td>16 optimize JPEG, 208-490 KB</td></tr>
+            <tr><td>Font</td><td>Overpass + Overpass Mono</td></tr>
+          </table>
+        </div>
+        <div>
+          <h3>Optimizasyonlar</h3>
+          <ul class="small">
+            <li>Tek API istemcisi; bileşenlerde dağınık fetch yok.</li>
+            <li>Fotoğraflarda lazy load ve async decode.</li>
+            <li>Fotoğraf kırılırsa yerel placeholder; beyaz kutu yok.</li>
+            <li>Keşfet detayları yalnızca arama/filtre kullanılınca yüklenir.</li>
+            <li>Global state yok; gereksiz render alanı daraltıldı.</li>
+            <li>Route geçişinde scroll sıfırlanır.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note">
+        Harita ve Google Fonts dış servis kullanır. Harita yüklenemezse OpenStreetMap bağlantısı
+        fallback olarak kalır. Lisanslı fotoğraflar yereldir; ana uygulama internetsiz de
+        gezilebilir, harita ve fontlar için ağ gerekir.
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 16</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">17 / KALİTE</p>
+          <h2>Test ve audit.</h2>
+        </div>
+        <p class="mono">51 API · 4 WEB</p>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3>Otomatik testler</h3>
+          <table>
+            <tr><td>API</td><td>51 test geçti</td></tr>
+            <tr><td>Web</td><td>4 test geçti</td></tr>
+            <tr><td>Lint</td><td>geçti</td></tr>
+            <tr><td>Typecheck</td><td>geçti</td></tr>
+            <tr><td>Build</td><td>geçti</td></tr>
+            <tr><td>Audit</td><td>0 vulnerability</td></tr>
+          </table>
+        </div>
+        <div>
+          <h3>Davranış kanıtları</h3>
+          <ul class="small">
+            <li>API E2E 31/31: auth, sahiplik, aktivite, katalog.</li>
+            <li>V2 mobil E2E: keşif, seçim, giriş, sihirbaz, import, gün sekmeleri, çıkış.</li>
+            <li>UI audit 320-1440 px: sayfa yatay taşması yok.</li>
+            <li>Auth audit 4 sayfa x 4 viewport: 0 hata.</li>
+            <li>Konsol: V2 E2E 0 uygulama hatası.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rule"></div>
+      <h3>Neyi test etmiyoruz?</h3>
+      <p class="small muted">
+        Fiziksel iOS/Android cihaz, gerçek Google OAuth, gerçek e-posta gönderimi, Mapbox/MapLibre
+        anahtarı ve canlı rezervasyon sağlayıcısı bu sürümün dışında. Bu başlıklar arayüzde
+        sahte başarı olarak gösterilmez; gerçek entegrasyon gerektiğinde eklenir.
+      </p>
+      <p class="end-line">Wayora / Full frontend raporu / 17</p>
+    </section>
+
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="kicker">18 / SINIRLAR</p>
+          <h2>Bugün ne yok?</h2>
+        </div>
+        <p class="mono">AÇIK KARARLAR</p>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3>Bilinçli olarak yok</h3>
+          <ul class="small">
+            <li>Gerçek Google OAuth ve e-posta şifre sıfırlama.</li>
+            <li>Mapbox/MapLibre anahtarı; şu an OSM embed.</li>
+            <li>Her deneyim için ayrı fotoğraf; şehir/kategori görselleri.</li>
+            <li>Canlı scrape ve gerçek rezervasyon fiyatı.</li>
+            <li>PWA, offline harita, push bildirim.</li>
+            <li>Bulut deploy ve paylaşılabilir plan linki.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Sonraki mantıklı adımlar</h3>
+          <ul class="small">
+            <li>Her deneyim için lisanslı, tekil fotoğraf seti.</li>
+            <li>Google OAuth ve e-posta servisi.</li>
+            <li>MapLibre + OSM/Mapbox geçişi.</li>
+            <li>Gerçek fiyat/booking sağlayıcısı.</li>
+            <li>Fiziksel cihaz testi ve Lighthouse.</li>
+            <li>E2E testlerini CI'a bağlama.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="box-dark" style="margin-top: 6mm">
+        <h3>Kısa hüküm</h3>
+        <p class="small">
+          V2 frontend, tasarım guide'ına uygun, mobil öncelikli, gerçek API ve DB üzerinde
+          çalışan bir ürün arayüzü. Eksikler gizlenmiyor; dış sağlayıcı gerektiren başlıklar
+          ayrı tutuluyor.
+        </p>
+      </div>
+      <p class="end-line">Wayora / Full frontend raporu / 18 · 29.10.2026</p>
+    </section>
+  </body>
+</html>

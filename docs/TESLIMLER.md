@@ -10,7 +10,10 @@ Tüm dosyalar Türkçedir ve projedeki gerçek kod, test ve sprint durumuyla hiz
 | [Wayora-Proje-Raporu.docx](Wayora-Proje-Raporu.docx) | Word | Detaylı proje raporu: problem, kapsam, ekip, mimari, veri modeli, API, AI, tasarım, güvenlik, test, sonuç |
 | [Wayora-Proje-Yonetimi.docx](Wayora-Proje-Yonetimi.docx) | Word | Proje yönetimi planı: hedefler, RACI, WBS, sprint takvimi, kaynak, kalite, risk, iletişim, KPI, kapanış |
 | [Wayora-User-Stories.docx](Wayora-User-Stories.docx) | Word | 20 user story, kabul kriterleri, öncelik, puan, sprint, durum ve test kanıtları |
-| [Wayora-Sunum.pptx](Wayora-Sunum.pptx) | PowerPoint | 14 slaytlık 16:9 sunum; ürün, mimari, AI, güvenlik, kalite, demo ve yol haritası |
+| [Wayora-Proje-Raporu.pdf](Wayora-Proje-Raporu.pdf) | PDF | Proje raporunun PDF çıktısı (29 Ekim 15:27 export'u) |
+| [Wayora-User-Stories.pdf](Wayora-User-Stories.pdf) | PDF | User story kataloğunun PDF çıktısı (29 Ekim 15:27 export'u) |
+| [Wayora-Sunum-Tasarim.pptx](Wayora-Sunum-Tasarim.pptx) | PowerPoint | **Sunulan deste.** 13 slayt; elle tasarlandı, gerçek ekran görüntüleriyle. Konuşmacı notu yoktur. |
+| [Wayora-Sunum.pptx](Wayora-Sunum.pptx) | PowerPoint | `generate_slides.py` ile üretilen 14 slaytlık yedek deste; her slaytta konuşmacı notu var |
 | [Wayora-V2-Full-Frontend-Raporu.pdf](Wayora-V2-Full-Frontend-Raporu.pdf) | PDF | V2 full frontend raporu: tüm ekranlar, tasarım sistemi, routing, state, erişilebilirlik ve testler |
 | [preview-rotasyon.png](preview-rotasyon.png) | Görsel | Masaüstü tasarım önizlemesi |
 | [preview-rotasyon-se.png](preview-rotasyon-se.png) | Görsel | 375x667 mobil uygulama önizlemesi |
@@ -58,7 +61,7 @@ okunabilir. Sunumun tamamı 16:9 (13.333 x 7.5 inç) olarak hazırlanmıştır.
 
 ## Doğrulama durumu
 
-- 51 API testi
+- 57 API testi
 - 4 web testi
 - lint, typecheck ve build temiz
 - `npm audit --omit=dev`: 0 vulnerability
@@ -77,6 +80,12 @@ Bu paket, mevcut MVP’yi anlatır. Aşağıdaki başlıklar bilinçli olarak so
 - Paylaşılabilir salt-okunur plan linki
 - PWA / çevrimdışı kabuk, bildirimler ve e-posta doğrulama
 - Bulut deploy ve demo verisi
+
+> **PDF'lerdeki test sayısı uyarısı:** `Wayora-Proje-Raporu.pdf` ve
+> `Wayora-User-Stories.pdf`, 29 Ekim 15:27'de Word'den alınmış export'lardır ve
+> raporda test sayısı **32** olarak geçer. Güncel sayı **57 API + 4 web**'tir;
+> `.docx` dosyaları ve bu belge güncellenmiştir. PDF'leri yeniden export etmek
+> gerekir.
 
 > Not: Hocanın ders materyali reposuna hiçbir commit veya PR gönderilmedi. Bu paket yalnızca
 > Wayora projesine aittir.

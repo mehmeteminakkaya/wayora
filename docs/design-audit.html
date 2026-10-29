@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Wayora / Mevcut Tasarım Denetimi</title>
+    <style>
+      :root {
+        --ink: #1d1b18;
+        --muted: #6d675d;
+        --line: #d8d0c3;
+        --paper: #f7f3ec;
+        --paper-2: #ece4d8;
+        --accent: #c64b32;
+        --olive: #5f7355;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); }
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.55;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .page {
+        max-width: 186mm;
+        margin: 0 auto;
+        padding: 4mm 0 10mm;
+        page-break-after: always;
+      }
+      .page:last-child { page-break-after: auto; }
+      .cover {
+        height: 245mm;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-top: 8mm;
+        page-break-after: always;
+      }
+      .kicker {
+        margin: 0 0 4mm;
+        color: var(--accent);
+        font-family: Consolas, monospace;
+        font-size: 7.5pt;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 {
+        margin-bottom: 7mm;
+        font-family: "Arial Black", "Segoe UI", sans-serif;
+        font-size: 42pt;
+        line-height: 0.93;
+        letter-spacing: -0.035em;
+        text-transform: uppercase;
+      }
+      h2 {
+        margin-bottom: 4mm;
+        font-family: "Arial Black", "Segoe UI", sans-serif;
+        font-size: 25pt;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+      }
+      h3 {
+        margin-bottom: 2mm;
+        font-size: 12pt;
+        line-height: 1.2;
+      }
+      .lead {
+        max-width: 120mm;
+        color: var(--muted);
+        font-size: 13pt;
+        line-height: 1.5;
+      }
+      .cover-meta, .meta {
+        color: var(--muted);
+        font-family: Consolas, monospace;
+        font-size: 8pt;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .cover-rule {
+        width: 100%;
+        height: 2px;
+        margin: 9mm 0 5mm;
+        background: var(--ink);
+      }
+      .cover-bottom {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 12mm;
+        padding-top: 8mm;
+        border-top: 2px solid var(--ink);
+      }
+      .cover-mark {
+        color: var(--accent);
+        font-family: "Arial Black", "Segoe UI", sans-serif;
+        font-size: 38pt;
+        line-height: 0.8;
+        text-transform: uppercase;
+      }
+      .muted { color: var(--muted); }
+      .small { font-size: 9pt; }
+      .rule { height: 2px; margin: 5mm 0; background: var(--ink); }
+      .thin-rule { height: 1px; margin: 4mm 0; background: var(--line); }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8mm;
+      }
+      .three-col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5mm;
+      }
+      .box {
+        padding: 5mm;
+        border: 1.5px solid var(--ink);
+        background: #fff;
+      }
+      .box-tint {
+        padding: 5mm;
+        border: 1.5px solid var(--ink);
+        background: var(--paper-2);
+      }
+      .box h3 { margin-bottom: 1.5mm; }
+      .box p { margin-bottom: 0; }
+      .number {
+        display: inline-block;
+        margin-bottom: 2mm;
+        color: var(--accent);
+        font-family: "Arial Black", "Segoe UI", sans-serif;
+        font-size: 23pt;
+        line-height: 1;
+      }
+      .quote {
+        margin: 6mm 0;
+        padding: 5mm 7mm;
+        border-left: 4px solid var(--accent);
+        background: #fff;
+        font-size: 14pt;
+        font-weight: 600;
+        line-height: 1.35;
+      }
+      .tag {
+        display: inline-block;
+        margin: 1mm 1mm 0 0;
+        padding: 1mm 2mm;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-family: Consolas, monospace;
+        font-size: 7pt;
+        text-transform: uppercase;
+      }
+      figure {
+        margin: 0;
+        page-break-inside: avoid;
+      }
+      figure img {
+        display: block;
+        width: 100%;
+        border: 1.5px solid var(--ink);
+        background: #fff;
+      }
+      figcaption {
+        padding: 2mm 0 0;
+        color: var(--muted);
+        font-family: Consolas, monospace;
+        font-size: 7.5pt;
+        text-transform: uppercase;
+      }
+      .screens-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4mm;
+      }
+      .screens-grid .wide {
+        grid-column: 1 / -1;
+      }
+      .screen-note {
+        margin: 1.5mm 0 0;
+        color: var(--muted);
+        font-size: 8.5pt;
+        line-height: 1.4;
+      }
+      .mobile-shot img {
+        max-height: 100mm;
+        object-fit: contain;
+        object-position: top;
+      }
+      .desktop-shot img {
+        max-height: 70mm;
+        object-fit: contain;
+        object-position: top;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9pt;
+        line-height: 1.4;
+      }
+      th {
+        padding: 2.5mm 2mm;
+        border-bottom: 2px solid var(--ink);
+        text-align: left;
+        font-family: Consolas, monospace;
+        font-size: 7.5pt;
+        text-transform: uppercase;
+      }
+      td {
+        padding: 2.5mm 2mm;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      td:first-child { width: 20%; font-weight: 700; }
+      td:nth-child(2) { width: 34%; }
+      td:nth-child(3) { width: 46%; }
+      .priority {
+        display: grid;
+        gap: 3mm;
+        margin-top: 4mm;
+      }
+      .priority-row {
+        display: grid;
+        grid-template-columns: 28mm 1fr;
+        gap: 4mm;
+        padding: 3mm 0;
+        border-top: 1px solid var(--line);
+      }
+      .priority-row strong { color: var(--accent); }
+      .keep-kill {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6mm;
+      }
+      .keep-kill h3 { color: var(--accent); }
+      ul {
+        margin: 0;
+        padding-left: 5mm;
+      }
+      li { margin-bottom: 1.4mm; }
+      .footer-note {
+        display: none;
+      }
+      .no-break { page-break-inside: avoid; }
+      @media print {
+        .screens-grid { break-inside: avoid; }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="page cover">
+      <div>
+        <p class="kicker">WAYORA / TASARIM DENETİMİ / 29 EKİM 2026</p>
+        <h1>Mevcut tasarım<br />ne anlatıyor?</h1>
+        <p class="lead">
+          Wayora'nın bugünkü arayüzü, güçlü bir seyahat dergisi estetiğine sahip. Ancak ürün
+          kullanımı açısından aynı netlikte değil. Bu dosya, mevcut ekranları ve tasarım
+          kararlarını ürün gözüyle değerlendiriyor.
+        </p>
+        <div class="cover-rule"></div>
+        <p class="meta">10 şehir · 100 deneyim · 9 seçili ekran · mobil öncelikli</p>
+      </div>
+      <div class="cover-bottom">
+        <div>
+          <div class="cover-mark">WAYORA</div>
+          <p class="small muted" style="margin: 2mm 0 0">Ürün arayüzü değerlendirmesi</p>
+        </div>
+        <p class="meta" style="text-align: right; max-width: 75mm">
+          Hazırlayan: Wayora geliştirme<br />
+          Durum: Mevcut tasarım<br />
+          Sonraki adım: Yön kararı
+        </p>
+      </div>
+    </section>
+
+    <section class="page">
+      <p class="kicker">01 / KISA HÜKÜM</p>
+      <h2>Tutarlı bir dünya, zayıf bir ürün dili.</h2>
+      <p class="lead">
+        Tasarım kötü olduğu için değil, ürünle aynı şeyi anlatmadığı için zorlanıyor. Wayora
+        keşfedilmesi, karşılaştırılması ve plana dönüşmesi gereken bir ürün; mevcut ekranlar ise
+        önce bir poster gibi okunuyor.
+      </p>
+      <div class="rule"></div>
+      <div class="three-col">
+        <div class="box">
+          <span class="number">01</span>
+          <h3>Hiyerarşi</h3>
+          <p class="small muted">Fiyat, puan, süre ve eylemler küçük etiketlerde kayboluyor.</p>
+        </div>
+        <div class="box">
+          <span class="number">02</span>
+          <h3>Dekorasyon</h3>
+          <p class="small muted">Damga, doku, dönüklük ve el yazısı aynı ekranda fazla yer kaplıyor.</p>
+        </div>
+        <div class="box">
+          <span class="number">03</span>
+          <h3>Görsel çekim</h3>
+          <p class="small muted">Seyahat ürününde fotoğraf ana unsurken, keşif kartlarında fotoğraf yok.</p>
+        </div>
+      </div>
+      <div class="quote">
+        “Şu anki tasarım, gidilecek yeri anlatıyor; o yeri neden seçeceğini ve ne zaman
+        ayıracağını yeterince hızlı anlatmıyor.”
+      </div>
+      <div class="two-col">
+        <div>
+          <h3>Güçlü kalanlar</h3>
+          <ul class="small">
+            <li>WAYORA ismi ve terracotta aksanı akılda kalıcı.</li>
+            <li>Sıcak palet, seyahat hissini doğru kuruyor.</li>
+            <li>Mobil alt menü ve güvenli alan altyapısı hazır.</li>
+            <li>Fotoğraflar iyi seçildiğinde marka güçleniyor.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Ürünü yavaşlatanlar</h3>
+          <ul class="small">
+            <li>8-10 px mono etiketler ve aşırı büyük başlıklar.</li>
+            <li>Her ekranda farklı bir “kâğıt” kompozisyonu.</li>
+            <li>Otomatik koyu tema ve tane dokusu.</li>
+            <li>Keşifte arama, fotoğraf ve belirgin fiyat eksikliği.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer-note">Wayora / Mevcut tasarım değerlendirmesi / 01</p>
+    </section>
+
+    <section class="page">
+      <p class="kicker">02 / MEVCUT EKRANLAR</p>
+      <h2>İlk izlenim: landing.</h2>
+      <div class="screens-grid">
+        <figure class="wide desktop-shot">
+          <img src="audit/design-landing-desktop.png" alt="Wayora landing masaüstü" />
+          <figcaption>Landing / masaüstü · 1440 px</figcaption>
+          <p class="screen-note">
+            Güçlü bir poster etkisi var. Ancak el yazısı “bütçe 500 €” notu fotoğrafın arkasında
+            kalıyor; sağ üstte kırpılmış görünüyor. CTA ve rota kartı aynı anda yarışıyor.
+          </p>
+        </figure>
+        <figure class="mobile-shot">
+          <img src="audit/design-landing-mobile.png" alt="Wayora landing mobil" />
+          <figcaption>Landing / mobil · 375 px</figcaption>
+          <p class="screen-note">
+            İlk ekranda marka ve büyük başlık var; ürün değeri ve CTA daha aşağıda kalıyor.
+          </p>
+        </figure>
+      </div>
+      <p class="footer-note">Wayora / Mevcut tasarım değerlendirmesi / 02</p>
+    </section>
+
+    <section class="page">
+      <p class="kicker">03 / MEVCUT EKRANLAR</p>
+      <h2>Giriş ve ilk kurulum.</h2>
+      <div class="screens-grid">
+        <figure class="mobile-shot">
+          <img src="audit/design-login-mobile.png" alt="Wayora giriş mobil" />
+          <figcaption>Giriş / mobil · 375 px</figcaption>
+          <p class="screen-note">
+            Mobilde kullanıcı önce 370 px'lik posteri görüyor. Form ve giriş butonu ekranın
+            altına düşüyor. İlk eylem önce gelmeli.
+          </p>
+        </figure>
+        <figure class="mobile-shot">
+          <img src="audit/design-onboarding-mobile.png" alt="Wayora onboarding mobil" />
+          <figcaption>Onboarding / mobil</figcaption>
+          <p class="screen-note">
+            Seçenekler var ama kaç adım kaldığı belli değil. Alttaki menü içerikle birleşiyor;
+            “Devam” eylemi belirgin değil.
+          </p>
+        </figure>
+      </div>
+      <p class="footer-note">Wayora / Mevcut tasarım değerlendirmesi / 03</p>
+    </section>
+
+    <section class="page">
+      <p class="kicker">04 / MEVCUT EKRANLAR</p>
+      <h2>Rotalar ve rota detayı.</h2>
+      <div class="screens-grid">
+        <figure class="mobile-shot">
+          <img src="audit/design-trips-mobile.png" alt="Wayora rotalar mobil" />
+          <figcaption>Rotalar / mobil</figcaption>
+          <p class="screen-note">
+            Berlin için siyah “B” plakası büyük bir görsel gibi davranıyor; “HAZIR” damgası kart
+            görselinin üzerinde kalıyor. Yaklaşan/geçmiş ayrımı yok.
+          </p>
+        </figure>
+        <figure class="mobile-shot">
+          <img src="audit/design-trip-detail-mobile.png" alt="Wayora rota detayı mobil" />
+          <figcaption>Rota detayı / mobil</figcaption>
+          <p class="screen-note">
+            Plan ilk ekranda görünmüyor. Başlık, iki büyük aksiyon ve şehir plakası planın önüne
+            geçiyor. Kullanıcı asıl içeriği görmek için kaydırmak zorunda.
+          </p>
+        </figure>
+      </div>
+      <p class="footer-note">Wayora / Mevcut tasarım değerlendirmesi / 04</p>
+    </section>
+
+    <section class="page">
+      <p class="kicker">05 / MEVCUT EKRANLAR</p>
+      <h2>Keşif ve şehir rehberi.</h2>
+      <div class="screens-grid">
+        <figure class="mobile-shot">
+          <img src="audit/design-explore-mobile-current.png" alt="Wayora keşfet mobil" />
+          <figcaption>Keşfet / mobil · 375 px</figcaption>
+          <p class="screen-note">
+            Tipografik kartlar karakterli ama fotoğraf yok. Şehirler arasında görsel bir seçim
+            yapmak zorlaşıyor; fiyat ve puan kartın içinde küçük kalıyor.
+          </p>
+        </figure>
+        <figure class="mobile-shot">
+          <img src="audit/explore-berlin-mobile.png" alt="Wayora Berlin rehberi mobil" />
+          <figcaption>Berlin rehberi / mobil</figcaption>
+          <p class="screen-note">
+            Filtreler hero'nun altında. Deneyim kartları iki sütunda sıkışıyor; “plana ekle”
+            gibi birincil eylem yok.
+          </p>
+        </figure>
+      </div>
+      <p class="footer-note">Wayora / Mevcut tasarım değerlendirmesi / 05</p>
+    </section>
+
+    <section class="page">
+      <p class="kicker">06 / MEVCUT EKRANLAR</p>
+      <h2>Yeni rota.</h2>
+      <figure class="mobile-shot">
+        <img src="audit/design-new-trip-mobile.png" alt="Wayora yeni rota mobil" />
+        <figcaption>Yeni rota / mobil · 375 px</figcaption>
+        <p class="screen-note">
+          Şehir ipucu artık 10 şehri listeliyor. Form hâlâ uzun; tarih, bütçe, para birimi,
+          notlar ve iki ayrı submit butonu aynı ekranda. Kullanıcı için tek bir sonraki adım
+          daha net olmalı.
+        </p>
+      </figure>
+      <p class="footer-note">Wayora / Mevcut tasarım değerlendirmesi / 06</p>
+    </section>
+
+    <section class="page">
+      <p class="kicker">07 / SAYFA SAYFA</p>
+      <h2>Ne var, ne sorun, ne olmalı?</h2>
+      <table>
+        <thead>
+          <tr><th>Sayfa</th><th>Bugün</th><th>Öneri</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Landing</td><td>Dev hero, defter, fiş, 3 şehir, tekrar eden CTA'lar</td><td>Tek değer önerisi, arama, 6-10 şehir, kısa “nasıl çalışır”, tek CTA</td></tr>
+          <tr><td>Auth</td><td>Poster önce, form sonra; mobilde form aşağıda</td><td>Form odaklı kart; küçük marka bandı; mobilde poster yok</td></tr>
+          <tr><td>Onboarding</td><td>Çipler ve seçenek kartları; ilerleme yok</td><td>2-3 adım, ilerleme çubuğu, canlı özet, sabit devam butonu</td></tr>
+          <tr><td>Rotalar</td><td>Döndürülmüş bilet kartları; aksiyonlar iç içe</td><td>Dashboard, yaklaşan/geçmiş, kapak fotoğrafı, durum etiketi, menü</td></tr>
+          <tr><td>Yeni rota</td><td>Uzun form + taslak bileti; iki submit butonu</td><td>Şehir/tarih, bütçe/tercih, özet adımları; tek CTA</td></tr>
+          <tr><td>Rota detayı</td><td>Büyük başlık ve plaka; plan aşağıda</td><td>Kompakt başlık, tarih/bütçe, gün sekmeleri, zaman çizelgesi, sabit ekle</td></tr>
+          <tr><td>Keşfet</td><td>Tipografik şehir kartları; arama yok</td><td>Fotoğraflı şehir kartları, arama, kategori, ortalama fiyat</td></tr>
+          <tr><td>Şehir detayı</td><td>Filtreler aşağıda; deneyimler sıkışık</td><td>Sticky filtre, fotoğraflı deneyim kartı, puan/fiyat/süre, net eylem</td></tr>
+        </tbody>
+      </table>
+      <div class="thin-rule"></div>
+      <div class="two-col">
+        <div class="box-tint">
+          <h3>En kritik 3 karar</h3>
+          <ul class="small">
+            <li>Anton'u ürün ekranlarından çıkar, sadece landing'de tut.</li>
+            <li>Kâğıt dokusu, damga ve dönüklüğü ürün ekranlarından kaldır.</li>
+            <li>Her şehir ve deneyim için gerçek kapak fotoğrafı kullan.</li>
+          </ul>
+        </div>
+        <div class="box-tint">
+          <h3>En hızlı kazanım</h3>
+          <ul class="small">
+            <li>Keşfet'e arama ve fotoğraflı kartlar ekle.</li>
+            <li>Fiyat, süre ve puanı kartın üstüne taşı.</li>
+            <li>Mobil girişte formu ilk ekrana al.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer-note">Wayora / Mevcut tasarım değerlendirmesi / 06</p>
+    </section>
+
+    <section class="page">
+      <p class="kicker">08 / GLOBAL ELEMENTLER</p>
+      <h2>Kabuk ve tasarım sistemi.</h2>
+      <div class="two-col">
+        <div>
+          <h3>Header ve mobil menü</h3>
+          <p class="small muted">
+            Masaüstünde Keşfet, Rotalar, Tercihler, kullanıcı, CTA ve çıkış aynı satırda. Mobilde
+            header yalnızca çıkışa indirgeniyor; alt menüde 4 sekme var fakat etiketler çok küçük.
+            İkon yok.
+          </p>
+          <p class="small muted">
+            Öneri: masaüstünde 4 net bağlantı, mobilde sade logo + profil; alt menüde 11-12 px
+            etiket ve ince çizgi ikon.
+          </p>
+        </div>
+        <div>
+          <h3>Tipografi ve renk</h3>
+          <p class="small muted">
+            Anton güçlü; her başlıkta kullanılınca poster etkisi yaratıyor. IBM Plex Mono
+            8-10 px'e kadar küçülüyor. Krem üzerinde küçük kahve tonları zorlanıyor. Otomatik
+            koyu tema marka kontrolünü kaybettiriyor.
+          </p>
+          <p class="small muted">
+            Öneri: Public Sans 16 px gövde; mono sadece fiyat/süre; Anton sadece pazarlama;
+            koyu tema ayrı tasarlanana kadar kapalı.
+          </p>
+        </div>
+      </div>
+      <div class="thin-rule"></div>
+      <h3>Kart ve dekorasyon</h3>
+      <p class="small muted">
+        Döndürülmüş kartlar, organik köşeler, damgalar ve gölgeler aynı anda kullanılıyor.
+        Bu, ürün kartlarında hizalama ve tarama hızını bozuyor. Öneri: ürün yüzeylerinde düz
+        hizalı, 12 px radius, ince çizgi ve yumuşak gölge; damga/dönüklük sadece landing gibi
+        duygusal yüzeylerde.
+      </p>
+      <div class="three-col" style="margin-top: 5mm">
+        <div class="box"><h3>Koru</h3><p class="small muted">WAYORA markası, terracotta aksan, sıcak zemin, iyi fotoğraf.</p></div>
+        <div class="box"><h3>Azalt</h3><p class="small muted">Tane dokusu, damga, el yazısı, dönüklük, aşırı büyük başlık.</p></div>
+        <div class="box"><h3>Ekle</h3><p class="small muted">Arama, gerçek fotoğraf, net fiyat/puan, sticky filtre, tek CTA.</p></div>
+      </div>
+      <p class="footer-note">Wayora / Mevcut tasarım değerlendirmesi / 08</p>
+    </section>
+
+    <section class="page">
+      <p class="kicker">09 / ÖNERİLEN YÖN</p>
+      <h2>Modern aktivite pazarı + sade planlayıcı.</h2>
+      <p class="lead">
+        Wayora'nın keşif tarafı GetYourGuide/Airbnb Experiences gibi fotoğraf, fiyat, puan ve
+        süreyle hızlı karar verdirmeli. Planlama tarafı ise sakin, net ve düzenlenebilir bir
+        çalışma alanı olmalı. İki taraf aynı görsel dili paylaşmalı.
+      </p>
+      <div class="rule"></div>
+      <div class="two-col">
+        <div>
+          <h3>Yeni ürün dili</h3>
+          <ul class="small">
+            <li>Sıcak kırık beyaz zemin, beyaz kart, koyu mürekkep.</li>
+            <li>Terracotta sadece ana CTA ve fiyat vurgusunda.</li>
+            <li>Public Sans 16 px gövde; mono sadece veri.</li>
+            <li>12 px radius, ince çizgi, yumuşak gölge.</li>
+            <li>Fotoğraf her şehir ve deneyimde ana unsur.</li>
+            <li>Mobilde sticky filtre ve tek elle erişilen CTA.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Sayfa önceliği</h3>
+          <div class="priority">
+            <div class="priority-row"><strong>P0</strong><span>Tasarım tokenları + header/alt menü</span></div>
+            <div class="priority-row"><strong>P0</strong><span>Keşfet + şehir detayı</span></div>
+            <div class="priority-row"><strong>P1</strong><span>Giriş + onboarding</span></div>
+            <div class="priority-row"><strong>P1</strong><span>Landing + rota listesi</span></div>
+            <div class="priority-row"><strong>P2</strong><span>Yeni rota + rota detayı</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="quote">
+        Tasarımın yeni hedefi “seyahat dergisi gibi görünmek” değil, “seyahati kolayca
+        planlatmak” olmalı.
+      </div>
+      <p class="footer-note">Wayora / Mevcut tasarım değerlendirmesi / 08</p>
+    </section>
+
+    <section class="page">
+      <p class="kicker">10 / KARAR</p>
+      <h2>Bir sonraki turda ne yapılmalı?</h2>
+      <div class="keep-kill">
+        <div>
+          <h3>Korunacaklar</h3>
+          <ul class="small">
+            <li>WAYORA kelime markası.</li>
+            <li>Terracotta ve sıcak palet.</li>
+            <li>Seyahat fotoğrafları.</li>
+            <li>“Rotasyon” ve planlama fikri.</li>
+            <li>Mobil bottom navigation altyapısı.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Kaldırılacaklar</h3>
+          <ul class="small">
+            <li>Tüm ekranlarda kâğıt tahıl dokusu.</li>
+            <li>Rota ve aktivite kartlarında dönüklük.</li>
+            <li>Her yerde damga ve el yazısı.</li>
+            <li>8-10 px mono etiketler.</li>
+            <li>Otomatik koyu tema.</li>
+            <li>Keşifte fotoğrafsız tipografik kartlar.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rule"></div>
+      <p class="lead" style="font-size: 11pt">
+        Bu dosya bir “beğendim/beğenmedim” tartışması değil. Mevcut tasarımın ne yaptığını ve
+        ürün hedefiyle nerede ayrıştığını gösteriyor. Yeni yön onaylandığında önce tek sayfalık
+        tasarım sistemi, sonra Keşfet ve giriş ekranları yeniden kurulmalı.
+      </p>
+      <p class="footer-note">Wayora / Mevcut tasarım değerlendirmesi / 10 · 29.10.2026</p>
+    </section>
+  </body>
+</html>

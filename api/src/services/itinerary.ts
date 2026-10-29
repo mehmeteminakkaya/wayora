@@ -334,6 +334,15 @@ export function normalizeLlmPlan(
   const totalDays = Math.min(21, dayCount(input.startDate, input.endDate))
   const fallback = generateOfflinePlan(input, candidates)
   const days: PlannedDay[] = []
+  const usedActivityKeys = new Set<string>()
+
+  function activityKey(activity: PlannedActivity): string {
+    return activity.googlePlaceId ?? activity.title.toLocaleLowerCase('tr-TR')
+  }
+
+  function rememberFallback(day: PlannedDay) {
+    for (const activity of day.activities) usedActivityKeys.add(activityKey(activity))
+  }
 
   for (let day = 1; day <= totalDays; day += 1) {
     const rawDay = raw.days.find((item) => item.dayIndex === day)
@@ -341,7 +350,9 @@ export function normalizeLlmPlan(
     date.setUTCDate(date.getUTCDate() + (day - 1))
 
     if (!rawDay || rawDay.activities.length === 0) {
-      days.push(fallback.days[day - 1]!)
+      const fallbackDay = fallback.days[day - 1]!
+      rememberFallback(fallbackDay)
+      days.push(fallbackDay)
       continue
     }
 
@@ -358,17 +369,18 @@ export function normalizeLlmPlan(
           googlePlaceId: place?.googlePlaceId ?? null,
         } satisfies PlannedActivity
       })
-      .filter((activity, index, list) => {
-        // Aynı gün içinde aynı katalog yerini iki kez göstermeyi engelle.
-        const key = activity.googlePlaceId ?? activity.title.toLocaleLowerCase('tr-TR')
-        return list.findIndex((candidate) => {
-          const candidateKey = candidate.googlePlaceId ?? candidate.title.toLocaleLowerCase('tr-TR')
-          return candidateKey === key
-        }) === index
+      .filter((activity) => {
+        // Aynı gezide aynı katalog yerini iki kez göstermeyi engelle.
+        const key = activityKey(activity)
+        if (usedActivityKeys.has(key)) return false
+        usedActivityKeys.add(key)
+        return true
       })
 
     if (activities.length === 0) {
-      days.push(fallback.days[day - 1]!)
+      const fallbackDay = fallback.days[day - 1]!
+      rememberFallback(fallbackDay)
+      days.push(fallbackDay)
       continue
     }
 

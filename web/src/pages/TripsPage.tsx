@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../api'
 import type { Trip, TripStatus } from '../api'
-import { cityImage } from '../lib/cityImage'
+import { cityImage, cityInitials } from '../lib/cityImage'
 import { formatMoney, formatShortDate, tripDayCount } from '../lib/format'
 
 const STATUS_LABELS: Record<TripStatus, string> = {
@@ -98,10 +98,18 @@ export function TripsPage() {
         </section>
       ) : (
         <div className="trip-stack">
-          {trips.map((trip, index) => (
+          {trips.map((trip, index) => {
+            const image = cityImage(trip.destination)
+            return (
             <article className="trip-ticket has-stamp" key={trip.id}>
               <span className="trip-index">{String(index + 1).padStart(2, '0')}</span>
-              <img className="trip-thumb" src={cityImage(trip.destination)} alt="" />
+              {image ? (
+                <img className="trip-thumb" src={image} alt="" />
+              ) : (
+                <div className="trip-thumb trip-thumb-empty" aria-hidden="true">
+                  {cityInitials(trip.destination)}
+                </div>
+              )}
 
               <div>
                 <h2>
@@ -163,7 +171,8 @@ export function TripsPage() {
                 {STATUS_LABELS[trip.status] ?? trip.status}
               </span>
             </article>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>

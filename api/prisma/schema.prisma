@@ -98,3 +98,47 @@ model Place {
   cachedAt      DateTime   @default(now())
   activities    Activity[]
 }
+
+// Keşif rehberi: 10 şehir ve şehir başına detaylı deneyim kataloğu.
+// Kaynak veri api/src/data/city-catalog.ts; sunucu açılışında idempotent seed edilir.
+model City {
+  id          String           @id @default(uuid())
+  slug        String           @unique
+  name        String
+  country     String
+  summary     String
+  bestSeason  String?
+  currency    String           @default("EUR")
+  sortOrder   Int              @default(0)
+  experiences CityExperience[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model CityExperience {
+  id              String   @id @default(uuid())
+  cityId          String
+  city            City     @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  slug            String
+  googlePlaceId   String   @unique
+  name            String
+  category        String   @default("other") // museum | food | nature | landmark | shopping | other
+  neighborhood    String?
+  address         String?
+  rating          Float?
+  durationMinutes Int
+  estimatedCost   Decimal  @db.Decimal(10, 2)
+  currency        String   @default("EUR")
+  priceNote       String?
+  description     String
+  tags            String[] @default([])
+  openingHours    String?
+  bookingUrl      String?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([cityId, slug])
+  @@index([cityId, category])
+  @@index([cityId, sortOrder])
+}

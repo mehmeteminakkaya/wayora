@@ -75,6 +75,42 @@ export type GenerationMeta = {
   latencyMs: number
 }
 
+export type CitySummary = {
+  slug: string
+  name: string
+  country: string
+  summary: string
+  bestSeason: string | null
+  currency: string
+  experienceCount: number
+  averageCost: number
+  minCost: number
+  tags: string[]
+}
+
+export type CityExperience = {
+  id: string
+  slug: string
+  googlePlaceId: string
+  name: string
+  category: ActivityCategory
+  neighborhood: string | null
+  address: string | null
+  rating: number | null
+  durationMinutes: number
+  estimatedCost: number
+  currency: string
+  priceNote: string | null
+  description: string
+  tags: string[]
+  openingHours: string | null
+  bookingUrl: string | null
+}
+
+export type CityDetail = CitySummary & {
+  experiences: CityExperience[]
+}
+
 export type CreateTripInput = {
   title: string
   destination: string
@@ -131,6 +167,11 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 
 export const api = {
   getHealth: () => request<Health>('/api/health'),
+
+  listCities: () => request<{ cities: CitySummary[] }>('/api/cities'),
+
+  getCity: (slug: string) =>
+    request<{ city: CityDetail }>(`/api/cities/${encodeURIComponent(slug)}`),
 
   register: (input: { email: string; password: string; name?: string }) =>
     request<{ user: User }>('/api/auth/register', {

@@ -1998,6 +1998,423 @@ body::after {
   box-shadow: 3px 3px 0 var(--ink);
 }
 
+/* ---------- Keşif rehberi ---------- */
+
+.explore-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(14rem, 0.65fr);
+  gap: 2rem;
+  align-items: end;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+.explore-heading h1 {
+  margin: 0.45rem 0 0.5rem;
+  font-size: clamp(3rem, 7vw, 6.4rem);
+}
+
+.explore-heading p {
+  max-width: 48ch;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.explore-stamp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.explore-stamp .mono {
+  width: 100%;
+  text-align: right;
+}
+
+.city-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+  margin-top: 2rem;
+}
+
+.city-guide-card {
+  position: relative;
+  display: flex;
+  min-height: 22rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.15rem;
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  box-shadow: 5px 5px 0 var(--ink);
+  color: var(--ink);
+  text-decoration: none;
+  transform: rotate(-0.35deg);
+}
+
+.city-guide-card:nth-child(3n + 2) {
+  transform: rotate(0.35deg);
+}
+
+.city-guide-card:hover {
+  border-color: var(--terracotta);
+  color: var(--ink);
+}
+
+.city-guide-card:hover .city-guide-link {
+  color: var(--terracotta);
+}
+
+.city-guide-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.city-monogram {
+  display: inline-flex;
+  width: 3.2rem;
+  height: 3.2rem;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--ink);
+  background: var(--terracotta);
+  color: var(--on-terracotta);
+  font-family: var(--display);
+  font-size: 1.55rem;
+  letter-spacing: 0.02em;
+  transform: rotate(-3deg);
+}
+
+.city-guide-card:nth-child(3n + 2) .city-monogram {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+.city-guide-card:nth-child(3n) .city-monogram {
+  background: var(--olive);
+  color: var(--cream);
+}
+
+.city-guide-card h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3.8vw, 3.3rem);
+  line-height: 0.9;
+}
+
+.city-guide-country,
+.city-guide-summary,
+.city-guide-meta {
+  margin: 0;
+}
+
+.city-guide-country {
+  color: var(--terracotta);
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  text-transform: uppercase;
+}
+
+.city-guide-summary {
+  flex: 1;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.city-guide-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--line-soft);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+}
+
+.city-guide-link {
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.16rem 0.35rem;
+  border: 1px solid var(--line-soft);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.explore-disclaimer {
+  max-width: 75ch;
+  margin: 1.5rem 0 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.explore-teaser {
+  margin-top: 2rem;
+  background: var(--paper-2);
+}
+
+.city-guide-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(15rem, 0.65fr);
+  gap: 2rem;
+  align-items: end;
+  padding-bottom: 1.7rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+.city-guide-hero h1 {
+  margin: 0.35rem 0 0.45rem;
+  font-size: clamp(3.8rem, 9vw, 8rem);
+  line-height: 0.82;
+}
+
+.city-guide-lead {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.city-guide-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.1rem;
+}
+
+.city-guide-ticket {
+  padding: 1.1rem;
+  border: 2px solid var(--ink);
+  background: var(--paper-2);
+  box-shadow: 5px 5px 0 var(--ink);
+  transform: rotate(0.8deg);
+}
+
+.city-ticket-name {
+  margin: 0.6rem 0 0.8rem;
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  line-height: 0.9;
+}
+
+.city-ticket-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0;
+  border-top: 1px dashed var(--line-soft);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  text-transform: uppercase;
+}
+
+.city-ticket-row strong {
+  color: var(--ink);
+  font-weight: 500;
+  text-align: right;
+}
+
+.guide-filters {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.1rem 0;
+  border-bottom: 2px solid var(--ink);
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.filter-chip {
+  min-height: 38px;
+  padding: 0.35rem 0.7rem;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.filter-chip:hover {
+  border-color: var(--terracotta);
+  color: var(--terracotta);
+}
+
+.filter-chip.is-selected {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+.guide-result-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.4rem 0 0.8rem;
+}
+
+.guide-result-head h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.experience-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.experience-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem;
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.experience-card:nth-child(2n) {
+  transform: rotate(0.2deg);
+}
+
+.experience-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.experience-card h3 {
+  margin: 0;
+  font-family: var(--body);
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.experience-description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.experience-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+  margin: 0;
+  color: var(--terracotta);
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  text-transform: uppercase;
+}
+
+.experience-details {
+  margin-top: 0.2rem;
+  padding-top: 0.45rem;
+  border-top: 1px dashed var(--line-soft);
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.experience-details summary {
+  cursor: pointer;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+}
+
+.experience-details p {
+  margin: 0.45rem 0 0;
+}
+
+.experience-details .text-link {
+  display: inline-block;
+  margin-top: 0.45rem;
+}
+
+.trip-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.city-plate-inner {
+  display: flex;
+  height: 190px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.city-plate-inner strong {
+  font-family: var(--display);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+.city-plate-inner .mono {
+  color: var(--paper);
+}
+
 /* ---------- Yeni rota ---------- */
 
 .new-trip-grid {
@@ -2123,6 +2540,23 @@ body::after {
   .day-num {
     font-size: 3rem;
   }
+
+  .explore-heading,
+  .city-guide-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .city-guide-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .experience-list {
+    grid-template-columns: 1fr;
+  }
+
+  .explore-stamp {
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 720px) {
@@ -2194,7 +2628,7 @@ body::after {
     left: 0;
     z-index: 200;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     padding-bottom: env(safe-area-inset-bottom);
     border-top: 2px solid var(--ink);
     background: var(--paper);
@@ -2466,6 +2900,44 @@ body::after {
   .icon-button {
     width: 44px;
     height: 44px;
+  }
+
+  .city-guide-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .city-guide-card {
+    min-height: 0;
+    transform: none;
+  }
+
+  .city-guide-card:nth-child(3n + 2),
+  .experience-card:nth-child(2n) {
+    transform: none;
+  }
+
+  .city-guide-hero h1 {
+    font-size: clamp(2.6rem, 13vw, 4rem);
+  }
+
+  .city-guide-ticket {
+    transform: none;
+  }
+
+  .filter-chip {
+    min-height: 44px;
+  }
+
+  .city-guide-actions {
+    align-items: flex-start;
+  }
+
+  .city-guide-actions .button {
+    width: 100%;
+  }
+
+  .explore-stamp .mono {
+    text-align: left;
   }
 }
 

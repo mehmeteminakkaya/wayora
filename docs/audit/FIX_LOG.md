@@ -20,15 +20,16 @@
 | 14 | `web/src/pages/TripDetailPage.tsx` | Planı yeniden hazırlama için satır içi onay eklendi | Yeniden üretim elle eklenen aktiviteleri siliyordu | Mobil E2E onay + Vazgeç |
 | 15 | `api/src/routes/trips.ts` | Bütçe doğrulaması `.nonnegative()` yapıldı | Form 0 kabul ederken API reddediyordu | API E2E `zeroBudget: 201` |
 | 16 | `web/index.html`, `web/src/index.css` | `viewport-fit=cover`, safe-area, 44/48 px dokunma hedefleri | Mobil çentik ve küçük dokunma alanları | 320/360 px taraması, 0 taşma |
-| 17 | `scripts/e2e_api.mjs`, `scripts/e2e_mobile.mjs` | Uçtan uca API + mobil UI testleri eklendi | Akış kanıtı | API 24/24, mobil UI 0 hata |
+| 17 | `scripts/e2e_api.mjs`, `scripts/e2e_mobile.mjs` | Uçtan uca API + mobil UI testleri eklendi | Akış kanıtı | API 31/31, mobil UI 0 hata |
 | 18 | `web/src/components/Layout.tsx` | Çıkışta önce ana sayfaya geçiş, sonra oturum kapatma | Çıkış korumalı sayfadan `/login`'e atıyordu | Mobil E2E çıkış + tekrar giriş |
+| 19 | `api/src/data/city-catalog.ts`, `api/prisma/schema.prisma`, `web/src/pages/ExplorePage.tsx`, `web/src/pages/CityPage.tsx` | 10 şehir / 100 deneyim kataloğu, DB seed, keşif UI ve rota ön dolumu | Keşfedilebilir gerçek aktivite verisi yoktu | Katalog testleri, API 31/31, keşif E2E |
 
 ## Komut çıktısı
 
 ```
 npm run lint       → geçti
 npm run typecheck  → geçti
-npm test           → 32 API + 4 web
+npm test           → 38 API + 4 web
 npm run build      → geçti
 npm audit --omit=dev --audit-level=high → 0 vulnerability
 ```
@@ -36,6 +37,7 @@ npm audit --omit=dev --audit-level=high → 0 vulnerability
 ## Açık kalanlar
 
 - Gerçek Google Places/Maps entegrasyonu ve harita pinleri
+- Canlı scrape ve gerçek rezervasyon fiyatı (sağlayıcı/anahtar gerektirir)
 - Yer arama API'sinin web arayüzüne bağlanması
 - Sürükle-bırak aktivite sıralama
 - Aktivite ve gezi başlığı/bütçesi için düzenleme ekranı (PATCH API var)

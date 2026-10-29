@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { api } from '../api'
 import type { Activity, ActivityCategory, CreateActivityInput, Trip } from '../api'
 import { CATEGORY_LABELS, formatDate, formatMoney } from '../lib/format'
-import { cityImage } from '../lib/cityImage'
+import { cityImage, cityInitials } from '../lib/cityImage'
 
 const CATEGORY_OPTIONS: ActivityCategory[] = [
   'landmark',
@@ -271,6 +271,7 @@ export function TripDetailPage() {
   const remaining = trip.budget === null ? null : trip.budget - estimatedTotal
   const overBudget = remaining !== null && remaining < 0
   const hasPlan = activities.length > 0
+  const heroImage = cityImage(trip.destination)
   const emptyDays = trip.days.filter((day) => day.activities.length === 0).length
   const progress =
     trip.budget === null || trip.budget <= 0
@@ -363,7 +364,17 @@ export function TripDetailPage() {
         </div>
 
         <figure className="trip-photo">
-          <img src={cityImage(trip.destination)} alt={`${trip.destination} şehir görünümü`} />
+          {heroImage ? (
+            <img src={heroImage} alt={`${trip.destination} şehir görünümü`} />
+          ) : (
+            <div className="city-plate-inner">
+              <span className="mono">ŞEHİR DOSYASI</span>
+              <strong>{trip.destination}</strong>
+              <span className="mono">
+                {cityInitials(trip.destination)} / {String(trip.days.length).padStart(2, '0')} GÜN
+              </span>
+            </div>
+          )}
           <figcaption>
             {trip.destination} / {String(trip.days.length).padStart(2, '0')} GÜN
           </figcaption>

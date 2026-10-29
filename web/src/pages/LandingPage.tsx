@@ -224,6 +224,17 @@ export function LandingPage() {
         ))}
       </section>
 
+      <section className="cta explore-teaser">
+        <div>
+          <p className="eyebrow">05 / ŞEHİR REHBERİ</p>
+          <h2>10 şehir. 100 deneyim.</h2>
+          <p>Müzeler, sokak lezzetleri, parklar ve günübirlik rotalar. Fiyatları gör, bütçeni kur.</p>
+        </div>
+        <Link className="button large" to="/kesfet">
+          Keşfe başla
+        </Link>
+      </section>
+
       <section className="cta">
         <div>
           <h2>Rotanı çiz.</h2>

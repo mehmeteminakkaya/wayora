@@ -8,6 +8,7 @@ import type { Config } from './config.ts'
 import type { Db } from './lib/prisma.ts'
 import { errorHandler, notFound } from './middleware/error.ts'
 import { authRouter } from './routes/auth.ts'
+import { cityRouter } from './routes/cities.ts'
 import { healthRouter } from './routes/health.ts'
 import { placeRouter } from './routes/places.ts'
 import { preferenceRouter } from './routes/preferences.ts'
@@ -60,6 +61,8 @@ export function createApp({ corsOrigin, checkDb, db, config, generateLimiter }: 
     })
 
   app.use('/api/health', healthRouter(checkDb))
+  // Keşif rehberi herkese açık; kullanıcı verisi içermez.
+  app.use('/api/cities', cityRouter({ db }))
   // Limit yalnızca kimlik denemelerine uygulanır; /me her sayfa yüklemesinde çağrılır.
   app.use('/api/auth/login', authLimiter)
   app.use('/api/auth/register', authLimiter)

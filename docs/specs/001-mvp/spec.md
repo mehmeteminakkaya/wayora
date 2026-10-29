@@ -99,6 +99,20 @@ tek bir akışa indirir: tercihler → gezi → AI planı → düzenleme.
 - [x] Çıktı zod şemasına uymazsa plan kabul edilmez.
 - [x] AI endpoint'i günlük limitle korunur; auth endpoint'i dakikalık limitle korunur.
 
+### US-9: Şehir keşif rehberi
+
+**Olarak** gezgin, **istiyorum ki** 10 büyük şehirde yapılacakları, yaklaşık maliyetleri ve
+süreleriyle birlikte görebileyim; beğendiğim şehirle hemen rota oluşturayım.
+
+- [x] 10 şehir ve toplam 100 deneyim veritabanında tutulur (`City`, `CityExperience`).
+- [x] Her deneyimde kategori, mahalle, adres, süre, tahmini kişi başı maliyet, puan, saat notu
+  ve varsa resmî bağlantı bulunur.
+- [x] `/kesfet` tüm şehirleri, `/kesfet/:slug` şehir rehberini herkese açık gösterir.
+- [x] Kategori ve fiyat filtreleri çalışır.
+- [x] Keşif ekranından seçilen şehir, giriş sonrası yeni rota formuna taşınır.
+- [x] Offline plan üreticisi aynı katalogdaki deneyim adlarını ve maliyetlerini kullanır.
+- [ ] Canlı scrape ve gerçek rezervasyon fiyatı (sağlayıcı/anahtar gerektirir).
+
 ## Fonksiyonel olmayan gereksinimler
 
 - **Performans:** offline üretim < 1 sn; LLM timeout 20 sn (yapılandırılabilir).

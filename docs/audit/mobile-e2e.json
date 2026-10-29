@@ -1,15 +1,15 @@
 {
   "browser": "Chrome/156.0.8078.49",
-  "email": "mobile-ui-1793279619088@example.com",
+  "email": "mobile-ui-1793281142593@example.com",
   "newTripActive": [
     "Planlama"
   ],
   "tripSummary": {
-    "url": "/trips/0f6e8840-a253-49d3-a711-2b9bb62ce4da",
+    "url": "/trips/b96319c2-dfaf-48ae-ba30-d9c8d55ca6ac",
     "title": "Roma rotası",
     "days": 3,
     "activities": 9,
-    "budget": "€290",
+    "budget": "€289",
     "bottomNav": "grid",
     "activeNav": [
       "Rotasyon"
@@ -21,7 +21,7 @@
     "body": true
   },
   "final": {
-    "url": "/trips/0f6e8840-a253-49d3-a711-2b9bb62ce4da",
+    "url": "/trips/b96319c2-dfaf-48ae-ba30-d9c8d55ca6ac",
     "activities": 9,
     "horizontalOverflow": false,
     "bottomNav": "grid"

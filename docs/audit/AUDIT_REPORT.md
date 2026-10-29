@@ -1,6 +1,6 @@
 # Wayora Audit Raporu
 
-Tarih: 27 Ekim 2026  
+Tarih: 29 Ekim 2026
 Kapsam: ürün, frontend, API, veri, AI, güvenlik, erişilebilirlik, responsive, doküman ve teslim  
 Yöntem: 1000 kişilik uzman paneli çerçevesi + otomatik testler + 320/360/375/390/768/1024/1440 px UI taraması
 
@@ -13,18 +13,20 @@ Master prompt: [docs/MASTER_AUDIT_PROMPT.md](../MASTER_AUDIT_PROMPT.md)
 - **P2 bulgu: 4, tamamı düzeltildi veya belgelendi.**
 - **P3 bulgu: 4, kabul edildi ve sonraki tura bırakıldı.**
 - **Mobil uçtan uca akış: 375 px'te kayıt, tercih, rota, plan, aktivite ekleme/silme geçti.**
+- **Keşif kataloğu: 10 şehir, 100 deneyim ve yaklaşık maliyetler veritabanında hazır.**
 
 Otomatik kontroller:
 
 - `npm run lint`: geçti
 - `npm run typecheck`: geçti
-- `npm test`: **32 API + 4 web testi geçti**
+- `npm test`: **38 API + 4 web testi geçti**
 - `npm run build`: geçti
 - `npm audit --omit=dev --audit-level=high`: **0 vulnerability**
 - UI audit: 7 viewport (320, 360, 375, 390, 768, 1024, 1440), **0 yatay taşma**, 0 kırık görsel, 0 etiketsiz input/buton
 - Auth audit: 4 korumalı sayfa x 4 viewport (320, 360, 375, 1440), **0 hata**
-- API E2E: kayıt, tercih, rota, AI plan, aktivite ekleme/silme, sahiplik, çıkış, tekrar giriş ve silme, **24/24 kontrol geçti**
+- API E2E: kayıt, tercih, 10 şehir kataloğu, Berlin planı, rota, AI plan, aktivite ekleme/silme, sahiplik, çıkış, tekrar giriş ve silme, **31/31 kontrol geçti**
 - Mobil UI E2E: kayıt → tercih → rota → plan → aktivite ekleme/silme → çıkış → tekrar giriş, **0 konsol hatası**
+- Keşif UI E2E: 10 şehir, Berlin rehberi, müze filtresi, misafir CTA → giriş → Berlin ön dolu rota, 320/360/768/1440 px, **0 yatay taşma**
 
 ## 2. Bulgular ve düzeltmeler
 
@@ -145,6 +147,26 @@ Mobil uçtan uca test `scripts/e2e_mobile.mjs` ile Chrome 375x667 emülasyonunda
 kayıt, onboarding, yeni rota, offline plan üretimi, aktivite ekleme, onaylı silme ve yeniden hazırlama onayı.
 Dosya: `docs/audit/mobile-e2e.json`.
 
+### Keşif kataloğu
+
+`/kesfet` ve `/kesfet/:slug` için 10 şehir ve 100 deneyim eklendi. Veri kaynağı
+`api/src/data/city-catalog.ts`; sunucu açılışında `City` ve `CityExperience` tablolarına idempotent
+seed ediliyor. Şehir başına 10 deneyim; kategori, mahalle, adres, süre, yaklaşık EUR maliyeti,
+puan, etiket, saat notu ve resmî bağlantı içeriyor.
+
+Kanıt:
+
+- `GET /api/cities` → 10 şehir
+- `GET /api/cities/berlin` → 10 deneyim
+- `/api/cities/_meta/count` → 10 şehir / 100 deneyim
+- Berlin için üretilen 2 günlük plan katalog adlarını kullandı.
+- Keşif UI E2E: 375 px'te liste, Berlin detayı, müze filtresi ve misafir CTA → giriş → ön dolu
+  `/trips/new?destination=Berlin`.
+- 320, 360, 768 ve 1440 px'te keşif listesi ve detayında yatay taşma yok.
+
+Dosyalar: `docs/audit/explore-audit.json`, `docs/audit/explore-mobile.png`,
+`docs/audit/explore-berlin-mobile.png`, `docs/CITY_CATALOG.md`.
+
 ## 4. Erişilebilirlik kontrolü
 
 - Tüm görsellerde `alt` var veya dekoratif olduğu için boş `alt` kullanılıyor.
@@ -160,7 +182,7 @@ Dosya: `docs/audit/mobile-e2e.json`.
 ```
 npm run lint       → geçti
 npm run typecheck  → geçti
-npm test           → 32 API + 4 web
+npm test           → 38 API + 4 web
 npm run build      → geçti
 npm audit --omit=dev --audit-level=high → 0 vulnerability
 ```

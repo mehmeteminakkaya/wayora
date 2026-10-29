@@ -36,6 +36,9 @@ export function Layout() {
           <nav className={`main-nav${user ? ' is-auth' : ''}`} aria-label="Ana menü">
             {user ? (
               <>
+                <NavLink to="/kesfet" className={navClass}>
+                  Keşfet
+                </NavLink>
                 <NavLink to="/trips" className={navClass}>
                   Rotalar
                 </NavLink>
@@ -54,6 +57,9 @@ export function Layout() {
               </>
             ) : (
               <>
+                <NavLink to="/kesfet" className={navClass}>
+                  Keşfet
+                </NavLink>
                 <NavLink to="/login" className={navClass}>
                   Giriş
                 </NavLink>
@@ -72,6 +78,9 @@ export function Layout() {
 
       {!isAuthPage && user ? (
         <nav className="mobile-nav" aria-label="Mobil menü">
+          <NavLink to="/kesfet" className={mobileClass}>
+            Keşfet
+          </NavLink>
           <Link
             to="/trips"
             className={isTripsSection ? 'is-active' : undefined}
@@ -95,8 +104,11 @@ export function Layout() {
           <NavLink to="/" className={mobileClass} end>
             Rotasyon
           </NavLink>
+          <NavLink to="/kesfet" className={mobileClass}>
+            Keşfet
+          </NavLink>
           <NavLink to="/login" className={mobileClass}>
-            Keşif
+            Giriş
           </NavLink>
           <NavLink to="/register" className={mobileClass}>
             Kurulum

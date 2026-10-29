@@ -206,7 +206,7 @@
       "mobile": false
     },
     "url": "http://localhost:5180/trips/new",
-    "scrollWidth": 1440,
+    "scrollWidth": 1425,
     "horizontalOverflow": false,
     "bottomNav": "none",
     "imagesBroken": [],

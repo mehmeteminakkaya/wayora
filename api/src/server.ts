@@ -1,9 +1,17 @@
 import { createApp } from './app.ts'
 import { loadConfig } from './config.ts'
 import { createPrisma } from './lib/prisma.ts'
+import { seedCityCatalog } from './services/city-catalog.ts'
 
 const config = loadConfig()
 const prisma = createPrisma(config.DATABASE_URL)
+
+try {
+  await seedCityCatalog(prisma)
+} catch (error) {
+  // Katalog migration'ı henüz uygulanmamışsa API yine açılır; /api/cities statik kataloğa düşer.
+  console.error('[city-catalog] seed başarısız:', error)
+}
 
 const app = createApp({
   corsOrigin: config.CORS_ORIGIN,

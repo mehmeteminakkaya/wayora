@@ -1,0 +1,124 @@
+{
+  "listing": {
+    "path": "/kesfet",
+    "cards": 10,
+    "names": [
+      "İstanbul",
+      "Paris",
+      "Roma",
+      "Barselona",
+      "Londra",
+      "Amsterdam",
+      "Berlin",
+      "Prag",
+      "Viyana",
+      "Lizbon"
+    ],
+    "mobileNav": [
+      "Rotasyon",
+      "Keşfet",
+      "Giriş",
+      "Kurulum"
+    ],
+    "horizontalOverflow": false
+  },
+  "city": {
+    "path": "/kesfet/berlin",
+    "heading": "Berlin",
+    "cards": 10,
+    "categories": [
+      "Müze",
+      "Gezilecek yer",
+      "Yemek",
+      "Doğa"
+    ],
+    "horizontalOverflow": false
+  },
+  "filtered": {
+    "cards": 2,
+    "names": [
+      "Museum Island",
+      "Berlin Katedrali"
+    ]
+  },
+  "ctaLogin": {
+    "path": "/trips/new",
+    "search": "?destination=Berlin",
+    "destination": "Berlin",
+    "fromState": true
+  },
+  "berlinTrip": {
+    "path": "/trips/b5c8b1cb-9c09-4cca-bfc4-df05bff3189a",
+    "days": 3,
+    "activities": 9,
+    "cityPlate": true,
+    "firstActivity": "Kreuzberg Sokak Lezzetleri"
+  },
+  "responsive": [
+    {
+      "width": 320,
+      "height": 568,
+      "mobile": true,
+      "list": {
+        "width": 320,
+        "overflow": false,
+        "cards": 10,
+        "headerHeight": 60.375
+      },
+      "detail": {
+        "width": 320,
+        "overflow": false,
+        "cards": 10
+      }
+    },
+    {
+      "width": 360,
+      "height": 640,
+      "mobile": true,
+      "list": {
+        "width": 360,
+        "overflow": false,
+        "cards": 10,
+        "headerHeight": 60.375
+      },
+      "detail": {
+        "width": 360,
+        "overflow": false,
+        "cards": 10
+      }
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "mobile": true,
+      "list": {
+        "width": 768,
+        "overflow": false,
+        "cards": 10,
+        "headerHeight": 68
+      },
+      "detail": {
+        "width": 768,
+        "overflow": false,
+        "cards": 10
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "mobile": false,
+      "list": {
+        "width": 1440,
+        "overflow": false,
+        "cards": 10,
+        "headerHeight": 68
+      },
+      "detail": {
+        "width": 1440,
+        "overflow": false,
+        "cards": 10
+      }
+    }
+  ],
+  "errors": []
+}

@@ -1,16 +1,28 @@
 import { useRef, useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { api } from '../api'
 import { formatShortDate, todayIso } from '../lib/format'
 
-const CITIES = ['İstanbul', 'Paris', 'Roma', 'Barselona', 'Londra', 'Amsterdam']
+const CITIES = [
+  'İstanbul',
+  'Paris',
+  'Roma',
+  'Barselona',
+  'Londra',
+  'Amsterdam',
+  'Berlin',
+  'Prag',
+  'Viyana',
+  'Lizbon',
+]
 const CURRENCIES = ['EUR', 'USD', 'TRY']
 
 export function NewTripPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
-  const [destination, setDestination] = useState('')
+  const [destination, setDestination] = useState(searchParams.get('destination') ?? '')
   const [title, setTitle] = useState('')
   const [startDate, setStartDate] = useState(todayIso(7))
   const [endDate, setEndDate] = useState(todayIso(9))
@@ -100,8 +112,8 @@ export function NewTripPage() {
               ))}
             </datalist>
             <span className="field-hint" id="destination-hint">
-              Hazır katalog: İstanbul, Paris, Roma, Barselona, Londra, Amsterdam. Diğer şehirler
-              genel şablonla planlanır.
+              Hazır katalog: İstanbul, Paris, Roma, Barselona, Londra, Amsterdam, Berlin, Prag,
+              Viyana ve Lizbon. Diğer şehirler genel şablonla planlanır.
             </span>
           </label>
 

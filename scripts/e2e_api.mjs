@@ -42,6 +42,10 @@ const savePrefs = await json('/api/me/preferences', auth(cookie, {
 }))
 if (!savePrefs.response.ok) throw new Error(`prefs ${savePrefs.response.status}: ${JSON.stringify(savePrefs.body)}`)
 
+const cityList = await json('/api/cities')
+const berlinDetail = await json('/api/cities/berlin')
+const catalogMeta = await json('/api/cities/_meta/count')
+
 const create = await json('/api/trips', auth(cookie, {
   method: 'POST',
   body: JSON.stringify({
@@ -73,6 +77,29 @@ const zeroBudgetId = zeroBudget.body?.trip?.id
 if (zeroBudgetId) {
   await json(`/api/trips/${zeroBudgetId}`, auth(cookie, { method: 'DELETE' }))
 }
+
+const berlinCreate = await json('/api/trips', auth(cookie, {
+  method: 'POST',
+  body: JSON.stringify({
+    title: 'Berlin katalog testi',
+    destination: 'Berlin',
+    startDate: '2026-11-20',
+    endDate: '2026-11-21',
+    budget: 250,
+    currency: 'EUR',
+    notes: null,
+  }),
+}))
+if (!berlinCreate.response.ok) throw new Error(`berlin create ${berlinCreate.response.status}: ${JSON.stringify(berlinCreate.body)}`)
+const berlinTripId = berlinCreate.body.trip.id
+const berlinGenerated = await json(`/api/trips/${berlinTripId}/generate`, auth(cookie, { method: 'POST' }))
+if (!berlinGenerated.response.ok) throw new Error(`berlin generate ${berlinGenerated.response.status}`)
+const berlinTitleList = berlinGenerated.body.trip.days
+  .flatMap((day) => day.activities)
+  .map((activity) => activity.title)
+const berlinCatalogNames = new Set(berlinDetail.body.city.experiences.map((experience) => experience.name))
+const berlinCatalogHit = berlinTitleList.some((title) => berlinCatalogNames.has(title))
+await json(`/api/trips/${berlinTripId}`, auth(cookie, { method: 'DELETE' }))
 
 const generated = await json(`/api/trips/${tripId}/generate`, auth(cookie, { method: 'POST' }))
 if (!generated.response.ok) throw new Error(`generate ${generated.response.status}: ${JSON.stringify(generated.body)}`)
@@ -125,6 +152,13 @@ const checks = {
   meEmail: me.body?.user?.email,
   defaultPrefs: prefs.response.status,
   savePrefs: savePrefs.response.status,
+  cityCount: cityList.body?.cities?.length,
+  berlinExperiences: berlinDetail.body?.city?.experiences?.length,
+  catalogCities: catalogMeta.body?.cities,
+  catalogExperiences: catalogMeta.body?.experiences,
+  berlinGenerate: berlinGenerated.response.status,
+  berlinDays: berlinGenerated.body?.trip?.days?.length,
+  berlinCatalogHit,
   create: create.response.status,
   zeroBudget: zeroBudget.response.status,
   generate: generated.response.status,
@@ -155,6 +189,13 @@ if (checks.register !== 201) failures.push('register')
 if (checks.me !== 200) failures.push('me')
 if (checks.defaultPrefs !== 200) failures.push('defaultPrefs')
 if (checks.savePrefs !== 200) failures.push('savePrefs')
+if (checks.cityCount !== 10) failures.push('cityCount')
+if (checks.berlinExperiences !== 10) failures.push('berlinExperiences')
+if (checks.catalogCities !== 10) failures.push('catalogCities')
+if (checks.catalogExperiences !== 100) failures.push('catalogExperiences')
+if (checks.berlinGenerate !== 200) failures.push('berlinGenerate')
+if (checks.berlinDays !== 2) failures.push('berlinDays')
+if (!checks.berlinCatalogHit) failures.push('berlinCatalogHit')
 if (checks.create !== 201) failures.push('create')
 if (checks.zeroBudget !== 201) failures.push('zeroBudget')
 if (checks.generate !== 200) failures.push('generate')

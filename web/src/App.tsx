@@ -1,6 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { CityPage } from './pages/CityPage'
+import { ExplorePage } from './pages/ExplorePage'
 import { LandingPage } from './pages/LandingPage'
 import { LoginPage } from './pages/LoginPage'
 import { NewTripPage } from './pages/NewTripPage'
@@ -15,6 +17,8 @@ export default function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<LandingPage />} />
+        <Route path="kesfet" element={<ExplorePage />} />
+        <Route path="kesfet/:slug" element={<CityPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route element={<ProtectedRoute />}>

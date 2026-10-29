@@ -69,9 +69,9 @@ export function ProfilePage() {
   async function handleLogout() {
     setBusy(true)
     setError(null)
-    navigate('/', { replace: true })
     try {
       await logout()
+      navigate('/', { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Çıkış yapılamadı. Tekrar dene.')
       setBusy(false)

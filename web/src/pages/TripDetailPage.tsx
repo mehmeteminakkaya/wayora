@@ -392,6 +392,7 @@ export function TripDetailPage() {
 
   async function persistReorder(reordered: Activity[]) {
     if (!activeDay) return
+    const previous = activeDay.activities
     setReorderStatus('saving')
     setTrip((current) =>
       current
@@ -412,6 +413,16 @@ export function TripDetailPage() {
       window.setTimeout(() => setReorderStatus('idle'), 1800)
     } catch (err) {
       setReorderStatus('error')
+      setTrip((current) =>
+        current
+          ? {
+              ...current,
+              days: current.days.map((day) =>
+                day.id === activeDay.id ? { ...day, activities: previous } : day,
+              ),
+            }
+          : current,
+      )
       setError(
         err instanceof Error
           ? `Sıra kaydedilemedi: ${err.message}`

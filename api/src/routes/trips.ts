@@ -32,7 +32,7 @@ const createTripSchema = z
     destination: z.string().trim().min(2, 'Destinasyon gerekli').max(120),
     startDate: dateOnly,
     endDate: dateOnly,
-    budget: z.coerce.number().positive().max(1_000_000).nullable().optional(),
+    budget: z.coerce.number().nonnegative().max(1_000_000).nullable().optional(),
     currency: z.string().trim().length(3).toUpperCase().default('EUR'),
     notes: z.string().trim().max(1000).nullable().optional(),
   })
@@ -49,7 +49,7 @@ const createTripSchema = z
 const updateTripSchema = z
   .object({
     title: z.string().trim().min(1).max(120).optional(),
-    budget: z.coerce.number().positive().max(1_000_000).nullable().optional(),
+    budget: z.coerce.number().nonnegative().max(1_000_000).nullable().optional(),
     currency: z.string().trim().length(3).toUpperCase().optional(),
     notes: z.string().trim().max(1000).nullable().optional(),
   })

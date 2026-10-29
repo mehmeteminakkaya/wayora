@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs'
 
-const PORT = 9223
+const PORT = Number(process.env.CDP_PORT ?? 9223)
 const API = 'http://127.0.0.1:4000'
 const BASE = 'http://localhost:5180'
 const out = 'docs/audit/auth-audit.json'
@@ -63,6 +63,8 @@ async function main() {
     ['/onboarding', 'Tercihler'],
   ]
   const viewports = [
+    { width: 320, height: 568, mobile: true },
+    { width: 360, height: 640, mobile: true },
     { width: 375, height: 667, mobile: true },
     { width: 1440, height: 900, mobile: false },
   ]

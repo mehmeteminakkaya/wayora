@@ -2,16 +2,17 @@
 
 Tarih: 27 Ekim 2026  
 Kapsam: ürün, frontend, API, veri, AI, güvenlik, erişilebilirlik, responsive, doküman ve teslim  
-Yöntem: 1000 kişilik uzman paneli çerçevesi + otomatik testler + 375/390/768/1024/1440 px UI taraması
+Yöntem: 1000 kişilik uzman paneli çerçevesi + otomatik testler + 320/360/375/390/768/1024/1440 px UI taraması
 
 Master prompt: [docs/MASTER_AUDIT_PROMPT.md](../MASTER_AUDIT_PROMPT.md)
 
 ## 1. Yönetici özeti
 
 - **P0 bulgu: 0.**
-- **P1 bulgu: 4, tamamı düzeltildi.**
-- **P2 bulgu: 3, tamamı düzeltildi veya belgelendi.**
+- **P1 bulgu: 8, tamamı düzeltildi.**
+- **P2 bulgu: 4, tamamı düzeltildi veya belgelendi.**
 - **P3 bulgu: 4, kabul edildi ve sonraki tura bırakıldı.**
+- **Mobil uçtan uca akış: 375 px'te kayıt, tercih, rota, plan, aktivite ekleme/silme geçti.**
 
 Otomatik kontroller:
 
@@ -20,8 +21,10 @@ Otomatik kontroller:
 - `npm test`: **32 API + 4 web testi geçti**
 - `npm run build`: geçti
 - `npm audit --omit=dev --audit-level=high`: **0 vulnerability**
-- UI audit: 5 viewport, **0 yatay taşma**, 0 kırık görsel, 0 etiketsiz input/buton
-- Auth audit: 4 korumalı sayfa x 2 viewport, **0 hata**
+- UI audit: 7 viewport (320, 360, 375, 390, 768, 1024, 1440), **0 yatay taşma**, 0 kırık görsel, 0 etiketsiz input/buton
+- Auth audit: 4 korumalı sayfa x 4 viewport (320, 360, 375, 1440), **0 hata**
+- API E2E: kayıt, tercih, rota, AI plan, aktivite ekleme/silme, sahiplik, çıkış, tekrar giriş ve silme, **24/24 kontrol geçti**
+- Mobil UI E2E: kayıt → tercih → rota → plan → aktivite ekleme/silme → çıkış → tekrar giriş, **0 konsol hatası**
 
 ## 2. Bulgular ve düzeltmeler
 
@@ -69,6 +72,42 @@ Otomatik kontroller:
 
 **Düzeltme:** Seçili kartta başlık ve açıklama rengi açıkça `--on-terracotta` yapıldı. Renk tek başına anlam taşımıyor; ✓ işareti de var.
 
+### P1-05: Mobil alt menüde iki sekme birden aktif görünüyordu
+
+**Kanıt:** `/trips/new` ekranında `NavLink to="/trips"` prefix eşleşmesi yüzünden hem `Rotasyon` hem `Planlama` aktif görünüyordu.
+
+**Düzeltme:** Rotasyon sekmesi `/trips` ve `/trips/:id` için, Planlama sekmesi yalnızca `/trips/new` için aktif olacak şekilde hesaplandı. `aria-current` de aynı mantıkla veriliyor.
+
+**Doğrulama:** Mobil UI E2E: yeni rota ekranında aktif sekme `Planlama`; plan detayında `Rotasyon`.
+
+### P1-06: Sıfır bütçe API tarafından reddediliyordu
+
+**Kanıt:** Form `min="0"` kabul ediyor, API `.positive()` yüzünden `0` değerini 400 ile reddediyordu.
+
+**Düzeltme:** Gezi oluşturma ve güncelleme şemalarında bütçe `.nonnegative()` yapıldı. Sıfır bütçe artık geçerli; aşım uyarısı normal çalışıyor.
+
+**Doğrulama:** API E2E `zeroBudget: 201`.
+
+### P1-07: Planı yeniden hazırlama elle eklenen aktiviteleri siliyordu
+
+**Kanıt:** `POST /api/trips/:id/generate` mevcut aktiviteleri silip yeniden yazıyor; arayüzde onay yoktu.
+
+**Düzeltme:** Plan doluysa `Planı yeniden hazırla` önce satır içi onay gösteriyor. `Vazgeç` mevcut planı koruyor.
+
+**Doğrulama:** Mobil UI E2E onay metni ve `Vazgeç` akışı geçti.
+
+### P1-08: Çıkışta korumalı sayfa kullanıcıyı login ekranına atıyordu
+
+**Kanıt:** Mobil E2E'de plan detayından `Çıkış` sonrası `navigate('/')` ile oturum temizliği yarışıyor, `ProtectedRoute` kullanıcıyı `/login`'e yönlendiriyordu.
+
+**Düzeltme:** `Layout.handleLogout` önce ana sayfaya geçiyor, sonra oturumu kapatıyor. Çıkış artık landing ekranına dönüyor.
+
+**Doğrulama:** Mobil E2E `logoutState.path: "/"`, giriş linki görünür; ardından tekrar giriş `/trips`'e dönüyor.
+
+### P2-04: Mobil güvenli alan ve dokunma hedefleri
+
+**Düzeltme:** `viewport-fit=cover`, `env(safe-area-inset-top/bottom)`, 44 px header/button/chip hedefleri ve 48 px alt menü satırları eklendi. 320 px'te de yatay taşma yok.
+
 ### P3-01: Yerel `main` ile remote `main` ayrı geçmişe sahip
 
 **Açıklama:** Proje, başlangıçta tarball olarak alındığı için yerel git geçmişi remote’tan bağımsız. Çalışma `design/rotasyon` branch’ine, `origin/main` ebeveynli tek commit olarak pushlandı ve PR #11 açıldı. `main`’e force-push yapılmadı.
@@ -91,14 +130,20 @@ Dosya: `docs/audit/ui-audit.json`
 
 | Viewport | Yatay taşma | Bottom nav | Kırık görsel | Etiketsiz kontrol | Konsol hatası |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| 320x568 | Yok | Görünür | 0 | 0 | 0 |
+| 360x640 | Yok | Görünür | 0 | 0 | 0 |
 | 375x667 | Yok | Görünür | 0 | 0 | 0 |
 | 390x844 | Yok | Görünür | 0 | 0 | 0 |
 | 768x1024 | Yok | Gizli | 0 | 0 | 0 |
 | 1024x768 | Yok | Gizli | 0 | 0 | 0 |
 | 1440x900 | Yok | Gizli | 0 | 0 | 0 |
 
-Korumalı sayfalar ayrıca 375 ve 1440 px’te tarandı: `/trips`, `/trips/:id`, `/trips/new`, `/onboarding`.
+Korumalı sayfalar 320, 360, 375 ve 1440 px'te tarandı: `/trips`, `/trips/:id`, `/trips/new`, `/onboarding`.
 Dosya: `docs/audit/auth-audit.json`.
+
+Mobil uçtan uca test `scripts/e2e_mobile.mjs` ile Chrome 375x667 emülasyonunda çalıştırıldı:
+kayıt, onboarding, yeni rota, offline plan üretimi, aktivite ekleme, onaylı silme ve yeniden hazırlama onayı.
+Dosya: `docs/audit/mobile-e2e.json`.
 
 ## 4. Erişilebilirlik kontrolü
 
@@ -124,6 +169,6 @@ npm audit --omit=dev --audit-level=high → 0 vulnerability
 
 ## 6. Sonuç
 
-Bu turda ürünü kıran P0 hata bulunmadı. Bulunan dört P1 hata; oturum limiti, mobil auth navigasyonu, bozuk onay karakteri ve auth posteri okunabilirliği idi. Hepsi düzeltildi ve test/audit ile doğrulandı.
+Bu turda ürünü kıran P0 hata bulunmadı. Bulunan sekiz P1 hata; oturum limiti, mobil auth navigasyonu, bozuk onay karakteri, auth posteri okunabilirliği, mobil çift aktif sekme, sıfır bütçe reddi, yeniden hazırlamada veri kaybı riski ve çıkışta yanlış yönlendirme idi. Hepsi düzeltildi ve test/audit ile doğrulandı.
 
 Kalan işler ürün kapsamına ait: harita/Places, sürükle-bırak, kısmi AI üretimi, deploy ve paylaşım. Bunlar gizlenmiyor; yol haritasında açıkça duruyor.

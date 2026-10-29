@@ -63,9 +63,12 @@ okunabilir. Sunumun tamamı 16:9 (13.333 x 7.5 inç) olarak hazırlanmıştır.
 Bu paket, mevcut MVP’yi anlatır. Aşağıdaki başlıklar bilinçli olarak sonraki tura bırakılmıştır:
 
 - Gerçek Google Places / Maps entegrasyonu ve harita pinleri
+- Yer arama API'sinin web arayüzüne bağlanması (API hazır, ekran yok)
+- Aktivite ve gezi başlığı/bütçesi için düzenleme ekranı (PATCH API hazır)
 - Sürükle-bırak aktivite sıralama
 - Kısmi gün / aktivite yeniden üretimi
 - Paylaşılabilir salt-okunur plan linki
+- PWA / çevrimdışı kabuk, bildirimler ve e-posta doğrulama
 - Bulut deploy ve demo verisi
 
 > Not: Hocanın ders materyali reposuna hiçbir commit veya PR gönderilmedi. Bu paket yalnızca

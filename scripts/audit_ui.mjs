@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs'
 
-const PORT = 9223
+const PORT = Number(process.env.CDP_PORT ?? 9223)
 const url = 'http://localhost:5180/'
 const out = 'docs/audit/ui-audit.json'
 
@@ -30,7 +30,9 @@ async function main() {
       errors.push({ type: 'exception', text: message.params.exceptionDetails?.text })
     }
     if (message.method === 'Log.entryAdded' && message.params.entry.level === 'error') {
-      errors.push({ type: 'log', text: message.params.entry.text })
+      const text = message.params.entry.text
+      // Misafir oturumda /api/auth/me 401 döner; bu beklenen oturum kontrolüdür.
+      if (!text.includes('401 (Unauthorized)')) errors.push({ type: 'log', text })
     }
     if (!message.id) return
     const waiter = pending.get(message.id)
@@ -49,8 +51,12 @@ async function main() {
   await send('Page.enable')
   await send('Runtime.enable')
   await send('Log.enable')
+  await send('Network.enable')
+  await send('Network.clearBrowserCookies')
 
   const widths = [
+    { width: 320, height: 568, mobile: true },
+    { width: 360, height: 640, mobile: true },
     { width: 375, height: 667, mobile: true },
     { width: 390, height: 844, mobile: true },
     { width: 768, height: 1024, mobile: true },

@@ -1,6 +1,178 @@
 {
-  "browser": "Chrome/156.0.8078.48",
+  "browser": "Chrome/156.0.8078.49",
   "results": [
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "mobile": true
+      },
+      "url": "http://localhost:5180/",
+      "innerWidth": 320,
+      "scrollWidth": 320,
+      "bodyScrollWidth": 320,
+      "horizontalOverflow": false,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 60.375,
+        "top": 0,
+        "right": 320,
+        "bottom": 60.375,
+        "left": 0
+      },
+      "heroTitle": {
+        "x": 35.59375,
+        "y": 136.953125,
+        "width": 248.8125,
+        "height": 113.25,
+        "top": 136.953125,
+        "right": 284.40625,
+        "bottom": 250.203125,
+        "left": 35.59375
+      },
+      "heroPhoto": {
+        "x": 34.322914123535156,
+        "y": 257.904296875,
+        "width": 251.35418701171875,
+        "height": 294.50390625,
+        "top": 257.904296875,
+        "right": 285.6771011352539,
+        "bottom": 552.408203125,
+        "left": 34.322914123535156
+      },
+      "bottomNav": {
+        "x": 0,
+        "y": 518,
+        "width": 320,
+        "height": 50,
+        "top": 518,
+        "right": 320,
+        "bottom": 568,
+        "left": 0
+      },
+      "bottomNavDisplay": "grid",
+      "images": [
+        {
+          "src": "/images/paris.jpg",
+          "loaded": true,
+          "alt": "Eyfel Kulesi ve Paris silüeti"
+        },
+        {
+          "src": "/images/street.jpg",
+          "loaded": true,
+          "alt": "Akşam ışığında Paris sokağı"
+        },
+        {
+          "src": "/images/istanbul.jpg",
+          "loaded": true,
+          "alt": "İstanbul şehir görünümü"
+        },
+        {
+          "src": "/images/paris.jpg",
+          "loaded": true,
+          "alt": "Paris şehir görünümü"
+        },
+        {
+          "src": "/images/rome.jpg",
+          "loaded": true,
+          "alt": "Roma şehir görünümü"
+        }
+      ],
+      "overflow": [],
+      "unlabeledButtons": [],
+      "missingAlt": [],
+      "inputsWithoutLabel": [],
+      "h1": "Bir şehir.Üç gün.",
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640,
+        "mobile": true
+      },
+      "url": "http://localhost:5180/",
+      "innerWidth": 360,
+      "scrollWidth": 360,
+      "bodyScrollWidth": 360,
+      "horizontalOverflow": false,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 360,
+        "height": 60.375,
+        "top": 0,
+        "right": 360,
+        "bottom": 60.375,
+        "left": 0
+      },
+      "heroTitle": {
+        "x": 35.59375,
+        "y": 136.953125,
+        "width": 288.8125,
+        "height": 127.4375,
+        "top": 136.953125,
+        "right": 324.40625,
+        "bottom": 264.390625,
+        "left": 35.59375
+      },
+      "heroPhoto": {
+        "x": 34.11860275268555,
+        "y": 271.9181823730469,
+        "width": 291.7628173828125,
+        "height": 341.8511047363281,
+        "top": 271.9181823730469,
+        "right": 325.88142013549805,
+        "bottom": 613.769287109375,
+        "left": 34.11860275268555
+      },
+      "bottomNav": {
+        "x": 0,
+        "y": 590,
+        "width": 360,
+        "height": 50,
+        "top": 590,
+        "right": 360,
+        "bottom": 640,
+        "left": 0
+      },
+      "bottomNavDisplay": "grid",
+      "images": [
+        {
+          "src": "/images/paris.jpg",
+          "loaded": true,
+          "alt": "Eyfel Kulesi ve Paris silüeti"
+        },
+        {
+          "src": "/images/street.jpg",
+          "loaded": true,
+          "alt": "Akşam ışığında Paris sokağı"
+        },
+        {
+          "src": "/images/istanbul.jpg",
+          "loaded": true,
+          "alt": "İstanbul şehir görünümü"
+        },
+        {
+          "src": "/images/paris.jpg",
+          "loaded": true,
+          "alt": "Paris şehir görünümü"
+        },
+        {
+          "src": "/images/rome.jpg",
+          "loaded": true,
+          "alt": "Roma şehir görünümü"
+        }
+      ],
+      "overflow": [],
+      "unlabeledButtons": [],
+      "missingAlt": [],
+      "inputsWithoutLabel": [],
+      "h1": "Bir şehir.Üç gün.",
+      "errors": []
+    },
     {
       "viewport": {
         "width": 375,
@@ -16,38 +188,38 @@
         "x": 0,
         "y": 0,
         "width": 375,
-        "height": 56,
+        "height": 60.375,
         "top": 0,
         "right": 375,
-        "bottom": 56,
+        "bottom": 60.375,
         "left": 0
       },
       "heroTitle": {
         "x": 35.59375,
-        "y": 132.578125,
+        "y": 136.953125,
         "width": 303.8125,
         "height": 132.75,
-        "top": 132.578125,
+        "top": 136.953125,
         "right": 339.40625,
-        "bottom": 265.328125,
+        "bottom": 269.703125,
         "left": 35.59375
       },
       "heroPhoto": {
         "x": 34.04198455810547,
-        "y": 272.7905578613281,
+        "y": 277.1655578613281,
         "width": 306.916015625,
         "height": 359.6064147949219,
-        "top": 272.7905578613281,
+        "top": 277.1655578613281,
         "right": 340.95800018310547,
-        "bottom": 632.39697265625,
+        "bottom": 636.77197265625,
         "left": 34.04198455810547
       },
       "bottomNav": {
         "x": 0,
-        "y": 628.75,
+        "y": 617,
         "width": 375,
-        "height": 38.25,
-        "top": 628.75,
+        "height": 50,
+        "top": 617,
         "right": 375,
         "bottom": 667,
         "left": 0
@@ -102,38 +274,38 @@
         "x": 0,
         "y": 0,
         "width": 390,
-        "height": 56,
+        "height": 60.375,
         "top": 0,
         "right": 390,
-        "bottom": 56,
+        "bottom": 60.375,
         "left": 0
       },
       "heroTitle": {
         "x": 35.59375,
-        "y": 132.578125,
+        "y": 136.953125,
         "width": 318.8125,
         "height": 138.03125,
-        "top": 132.578125,
+        "top": 136.953125,
         "right": 354.40625,
-        "bottom": 270.609375,
+        "bottom": 274.984375,
         "left": 35.59375
       },
       "heroPhoto": {
         "x": 33.96536636352539,
-        "y": 278.0066833496094,
+        "y": 282.3816833496094,
         "width": 322.06927490234375,
         "height": 377.3616027832031,
-        "top": 278.0066833496094,
+        "top": 282.3816833496094,
         "right": 356.03464126586914,
-        "bottom": 655.3682861328125,
+        "bottom": 659.7432861328125,
         "left": 33.96536636352539
       },
       "bottomNav": {
         "x": 0,
-        "y": 805.75,
+        "y": 794,
         "width": 390,
-        "height": 38.25,
-        "top": 805.75,
+        "height": 50,
+        "top": 794,
         "right": 390,
         "bottom": 844,
         "left": 0

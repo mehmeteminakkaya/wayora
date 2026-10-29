@@ -1,0 +1,38 @@
+{
+  "browser": "Chrome/156.0.8078.49",
+  "email": "mobile-ui-1793279619088@example.com",
+  "newTripActive": [
+    "Planlama"
+  ],
+  "tripSummary": {
+    "url": "/trips/0f6e8840-a253-49d3-a711-2b9bb62ce4da",
+    "title": "Roma rotası",
+    "days": 3,
+    "activities": 9,
+    "budget": "€290",
+    "bottomNav": "grid",
+    "activeNav": [
+      "Rotasyon"
+    ]
+  },
+  "regenerateConfirm": "MEVCUT PLAN SİLİNİP YENİDEN HAZIRLANACAK. DEVAM?\nYENİDEN HAZIRLA\nVAZGEÇ",
+  "afterAdd": {
+    "activities": 10,
+    "body": true
+  },
+  "final": {
+    "url": "/trips/0f6e8840-a253-49d3-a711-2b9bb62ce4da",
+    "activities": 9,
+    "horizontalOverflow": false,
+    "bottomNav": "grid"
+  },
+  "logoutState": {
+    "path": "/",
+    "loginLink": true
+  },
+  "loginState": {
+    "path": "/trips",
+    "mobileNav": true
+  },
+  "errors": []
+}

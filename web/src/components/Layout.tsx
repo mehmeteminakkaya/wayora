@@ -11,10 +11,13 @@ export function Layout() {
   const navigate = useNavigate()
   const location = useLocation()
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register'
+  const isNewTrip = location.pathname === '/trips/new'
+  const isTripsSection =
+    location.pathname === '/trips' || (location.pathname.startsWith('/trips/') && !isNewTrip)
 
   async function handleLogout() {
-    await logout()
     navigate('/')
+    await logout()
   }
 
   return (
@@ -69,12 +72,20 @@ export function Layout() {
 
       {!isAuthPage && user ? (
         <nav className="mobile-nav" aria-label="Mobil menü">
-          <NavLink to="/trips" className={mobileClass}>
+          <Link
+            to="/trips"
+            className={isTripsSection ? 'is-active' : undefined}
+            aria-current={isTripsSection ? 'page' : undefined}
+          >
             Rotasyon
-          </NavLink>
-          <NavLink to="/trips/new" className={mobileClass}>
+          </Link>
+          <Link
+            to="/trips/new"
+            className={isNewTrip ? 'is-active' : undefined}
+            aria-current={isNewTrip ? 'page' : undefined}
+          >
             Planlama
-          </NavLink>
+          </Link>
           <NavLink to="/onboarding" className={mobileClass}>
             Kurulum
           </NavLink>

@@ -138,6 +138,7 @@ export function TripDetailPage() {
   const [openDayId, setOpenDayId] = useState<string | null>(null)
   const [confirmTripDelete, setConfirmTripDelete] = useState(false)
   const [deletingTrip, setDeletingTrip] = useState(false)
+  const [confirmRegenerate, setConfirmRegenerate] = useState(false)
   const [confirmActivityId, setConfirmActivityId] = useState<string | null>(null)
 
   useEffect(() => {
@@ -162,6 +163,11 @@ export function TripDetailPage() {
 
   async function handleGenerate() {
     if (!trip) return
+    if (hasPlan && !confirmRegenerate) {
+      setConfirmRegenerate(true)
+      return
+    }
+    setConfirmRegenerate(false)
     setGenerating(true)
     setError(null)
     setPlanNotice(null)
@@ -289,19 +295,41 @@ export function TripDetailPage() {
           {trip.notes && <p className="trip-notes">{trip.notes}</p>}
 
           <div className="trip-actions">
-            <button
-              className="button"
-              type="button"
-              onClick={handleGenerate}
-              disabled={generating}
-              aria-busy={generating}
-            >
-              {generating
-                ? 'Plan hazırlanıyor…'
-                : hasPlan
-                  ? 'Planı yeniden hazırla'
-                  : 'Planı hazırla'}
-            </button>
+            {confirmRegenerate && hasPlan ? (
+              <div className="inline-confirm">
+                <span>Mevcut plan silinip yeniden hazırlanacak. Devam?</span>
+                <button
+                  className="button danger small"
+                  type="button"
+                  onClick={handleGenerate}
+                  disabled={generating}
+                  aria-busy={generating}
+                >
+                  {generating ? 'Hazırlanıyor…' : 'Yeniden hazırla'}
+                </button>
+                <button
+                  className="button ghost small"
+                  type="button"
+                  onClick={() => setConfirmRegenerate(false)}
+                >
+                  Vazgeç
+                </button>
+              </div>
+            ) : (
+              <button
+                className="button"
+                type="button"
+                onClick={handleGenerate}
+                disabled={generating}
+                aria-busy={generating}
+              >
+                {generating
+                  ? 'Plan hazırlanıyor…'
+                  : hasPlan
+                    ? 'Planı yeniden hazırla'
+                    : 'Planı hazırla'}
+              </button>
+            )}
 
             {confirmTripDelete ? (
               <div className="inline-confirm">

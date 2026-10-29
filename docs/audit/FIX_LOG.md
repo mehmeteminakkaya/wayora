@@ -16,6 +16,12 @@
 | 10 | `docs/audit/ui-audit.json` | 5 viewport otomatik UI taraması | Responsive/erişilebilirlik kanıtı | 0 taşma, 0 kırık görsel |
 | 11 | `docs/audit/auth-audit.json` | 4 korumalı sayfa x 2 viewport | Auth akışı kanıtı | 0 hata |
 | 12 | `docs/Wayora-*.docx`, `docs/Wayora-Sunum.pptx` | Rapor, proje yönetimi, user story ve sunum üretildi | Teslim paketi | python-docx/pptx yapı kontrolü |
+| 13 | `web/src/components/Layout.tsx` | Mobil Rotasyon/Planlama sekmeleri path'e göre hesaplandı | `/trips/new` ekranında iki sekme birden aktif görünüyordu | `e2e_mobile.mjs`: Planlama / Rotasyon |
+| 14 | `web/src/pages/TripDetailPage.tsx` | Planı yeniden hazırlama için satır içi onay eklendi | Yeniden üretim elle eklenen aktiviteleri siliyordu | Mobil E2E onay + Vazgeç |
+| 15 | `api/src/routes/trips.ts` | Bütçe doğrulaması `.nonnegative()` yapıldı | Form 0 kabul ederken API reddediyordu | API E2E `zeroBudget: 201` |
+| 16 | `web/index.html`, `web/src/index.css` | `viewport-fit=cover`, safe-area, 44/48 px dokunma hedefleri | Mobil çentik ve küçük dokunma alanları | 320/360 px taraması, 0 taşma |
+| 17 | `scripts/e2e_api.mjs`, `scripts/e2e_mobile.mjs` | Uçtan uca API + mobil UI testleri eklendi | Akış kanıtı | API 24/24, mobil UI 0 hata |
+| 18 | `web/src/components/Layout.tsx` | Çıkışta önce ana sayfaya geçiş, sonra oturum kapatma | Çıkış korumalı sayfadan `/login`'e atıyordu | Mobil E2E çıkış + tekrar giriş |
 
 ## Komut çıktısı
 
@@ -29,9 +35,10 @@ npm audit --omit=dev --audit-level=high → 0 vulnerability
 
 ## Açık kalanlar
 
-- Gerçek Google Places/Maps entegrasyonu
+- Gerçek Google Places/Maps entegrasyonu ve harita pinleri
+- Yer arama API'sinin web arayüzüne bağlanması
 - Sürükle-bırak aktivite sıralama
+- Aktivite ve gezi başlığı/bütçesi için düzenleme ekranı (PATCH API var)
 - Kısmi gün/aktivite AI üretimi
-- Bulut deploy
-- Paylaşılabilir salt-okunur link
+- Bulut deploy, paylaşılabilir link, PWA
 - PDF çıktısı (Word/PPTX hazır)

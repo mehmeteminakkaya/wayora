@@ -3,6 +3,42 @@
     "page": "/trips",
     "name": "Rotalar",
     "viewport": {
+      "width": 320,
+      "height": 568,
+      "mobile": true
+    },
+    "url": "http://localhost:5180/trips",
+    "scrollWidth": 320,
+    "horizontalOverflow": false,
+    "bottomNav": "grid",
+    "imagesBroken": [],
+    "unlabeledButtons": 0,
+    "overflow": [],
+    "h1": "Rotaların",
+    "errors": []
+  },
+  {
+    "page": "/trips",
+    "name": "Rotalar",
+    "viewport": {
+      "width": 360,
+      "height": 640,
+      "mobile": true
+    },
+    "url": "http://localhost:5180/trips",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "bottomNav": "grid",
+    "imagesBroken": [],
+    "unlabeledButtons": 0,
+    "overflow": [],
+    "h1": "Rotaların",
+    "errors": []
+  },
+  {
+    "page": "/trips",
+    "name": "Rotalar",
+    "viewport": {
       "width": 375,
       "height": 667,
       "mobile": true
@@ -33,6 +69,42 @@
     "unlabeledButtons": 0,
     "overflow": [],
     "h1": "Rotaların",
+    "errors": []
+  },
+  {
+    "page": "/trips/83b5e0bb-92ca-4038-8336-5294f1d2b18d",
+    "name": "Plan detayı",
+    "viewport": {
+      "width": 320,
+      "height": 568,
+      "mobile": true
+    },
+    "url": "http://localhost:5180/trips/83b5e0bb-92ca-4038-8336-5294f1d2b18d",
+    "scrollWidth": 320,
+    "horizontalOverflow": false,
+    "bottomNav": "grid",
+    "imagesBroken": [],
+    "unlabeledButtons": 0,
+    "overflow": [],
+    "h1": "Paris test",
+    "errors": []
+  },
+  {
+    "page": "/trips/83b5e0bb-92ca-4038-8336-5294f1d2b18d",
+    "name": "Plan detayı",
+    "viewport": {
+      "width": 360,
+      "height": 640,
+      "mobile": true
+    },
+    "url": "http://localhost:5180/trips/83b5e0bb-92ca-4038-8336-5294f1d2b18d",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "bottomNav": "grid",
+    "imagesBroken": [],
+    "unlabeledButtons": 0,
+    "overflow": [],
+    "h1": "Paris test",
     "errors": []
   },
   {
@@ -75,6 +147,42 @@
     "page": "/trips/new",
     "name": "Yeni rota",
     "viewport": {
+      "width": 320,
+      "height": 568,
+      "mobile": true
+    },
+    "url": "http://localhost:5180/trips/new",
+    "scrollWidth": 320,
+    "horizontalOverflow": false,
+    "bottomNav": "grid",
+    "imagesBroken": [],
+    "unlabeledButtons": 0,
+    "overflow": [],
+    "h1": "Nereye, ne zaman?",
+    "errors": []
+  },
+  {
+    "page": "/trips/new",
+    "name": "Yeni rota",
+    "viewport": {
+      "width": 360,
+      "height": 640,
+      "mobile": true
+    },
+    "url": "http://localhost:5180/trips/new",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "bottomNav": "grid",
+    "imagesBroken": [],
+    "unlabeledButtons": 0,
+    "overflow": [],
+    "h1": "Nereye, ne zaman?",
+    "errors": []
+  },
+  {
+    "page": "/trips/new",
+    "name": "Yeni rota",
+    "viewport": {
       "width": 375,
       "height": 667,
       "mobile": true
@@ -105,6 +213,42 @@
     "unlabeledButtons": 0,
     "overflow": [],
     "h1": "Nereye, ne zaman?",
+    "errors": []
+  },
+  {
+    "page": "/onboarding",
+    "name": "Tercihler",
+    "viewport": {
+      "width": 320,
+      "height": 568,
+      "mobile": true
+    },
+    "url": "http://localhost:5180/onboarding",
+    "scrollWidth": 320,
+    "horizontalOverflow": false,
+    "bottomNav": "grid",
+    "imagesBroken": [],
+    "unlabeledButtons": 0,
+    "overflow": [],
+    "h1": "Nasıl gezersin?",
+    "errors": []
+  },
+  {
+    "page": "/onboarding",
+    "name": "Tercihler",
+    "viewport": {
+      "width": 360,
+      "height": 640,
+      "mobile": true
+    },
+    "url": "http://localhost:5180/onboarding",
+    "scrollWidth": 360,
+    "horizontalOverflow": false,
+    "bottomNav": "grid",
+    "imagesBroken": [],
+    "unlabeledButtons": 0,
+    "overflow": [],
+    "h1": "Nasıl gezersin?",
     "errors": []
   },
   {

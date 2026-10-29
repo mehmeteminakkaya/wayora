@@ -78,7 +78,7 @@ export function NewTripPage() {
     ),
   ]
 
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(destinationParam ? 2 : 1)
   const [destination, setDestination] = useState(destinationParam)
   const [startDate, setStartDate] = useState(todayIso(7))
   const [endDate, setEndDate] = useState(todayIso(9))
@@ -137,6 +137,12 @@ export function NewTripPage() {
       if (value > 1_000_000) return 'Bütçe en fazla 1.000.000 olabilir.'
     }
     return null
+  }
+
+  function selectCity(city: string) {
+    setDestination(city)
+    setError(null)
+    if (step === 1) setStep(2)
   }
 
   function goNext() {
@@ -229,8 +235,35 @@ export function NewTripPage() {
         <form className="form" onSubmit={handleSubmit} noValidate>
           {step === 1 && (
             <div className="wizard-step is-active">
+              <div className="field">
+                <span className="field-label">Popüler şehirler</span>
+                <div
+                  className="chip-row"
+                  role="group"
+                  aria-label="Popüler şehirler"
+                  style={{ flexWrap: 'wrap', overflow: 'visible' }}
+                >
+                  {CITIES.map((city) => {
+                    const selected =
+                      destination.trim().toLocaleLowerCase('tr-TR') ===
+                      city.toLocaleLowerCase('tr-TR')
+                    return (
+                      <button
+                        key={city}
+                        type="button"
+                        className="chip"
+                        aria-pressed={selected}
+                        onClick={() => selectCity(city)}
+                      >
+                        {city}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
               <label className="field">
-                <span>Şehir</span>
+                <span>Ya da başka bir şehir yaz</span>
                 <input
                   className="input"
                   type="text"
@@ -239,10 +272,9 @@ export function NewTripPage() {
                   required
                   minLength={2}
                   maxLength={120}
-                  autoFocus
                   value={destination}
                   onChange={(event) => setDestination(event.target.value)}
-                  placeholder="Örn. Paris"
+                  placeholder="Örn. Nice"
                   aria-describedby="destination-hint"
                 />
                 <datalist id="sehirler">
@@ -251,8 +283,8 @@ export function NewTripPage() {
                   ))}
                 </datalist>
                 <span className="helper" id="destination-hint">
-                  İstanbul, Paris, Roma, Barselona, Londra, Amsterdam, Berlin, Prag, Viyana ve
-                  Lizbon. Diğer şehirler genel şablonla planlanır.
+                  Katalogdaki 10 şehirde plan daha isabetli hazırlanır. Diğer şehirler genel
+                  şablonla planlanır.
                 </span>
               </label>
 

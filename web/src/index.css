@@ -479,6 +479,9 @@ p {
   display: grid;
   gap: 12px;
   grid-template-columns: 1fr 1fr;
+  /* Sütunlar eşit yüksekliğe gerilmesin: yardımcı metinli alan, yanındaki
+     select/input'u aşağı kaydırıp uzatıyordu (Adım 3 bütçe/para birimi). */
+  align-items: start;
 }
 
 .form-actions {
@@ -1564,6 +1567,11 @@ p {
   max-width: 720px;
 }
 
+/* Adım açıklaması ile form arasında nefes payı (intro doğrudan forma yapışıyordu). */
+.wizard > .helper {
+  margin-bottom: 16px;
+}
+
 .wizard-progress {
   display: flex;
   align-items: center;
@@ -1583,7 +1591,8 @@ p {
 }
 
 .wizard-step.is-active {
-  display: block;
+  display: grid;
+  gap: 16px;
   animation: step-in var(--duration-base) var(--ease-standard);
 }
 

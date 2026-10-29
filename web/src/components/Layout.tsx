@@ -2,6 +2,7 @@ import { Compass, Map, Plus, UserRound } from 'lucide-react'
 import { useEffect } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigationType } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import { WayoraLogo } from './WayoraLogo'
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
   isActive ? 'topbar-link is-active' : 'topbar-link'
@@ -37,7 +38,7 @@ export function Layout() {
       <header className="topbar">
         <div className="topbar-inner">
           <Link to="/" className="logo" aria-label="Wayora ana sayfa">
-            WAYORA
+            <WayoraLogo />
           </Link>
 
           {!isAuthPage && (

@@ -122,7 +122,73 @@ p {
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   letter-spacing: -0.045em;
+}
+
+.wayora-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.wayora-mark {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.wayora-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wayora-mark-fallback {
+  display: inline-flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--surface);
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.wayora-mark.is-ready .wayora-mark-fallback {
+  display: none;
+}
+
+.wayora-word {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+@media (max-width: 720px) {
+  .logo {
+    gap: 7px;
+  }
+
+  .wayora-logo {
+    gap: 7px;
+  }
+
+  .wayora-word {
+    font-size: 16px;
+  }
 }
 
 .topbar-login {

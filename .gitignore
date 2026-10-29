@@ -21,5 +21,8 @@ api/src/generated/
 .DS_Store
 Thumbs.db
 
-# Python araçlarý
+# Python araï¿½larï¿½
 __pycache__/
+.vercel
+.env.local
+.env.*.local

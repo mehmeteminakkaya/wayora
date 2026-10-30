@@ -406,8 +406,14 @@ export const api = {
       body: JSON.stringify(input),
     }),
 
-  getSocialMatches: () =>
-    request<{ matches: SocialMatch[]; total?: number; reason?: string }>('/api/social/matches'),
+  getSocialMatches: (offset = 0, limit = 20) =>
+    request<{
+      matches: SocialMatch[]
+      total?: number
+      offset?: number
+      limit?: number
+      reason?: string
+    }>(`/api/social/matches?offset=${offset}&limit=${limit}`),
 
   sendSocialRequest: (recipientId: string, message?: string) =>
     request<{ connection: SocialConnection }>('/api/social/requests', {

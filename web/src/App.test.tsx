@@ -112,8 +112,9 @@ describe('App', () => {
       if (url.endsWith('/api/social/connections')) {
         return jsonResponse({ incoming: [], outgoing: [], accepted: [] })
       }
-      if (url.endsWith('/api/social/matches')) {
+      if (url.includes('/api/social/matches')) {
         return jsonResponse({
+          total: 24,
           matches: [
             {
               userId: 'u2',
@@ -149,5 +150,6 @@ describe('App', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Tümü/ }))
     expect(screen.getByRole('button', { name: /Ortak ilgi/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Daha fazla eşleşme/ })).toBeInTheDocument()
   })
 })

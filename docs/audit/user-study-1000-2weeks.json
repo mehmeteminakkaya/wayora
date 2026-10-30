@@ -1,0 +1,249 @@
+{
+  "note": "1000 kişi x 14 gün deterministik kullanım simülasyonu. Gerçek kullanıcı çalışması değildir; bulgular önceliklendirme ve demo kararları içindir.",
+  "generatedAt": "2026-10-30T01:48:11.749Z",
+  "period": {
+    "days": 14,
+    "start": "2026-10-31",
+    "end": "2026-11-13"
+  },
+  "participants": {
+    "total": 1000,
+    "mobile": 700,
+    "desktop": 200,
+    "tablet": 100,
+    "accessibilityNeeds": 167,
+    "firstTime": 800
+  },
+  "totals": {
+    "participants": 1000,
+    "days": 14,
+    "sessions": 6644,
+    "activeUsers": 1000,
+    "reports": 1319,
+    "averageCsat": 4.01,
+    "finalNps": 31
+  },
+  "weekly": [
+    {
+      "week": 1,
+      "activeUsers": 1000,
+      "days": 7,
+      "sessions": 3428,
+      "taskCompletionRate": 68.4,
+      "csat": 3.82,
+      "nps": 17,
+      "reports": 835.8,
+      "mobileShare": 70,
+      "accessibilityShare": 18
+    },
+    {
+      "week": 2,
+      "activeUsers": 946,
+      "days": 7,
+      "sessions": 3216,
+      "taskCompletionRate": 77.8,
+      "csat": 4.21,
+      "nps": 31,
+      "reports": 483.4,
+      "mobileShare": 70,
+      "accessibilityShare": 18
+    }
+  ],
+  "positiveThemes": [
+    {
+      "theme": "Mobil arayüzün sakin ve okunabilir olması",
+      "mentions": 612,
+      "share": 61.2,
+      "sample": "Harita, gün şeridi ve tipografi telefonda beklediğimden çok daha net."
+    },
+    {
+      "theme": "Türkçe ürün dili ve net boş durumlar",
+      "mentions": 488,
+      "share": 48.8,
+      "sample": "Ne yapacağımı anlamak için İngilizce düşünmek zorunda kalmadım."
+    },
+    {
+      "theme": "Yol Arkadaşları fikri ve ortak ilgi gerekçeleri",
+      "mentions": 391,
+      "share": 39.1,
+      "sample": "Sadece isim listesi değil; neden eşleştiğimizi de gösteriyor."
+    },
+    {
+      "theme": "Filtreler ve “20 / 48 eşleşme” şeffaflığı",
+      "mentions": 286,
+      "share": 28.6,
+      "sample": "Tüm eşleşmeleri göremediğimde eksik olduğunu artık biliyorum."
+    },
+    {
+      "theme": "Katalogun 14 şehir/140 deneyim olması",
+      "mentions": 204,
+      "share": 20.4,
+      "sample": "Madrid, Floransa ve Atina’nın da gelmesi keşfetmeyi ciddi biçimde büyüttü."
+    }
+  ],
+  "negativeThemes": [
+    {
+      "id": "notifications",
+      "theme": "Mesaj ve istekler için bildirim/e-posta yok",
+      "severity": "medium",
+      "mentions": 310,
+      "share": 31,
+      "action": "Sonraki faza bırakıldı; gerçek zamanlı bildirim gerekli.",
+      "status": "open",
+      "engineerFix": false
+    },
+    {
+      "id": "ai-wait",
+      "theme": "AI plan üretimi beklerken ilerleme hissi zayıf",
+      "severity": "medium",
+      "mentions": 264,
+      "share": 26.4,
+      "action": "Offline fallback var; adım adım üretim durumu sonraki faza bırakıldı.",
+      "status": "open",
+      "engineerFix": false
+    },
+    {
+      "id": "trust",
+      "theme": "Sosyal eşleşmede kimlik doğrulama ve moderasyon eksik",
+      "severity": "high",
+      "mentions": 221,
+      "share": 22.1,
+      "action": "Launch öncesi zorunlu; demo kapsamında güvenlik uyarıları var.",
+      "status": "open",
+      "engineerFix": false
+    },
+    {
+      "id": "empty-matches",
+      "theme": "Eşleşme ekranı neden boş olduğunu anlatmıyordu",
+      "severity": "high",
+      "mentions": 218,
+      "share": 21.8,
+      "action": "Boş durumda profil görünürlüğü, rota ve kesişen tarih adımları eklendi.",
+      "status": "fixed",
+      "engineerFix": true
+    },
+    {
+      "id": "only-20-matches",
+      "theme": "Yalnızca ilk 20 eşleşme görünüyor, devamına ulaşılamıyordu",
+      "severity": "high",
+      "mentions": 196,
+      "share": 19.6,
+      "action": "Sunucu offset/limit desteği ve “Daha fazla eşleşme göster” eklendi.",
+      "status": "fixed",
+      "engineerFix": true
+    },
+    {
+      "id": "trip-density",
+      "theme": "Mobil rota detayı ilk bakışta yoğun geliyor",
+      "severity": "medium",
+      "mentions": 187,
+      "share": 18.7,
+      "action": "Kademeli özet/aksiyon düzeni sonraki tasarım turuna bırakıldı.",
+      "status": "open",
+      "engineerFix": false
+    },
+    {
+      "id": "catalog-counts",
+      "theme": "Landing ve Keşfet farklı katalog sayıları gösteriyordu",
+      "severity": "medium",
+      "mentions": 165,
+      "share": 16.5,
+      "action": "Katalog 14 şehir/140 deneyim olarak hizalandı; sayaçlar tek kaynağa bağlandı.",
+      "status": "fixed",
+      "engineerFix": true
+    },
+    {
+      "id": "live-data-gaps",
+      "theme": "Canlı etkinlik/uçuş verisi her şehirde ve tarihte dolu değil",
+      "severity": "low",
+      "mentions": 154,
+      "share": 15.4,
+      "action": "Dış sağlayıcı kapsamı; sahte veri üretilmemesi korunuyor.",
+      "status": "open",
+      "engineerFix": false
+    },
+    {
+      "id": "touch-targets",
+      "theme": "Bazı mobil kontroller 44px altındaydı",
+      "severity": "medium",
+      "mentions": 142,
+      "share": 14.2,
+      "action": "Segment, select, logo, section linkleri ve filtreler 44px hedefe çıkarıldı.",
+      "status": "fixed",
+      "engineerFix": true
+    },
+    {
+      "id": "demo-confusion",
+      "theme": "Kullanıcı kendi hesabıyla girince demo profillerini göremedi",
+      "severity": "high",
+      "mentions": 133,
+      "share": 13.3,
+      "action": "Canlı demo hesabı, 75 profil ve net demo akışı eklendi.",
+      "status": "fixed",
+      "engineerFix": true
+    }
+  ],
+  "cohortBreakdown": [
+    {
+      "cohort": "Mobil, ilk kez gelen",
+      "count": 420,
+      "completion": 71.6,
+      "csat": 4.05,
+      "mainNeed": "Boş durumda sıradaki adımı net görmek."
+    },
+    {
+      "cohort": "Plan odaklı gezgin",
+      "count": 400,
+      "completion": 73.4,
+      "csat": 4.18,
+      "mainNeed": "AI üretimi sırasında ilerleme ve güven."
+    },
+    {
+      "cohort": "Sosyal keşif odaklı",
+      "count": 200,
+      "completion": 58.9,
+      "csat": 3.91,
+      "mainNeed": "Daha fazla eşleşme, güvenlik ve bildirim."
+    },
+    {
+      "cohort": "Erişilebilirlik ihtiyacı olan",
+      "count": 180,
+      "completion": 69.8,
+      "csat": 4.02,
+      "mainNeed": "44px hedefler, odak ve kontrast."
+    }
+  ],
+  "engineeringSprint": [
+    {
+      "fix": "Eşleşme boş durumu neden-sonuç rehberi",
+      "impact": "Boş ekranı gören kullanıcıların sonraki adımı bulma oranı +19 puan.",
+      "status": "deployed"
+    },
+    {
+      "fix": "Offset/limit ve “Daha fazla eşleşme göster”",
+      "impact": "İlk 20 sınırına takılma bildirimleri ikinci haftada sıfıra indi.",
+      "status": "deployed"
+    },
+    {
+      "fix": "44px dokunma hedefleri ve katalog sayaç hizalaması",
+      "impact": "Mobil audit 22/22 temiz; yatay taşma ve kısa hedef yok.",
+      "status": "deployed"
+    },
+    {
+      "fix": "Canlı demo hesabı ve 75 profil",
+      "impact": "Demo sırasında boş eşleşme görme şikâyeti azaldı.",
+      "status": "deployed"
+    }
+  ],
+  "remainingWork": [
+    "Gerçek kullanıcı doğrulaması, moderasyon kuyruğu ve rapor SLA’sı.",
+    "Bildirim/e-posta ve gerçek zamanlı sohbet.",
+    "AI üretiminde adım adım ilerleme ve tahmini süre.",
+    "Mobil rota detayında kademeli özet ve daha az ilk ekran yoğunluğu.",
+    "Gerçek 20-30 kişilik kullanılabilirlik testi."
+  ],
+  "audit": {
+    "checks": 22,
+    "issues": 0
+  }
+}

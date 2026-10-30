@@ -437,6 +437,26 @@
   font-size: 14px;
 }
 
+.social-empty-steps {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.social-load-more {
+  display: flex;
+  justify-content: center;
+  margin: 18px 0 4px;
+}
+
+.social-load-more .btn {
+  min-width: 240px;
+}
+
 .connection-list {
   display: grid;
   gap: 8px;

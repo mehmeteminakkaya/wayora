@@ -93,6 +93,7 @@ export function HitchhikerPage() {
   const [matchFilter, setMatchFilter] = useState<MatchFilter>('all')
   const [loading, setLoading] = useState(true)
   const [matchesLoading, setMatchesLoading] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [editing, setEditing] = useState(false)
@@ -142,7 +143,7 @@ export function HitchhikerPage() {
     // oxlint-disable-next-line react/set-state-in-effect
     setMatchesLoading(true)
     api
-      .getSocialMatches()
+      .getSocialMatches(0, 20)
       .then((result) => {
         if (!active) return
         setMatches(result.matches)
@@ -184,6 +185,24 @@ export function HitchhikerPage() {
   async function reloadConnections() {
     const result = await api.getSocialConnections()
     setConnections(result)
+  }
+
+  async function loadMoreMatches() {
+    if (loadingMore || matches.length >= matchTotal) return
+    setLoadingMore(true)
+    setError(null)
+    try {
+      const result = await api.getSocialMatches(matches.length, 20)
+      setMatches((current) => {
+        const seen = new Set(current.map((match) => match.userId))
+        return [...current, ...result.matches.filter((match) => !seen.has(match.userId))]
+      })
+      setMatchTotal(result.total ?? matches.length + result.matches.length)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Daha fazla eşleşme yüklenemedi.')
+    } finally {
+      setLoadingMore(false)
+    }
   }
 
   async function handleSaveProfile(event: FormEvent<HTMLFormElement>) {
@@ -293,7 +312,7 @@ export function HitchhikerPage() {
       setNotice(`${chatConnection.other.name} engellendi.`)
       await reloadConnections()
       if (profile?.visible) {
-        const result = await api.getSocialMatches()
+        const result = await api.getSocialMatches(0, 20)
         setMatches(result.matches)
         setMatchTotal(result.total ?? result.matches.length)
       }
@@ -571,13 +590,27 @@ export function HitchhikerPage() {
                 <div className="social-empty">
                   <UserRound size={26} strokeWidth={1.5} aria-hidden="true" />
                   <h3>Henüz eşleşme yok.</h3>
-                  <p>
-                    Profilin görünür olmalı ve en az bir rota tarihin olmalı. Yeni bir rota
-                    oluşturduğunda aynı tarihlerdeki gezginler burada görünür.
-                  </p>
-                  <Link className="btn btn-secondary btn-sm" to="/trips/new">
-                    Yeni rota oluştur
-                  </Link>
+                  <p>Eşleşmeler için üç şeyin aynı anda hazır olması gerekir:</p>
+                  <ul className="social-empty-steps">
+                    <li>Profilin görünür olsun.</li>
+                    <li>Bir rota tarihin olsun.</li>
+                    <li>Aynı şehirde, kesişen tarihlerde başka bir gezgin olsun.</li>
+                  </ul>
+                  <div className="form-actions">
+                    <Link className="btn btn-secondary btn-sm" to="/trips/new">
+                      Yeni rota oluştur
+                    </Link>
+                    <Link className="btn btn-ghost btn-sm" to="/trips">
+                      Rotalarımı aç
+                    </Link>
+                    <button
+                      className="section-link"
+                      type="button"
+                      onClick={() => setEditing(true)}
+                    >
+                      Profili düzenle
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <>
@@ -678,6 +711,20 @@ export function HitchhikerPage() {
                       </div>
                     </article>
                       ))}
+                    </div>
+                  )}
+                  {matches.length < matchTotal && (
+                    <div className="social-load-more">
+                      <button
+                        className="btn btn-secondary"
+                        type="button"
+                        onClick={() => void loadMoreMatches()}
+                        disabled={loadingMore}
+                      >
+                        {loadingMore
+                          ? 'Yükleniyor...'
+                          : `Daha fazla eşleşme göster (${matchTotal - matches.length})`}
+                      </button>
                     </div>
                   )}
                 </>

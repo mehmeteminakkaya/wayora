@@ -50,6 +50,11 @@ const blockSchema = z.object({
   userId: z.string().uuid(),
 })
 
+const matchesQuerySchema = z.object({
+  offset: z.coerce.number().int().min(0).default(0),
+  limit: z.coerce.number().int().min(1).max(40).default(20),
+})
+
 function tripToSocial(trip: {
   id: string
   destination: string
@@ -214,6 +219,7 @@ export function socialRouter({ db, config }: { db: Db; config: Config }) {
 
   router.get('/matches', async (req, res) => {
     const userId = req.userId!
+    const query = parseOrThrow(matchesQuerySchema, req.query)
     const profile = await db.travelerProfile.findUnique({ where: { userId } })
     if (!profile || !profile.visible) {
       return res.json({ matches: [], reason: 'PROFILE_NOT_VISIBLE' })
@@ -284,7 +290,7 @@ export function socialRouter({ db, config }: { db: Db; config: Config }) {
       .sort((a, b) => b.score - a.score)
     const total = rankedMatches.length
     const matches = rankedMatches
-      .slice(0, 20)
+      .slice(query.offset, query.offset + query.limit)
       .map((match) => ({
         userId: match.candidate.userId,
         displayName: match.candidate.displayName,
@@ -304,7 +310,7 @@ export function socialRouter({ db, config }: { db: Db; config: Config }) {
         reasons: match.reasons,
       }))
 
-    res.json({ matches, total })
+    res.json({ matches, total, offset: query.offset, limit: query.limit })
   })
 
   router.get('/connections', async (req, res) => {

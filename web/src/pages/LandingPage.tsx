@@ -4,6 +4,8 @@ import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { Photo } from '../components/Photo'
+import { useLang } from '../i18n.tsx'
+import type { TranslationKey } from '../i18n.tsx'
 import { cityPhoto, cityPhotoLabel, citySlug } from '../lib/photos'
 
 const CITIES = [
@@ -23,39 +25,52 @@ const CITIES = [
   { name: 'Atina', country: 'Yunanistan' },
 ]
 
-const STEPS = [
-  {
-    title: 'Şehri seç',
-    text: 'Berlin, Roma, Lizbon, Madrid ve daha fazlası. Tarihlerini sen belirle.',
-  },
-  {
-    title: 'Tercihlerini söyle',
-    text: 'İlgi alanların, bütçen ve tempon üç kısa adımda kaydedilir.',
-  },
-  {
-    title: 'Planını al',
-    text: 'Wayora günleri saat saat sıralar. İstediğin durağı değiştirirsin.',
-  },
+const COUNTRY_EN: Record<string, string> = {
+  Almanya: 'Germany',
+  İtalya: 'Italy',
+  Portekiz: 'Portugal',
+  Fransa: 'France',
+  İspanya: 'Spain',
+  Hollanda: 'Netherlands',
+  Türkiye: 'Türkiye',
+  'Birleşik Krallık': 'United Kingdom',
+  Çekya: 'Czechia',
+  Avusturya: 'Austria',
+  Yunanistan: 'Greece',
+}
+
+type Step = { titleKey: TranslationKey; textKey: TranslationKey }
+
+const STEPS: Step[] = [
+  { titleKey: 'landing.step1Title', textKey: 'landing.step1Text' },
+  { titleKey: 'landing.step2Title', textKey: 'landing.step2Text' },
+  { titleKey: 'landing.step3Title', textKey: 'landing.step3Text' },
 ]
 
-const SAMPLE_STOPS = [
-  { time: '09:30', title: 'East Side Gallery', price: 'Ücretsiz' },
+type SampleStop = { time: string; title?: string; titleKey?: TranslationKey; price: string | null }
+
+const SAMPLE_STOPS: SampleStop[] = [
+  { time: '09:30', title: 'East Side Gallery', price: null },
   { time: '12:30', title: 'Markthalle Neun', price: '14 €' },
-  { time: '15:00', title: 'Tempelhofer Feld', price: 'Ücretsiz' },
-  { time: '17:30', title: 'Hackescher Markt', price: 'Ücretsiz' },
-  { time: '19:30', title: 'Akşam yemeği · Kreuzberg', price: '22 €' },
+  { time: '15:00', title: 'Tempelhofer Feld', price: null },
+  { time: '17:30', title: 'Hackescher Markt', price: null },
+  { time: '19:30', titleKey: 'landing.sampleDinner', price: '22 €' },
 ]
 
-const SAMPLE_POINTS = [
-  'Gün gün, saat saat plan',
-  'Bütçene göre duraklar',
-  'İstediğin durağı değiştir',
+const SAMPLE_POINTS: TranslationKey[] = [
+  'landing.samplePoint1',
+  'landing.samplePoint2',
+  'landing.samplePoint3',
 ]
 
 export function LandingPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { lang, t } = useLang()
   const [destination, setDestination] = useState('')
+
+  const countryLabel = (country: string) =>
+    lang === 'en' ? (COUNTRY_EN[country] ?? country) : country
 
   function handleSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -67,18 +82,15 @@ export function LandingPage() {
     <div className="landing-page">
       <section className="landing-hero page" aria-labelledby="landing-title">
         <div className="landing-hero-copy">
-          <p className="eyebrow landing-kicker">SEYAHAT PLANLAMA</p>
+          <p className="eyebrow landing-kicker">{t('landing.kicker')}</p>
           <h1 className="landing-title" id="landing-title">
-            Bir şehir seç. Günlerini Wayora sıralasın.
+            {t('landing.title')}
           </h1>
-          <p className="landing-lead">
-            İlgi alanlarını, bütçeni ve temponu söyle. Wayora şehri günlere, günleri saatlere
-            böler. Planı hazır bırakmaz, düzenlemen için eline verir.
-          </p>
+          <p className="landing-lead">{t('landing.lead')}</p>
 
           <form className="hero-search" role="search" onSubmit={handleSearch}>
             <label className="field-label" htmlFor="landing-city">
-              Şehir
+              {t('landing.city')}
             </label>
             <div className="search-box">
               {destination.trim() ? (
@@ -92,19 +104,19 @@ export function LandingPage() {
                 name="city"
                 type="text"
                 autoComplete="off"
-                aria-label="Şehir ara"
+                aria-label={t('landing.searchAria')}
                 value={destination}
                 onChange={(event) => setDestination(event.target.value)}
-                placeholder="Şehir ara: Berlin, Roma, Lizbon..."
+                placeholder={t('landing.cityPlaceholder')}
               />
             </div>
 
             <div className="field">
-              <span className="field-label">Popüler şehirler</span>
+              <span className="field-label">{t('landing.popular')}</span>
               <div
                 className="chip-row"
                 role="group"
-                aria-label="Popüler şehirler"
+                aria-label={t('landing.popular')}
                 style={{ flexWrap: 'wrap', overflow: 'visible' }}
               >
                 {CITIES.map((city) => {
@@ -134,17 +146,15 @@ export function LandingPage() {
             </div>
 
             <button className="btn btn-primary btn-block" type="submit">
-              {user ? 'Rotanı planla' : 'Planı başlat'}
+              {user ? t('landing.cta') : t('landing.ctaGuest')}
               <ArrowRight size={20} strokeWidth={1.75} aria-hidden="true" />
             </button>
           </form>
 
-          <p className="hero-stat">
-            {CITIES.length} şehir · {CITIES.length * 10} deneyim · ücretsiz
-          </p>
+          <p className="hero-stat">{t('landing.stat')}</p>
           {user && (
             <Link className="section-link" to="/trips">
-              Rotalarıma dön
+              {t('landing.backToTrips')}
             </Link>
           )}
         </div>
@@ -152,7 +162,7 @@ export function LandingPage() {
         <div className="landing-hero-media">
           <Photo
             src={cityPhoto('Berlin')}
-            alt="Berlin'de sokak ve şehir görünümü"
+            alt="Berlin street and city view"
             label={cityPhotoLabel('Berlin')}
             priority
           />
@@ -162,17 +172,17 @@ export function LandingPage() {
       <div className="page">
         <section className="section" aria-labelledby="how-title">
           <div className="section-head">
-            <h2 id="how-title">Nasıl çalışır</h2>
+            <h2 id="how-title">{t('landing.howTitle')}</h2>
           </div>
           <div className="how-list">
             {STEPS.map((step, index) => (
-              <article className="how-item" key={step.title}>
+              <article className="how-item" key={step.titleKey}>
                 <span className="how-number" aria-hidden="true">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <div>
-                  <h3>{step.title}</h3>
-                  <p>{step.text}</p>
+                  <h3>{t(step.titleKey)}</h3>
+                  <p>{t(step.textKey)}</p>
                 </div>
               </article>
             ))}
@@ -181,13 +191,13 @@ export function LandingPage() {
 
         <section className="section" aria-labelledby="cities-title">
           <div className="section-head">
-            <h2 id="cities-title">Şehirler</h2>
+            <h2 id="cities-title">{t('landing.citiesTitle')}</h2>
             <Link
               className="section-link"
               to="/kesfet"
               style={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
             >
-              Tüm şehirler
+              {t('landing.allCities')}
             </Link>
           </div>
           <div className="city-rail">
@@ -196,15 +206,15 @@ export function LandingPage() {
                 <Photo
                   className="city-card-media"
                   src={cityPhoto(city.name)}
-                  alt={`${city.name} şehir görünümü`}
+                  alt={`${city.name} city view`}
                   label={cityPhotoLabel(city.name)}
                 />
                 <div className="city-card-body">
                   <div className="city-card-title-row">
                     <h3 className="city-card-title">{city.name}</h3>
-                    <span className="city-card-country">{city.country}</span>
+                    <span className="city-card-country">{countryLabel(city.country)}</span>
                   </div>
-                  <p className="city-card-meta">10 deneyim</p>
+                  <p className="city-card-meta">{t('landing.experiences')}</p>
                 </div>
               </Link>
             ))}
@@ -213,31 +223,28 @@ export function LandingPage() {
 
         <section className="section sample-section" aria-labelledby="sample-title">
           <div className="sample-copy">
-            <p className="eyebrow">ÖRNEK PLAN</p>
-            <h2 id="sample-title">Örnek bir gün</h2>
-            <p className="muted">
-              Wayora bir günü saat saat sıralar: sabah bir müze, öğlen yerel bir pazar, akşamüstü
-              açık hava. Sen sadece şehri, tarihleri ve temponu seçersin.
-            </p>
+            <p className="eyebrow">{t('landing.sampleKicker')}</p>
+            <h2 id="sample-title">{t('landing.sampleTitle')}</h2>
+            <p className="muted">{t('landing.sampleLead')}</p>
             <ul className="sample-points">
               {SAMPLE_POINTS.map((point) => (
-                <li key={point}>{point}</li>
+                <li key={point}>{t(point)}</li>
               ))}
             </ul>
             <Link className="btn btn-primary" to="/trips/new">
-              Kendi planını oluştur
+              {t('landing.sampleCta')}
             </Link>
           </div>
-          <div className="sample-day" aria-label="Berlin için örnek gün planı">
+          <div className="sample-day" aria-label={t('landing.sampleDayLabel')}>
             <div className="sample-day-head">
-              <span>BERLİN / GÜN 01</span>
+              <span>{t('landing.sampleDayHead')}</span>
               <span>09:30-19:30</span>
             </div>
             {SAMPLE_STOPS.map((stop) => (
               <div className="sample-row" key={stop.time}>
                 <time>{stop.time}</time>
-                <strong>{stop.title}</strong>
-                <span>{stop.price}</span>
+                <strong>{stop.titleKey ? t(stop.titleKey) : stop.title}</strong>
+                <span>{stop.price ?? t('common.free')}</span>
               </div>
             ))}
           </div>

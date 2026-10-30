@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
 import { AuthProvider } from './auth/AuthContext'
+import { LanguageProvider } from './i18n.tsx'
 
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -21,9 +22,11 @@ function mockApi(handler: (url: string) => Response | Promise<Response>) {
 function renderAt(route: string) {
   return render(
     <MemoryRouter initialEntries={[route]}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </LanguageProvider>
     </MemoryRouter>,
   )
 }

@@ -1,5 +1,5 @@
 import { Compass, Map, Plus, UserRound } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigationType } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { WayoraLogo } from './WayoraLogo'
@@ -20,8 +20,18 @@ export function Layout() {
   const isProfile = location.pathname === '/profil'
   const showBottomNav = !!user && !isAuthPage && (isExplore || isTrips || isProfile)
 
+  const previousPathRef = useRef(location.pathname)
+
   useEffect(() => {
-    if (navigationType === 'POP' || navigator.userAgent.includes('jsdom')) return
+    // Yalnızca sayfa (pathname) değiştiğinde yukarı dön. Arama parametresi
+    // değişimleri (ör. şehir sayfasında "seç" tiki) REPLACE navigasyonu
+    // üretip navigationType'ı değiştiriyordu; bu da her tikte sayfayı
+    // başına sıçratıyordu.
+    const pathChanged = previousPathRef.current !== location.pathname
+    previousPathRef.current = location.pathname
+    if (!pathChanged || navigationType === 'POP' || navigator.userAgent.includes('jsdom')) {
+      return
+    }
     try {
       window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
     } catch {

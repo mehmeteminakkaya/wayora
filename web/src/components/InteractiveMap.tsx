@@ -54,7 +54,7 @@ const SATELLITE_STYLE: maplibregl.StyleSpecification = {
 }
 
 const STYLES: Record<StyleKey, string | maplibregl.StyleSpecification> = {
-  map: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+  map: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
   satellite: SATELLITE_STYLE,
   dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
 }
@@ -70,19 +70,75 @@ function markerEl(index: number, active: boolean): HTMLButtonElement {
   el.type = 'button'
   el.textContent = String(index)
   el.style.cssText = [
-    'width:30px',
-    'height:30px',
-    'border-radius:50%',
-    `background:${active ? '#FFC400' : '#121212'}`,
-    `color:${active ? '#121212' : '#fff'}`,
-    'border:2px solid #fff',
-    'font:700 13px Overpass,sans-serif',
+    'width:32px',
+    'height:32px',
+    'border-radius:50% 50% 50% 4px',
+    'transform-origin:center',
+    `transform:rotate(-45deg) scale(${active ? 1.2 : 1})`,
+    `background:${active ? '#121212' : '#FFC400'}`,
+    `color:${active ? '#FFC400' : '#121212'}`,
+    'border:2.5px solid #fff',
+    'font:800 12px Overpass,sans-serif',
     'cursor:pointer',
-    'box-shadow:0 1px 4px rgba(0,0,0,.35)',
-    `transform:scale(${active ? 1.25 : 1})`,
-    'transition:transform .15s',
+    'box-shadow:0 4px 12px rgba(18,18,18,.3)',
+    'transition:transform .2s cubic-bezier(.34,1.56,.64,1)',
+    'padding:0',
   ].join(';')
+  // Metni dik tutmak için içeriği ters çevir.
+  el.innerHTML = `<span style="display:block;transform:rotate(45deg)">${index}</span>`
   return el
+}
+
+// Wayora renkleri: krem zemin, sade yollar, yumuşak su/park, sakin etiketler.
+function applyBrandStyle(map: maplibregl.Map, tilted: boolean) {
+  const style = map.getStyle()
+  if (!style?.layers) return
+  const set = (id: string, prop: string, value: unknown) => {
+    try {
+      map.setPaintProperty(id, prop as 'background-color', value as string)
+    } catch {
+      /* katman bu özelliği desteklemiyor */
+    }
+  }
+  for (const layer of style.layers) {
+    const id = layer.id
+    if (layer.type === 'background') set(id, 'background-color', '#F3F3F1')
+    else if (layer.type === 'fill') {
+      if (id === 'water' || id === 'water_shadow') set(id, 'fill-color', '#C9DCE6')
+      else if (id.startsWith('park') || id === 'landcover') set(id, 'fill-color', '#DCE8D3')
+      else if (id.startsWith('landuse')) set(id, 'fill-color', '#EDECE8')
+      else if (id === 'building' || id === 'building-top') {
+        set(id, 'fill-color', '#E4E3DD')
+        set(id, 'fill-outline-color', '#D6D5CE')
+      }
+    } else if (layer.type === 'line') {
+      if (id.endsWith('_fill') || id.includes('_fill_')) set(id, 'line-color', '#FFFFFF')
+      else if (id.includes('_case')) set(id, 'line-color', '#E0DFD9')
+      else if (id.startsWith('boundary')) set(id, 'line-color', '#D2D1CB')
+    } else if (layer.type === 'symbol') {
+      set(id, 'text-color', id.startsWith('watername') ? '#6F8FA3' : '#3E4046')
+      set(id, 'text-halo-color', '#F3F3F1')
+      set(id, 'text-halo-width', 1.6)
+    }
+  }
+  // 3B: bina yükseklikleri. Yalnızca eğik modda görünür.
+  const building = style.layers.find((l) => l.id === 'building')
+  if (building && 'source' in building && typeof building.source === 'string' && !map.getLayer('building-3d')) {
+    map.addLayer({
+      id: 'building-3d',
+      type: 'fill-extrusion',
+      source: building.source,
+      'source-layer': 'building',
+      minzoom: 13,
+      layout: { visibility: tilted ? 'visible' : 'none' },
+      paint: {
+        'fill-extrusion-color': '#E9E8E2',
+        'fill-extrusion-height': ['coalesce', ['get', 'render_height'], 10],
+        'fill-extrusion-base': ['coalesce', ['get', 'render_min_height'], 0],
+        'fill-extrusion-opacity': 0.92,
+      },
+    })
+  }
 }
 
 export function InteractiveMap({
@@ -101,6 +157,8 @@ export function InteractiveMap({
   const [styleKey, setStyleKey] = useState<StyleKey>('map')
   const [tilted, setTilted] = useState(false)
   const appliedStyle = useRef<StyleKey>('map')
+  const tiltedRef = useRef(false)
+  const styleKeyRef = useRef<StyleKey>('map')
   const refit = useRef<() => void>(() => {})
   const onSelectRef = useRef(onSelect)
   onSelectRef.current = onSelect
@@ -129,6 +187,9 @@ export function InteractiveMap({
     )
     map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left')
     mapRef.current = map
+    map.on('style.load', () => {
+      if (styleKeyRef.current === 'map') applyBrandStyle(map, tiltedRef.current)
+    })
     // Düzen sonradan değişirse (görsel yüklenmesi, mobil çubuk) boyutu ve görünümü yenile.
     const observer = new ResizeObserver(() => {
       map.resize()
@@ -149,11 +210,16 @@ export function InteractiveMap({
     // Stil değişince işaretçiler DOM öğesi olduğu için korunur.
     if (appliedStyle.current === styleKey) return
     appliedStyle.current = styleKey
+    styleKeyRef.current = styleKey
     mapRef.current?.setStyle(STYLES[styleKey])
   }, [styleKey])
 
   useEffect(() => {
-    mapRef.current?.easeTo({ pitch: tilted ? 60 : 0, bearing: tilted ? -20 : 0, duration: 700 })
+    tiltedRef.current = tilted
+    const map = mapRef.current
+    if (!map) return
+    if (map.getLayer('building-3d')) map.setLayoutProperty('building-3d', 'visibility', tilted ? 'visible' : 'none')
+    map.easeTo({ pitch: tilted ? 60 : 0, bearing: tilted ? -20 : 0, zoom: tilted ? Math.max(map.getZoom(), 15) : map.getZoom(), duration: 800 })
   }, [tilted])
 
   // Üst bileşen her render'da yeni dizi verir; haritayı yalnızca içerik değişince güncelle.
@@ -265,11 +331,14 @@ export function InteractiveMap({
 
 function mapButton(active: boolean): React.CSSProperties {
   return {
-    padding: '6px 10px',
-    border: '1px solid #121212',
-    borderRadius: 4,
-    background: active ? '#FFC400' : '#fff',
-    color: '#121212',
+    padding: '7px 12px',
+    border: '1px solid rgba(255,255,255,.6)',
+    borderRadius: 999,
+    background: active ? '#121212' : 'rgba(255,255,255,.72)',
+    color: active ? '#fff' : '#121212',
+    WebkitBackdropFilter: 'blur(14px) saturate(180%)',
+    backdropFilter: 'blur(14px) saturate(180%)',
+    boxShadow: '0 2px 10px rgba(18,18,18,.15)',
     font: '700 12px Overpass, sans-serif',
     cursor: 'pointer',
   }
@@ -277,7 +346,7 @@ function mapButton(active: boolean): React.CSSProperties {
 
 function popupContent(p: MapPoint): HTMLElement {
   const box = document.createElement('div')
-  box.style.cssText = 'font:14px Overpass,sans-serif;color:#121212;max-width:200px'
+  box.style.cssText = 'font:14px Overpass,sans-serif;color:#121212;max-width:220px;padding:2px 2px'
   const strong = document.createElement('strong')
   strong.textContent = p.label
   box.appendChild(strong)

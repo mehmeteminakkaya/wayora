@@ -53,11 +53,22 @@ const SATELLITE_STYLE: maplibregl.StyleSpecification = {
   ],
 }
 
-const STYLES: Record<StyleKey, string | maplibregl.StyleSpecification> = {
-  map: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-  satellite: SATELLITE_STYLE,
-  dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
-}
+// MapTiler anahtarı tarayıcıya açık (alan adı kısıtlıdır). Yoksa anahtarsız CARTO/Esri'ye düşülür.
+const MAPTILER_KEY = (import.meta.env.VITE_MAPTILER_KEY as string | undefined)?.trim()
+const maptiler = (name: string) =>
+  `https://api.maptiler.com/maps/${name}/style.json?key=${MAPTILER_KEY}`
+
+const STYLES: Record<StyleKey, string | maplibregl.StyleSpecification> = MAPTILER_KEY
+  ? {
+      map: maptiler('streets-v2'),
+      satellite: maptiler('hybrid'),
+      dark: maptiler('streets-v2-dark'),
+    }
+  : {
+      map: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+      satellite: SATELLITE_STYLE,
+      dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+    }
 
 const STYLE_LABELS: Array<[StyleKey, string]> = [
   ['map', 'Harita'],
@@ -97,6 +108,10 @@ function markerEl(index: number, active: boolean): HTMLButtonElement {
 function applyBrandStyle(map: maplibregl.Map, tilted: boolean) {
   const style = map.getStyle()
   if (!style?.layers) return
+  if (MAPTILER_KEY) {
+    add3d(map, tilted)
+    return
+  }
   const set = (id: string, prop: string, value: unknown) => {
     try {
       map.setPaintProperty(id, prop as 'background-color', value as string)
@@ -125,8 +140,22 @@ function applyBrandStyle(map: maplibregl.Map, tilted: boolean) {
       set(id, 'text-halo-width', 1.6)
     }
   }
-  // 3B: bina yükseklikleri. Yalnızca eğik modda görünür.
-  const building = style.layers.find((l) => l.id === 'building')
+  add3d(map, tilted)
+}
+
+// 3B: bina yükseklikleri ve (MapTiler ile) arazi. Yalnızca eğik modda görünür.
+function add3d(map: maplibregl.Map, tilted: boolean) {
+  const layers = map.getStyle()?.layers ?? []
+  const building = layers.find(
+    (l) => 'source-layer' in l && l['source-layer'] === 'building' && l.type === 'fill',
+  )
+  if (MAPTILER_KEY && !map.getSource('terrain-dem')) {
+    map.addSource('terrain-dem', {
+      type: 'raster-dem',
+      url: `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`,
+      tileSize: 256,
+    })
+  }
   if (building && 'source' in building && typeof building.source === 'string' && !map.getLayer('building-3d')) {
     map.addLayer({
       id: 'building-3d',
@@ -193,6 +222,10 @@ export function InteractiveMap({
     mapRef.current = map
     map.on('style.load', () => {
       if (styleKeyRef.current === 'map') applyBrandStyle(map, tiltedRef.current)
+      else if (styleKeyRef.current === 'dark' && MAPTILER_KEY) add3d(map, tiltedRef.current)
+      if (MAPTILER_KEY && tiltedRef.current && map.getSource('terrain-dem')) {
+        map.setTerrain({ source: 'terrain-dem', exaggeration: 1.2 })
+      }
     })
     // Düzen sonradan değişirse (görsel yüklenmesi, mobil çubuk) boyutu ve görünümü yenile.
     const observer = new ResizeObserver(() => {
@@ -222,6 +255,9 @@ export function InteractiveMap({
     tiltedRef.current = tilted
     const map = mapRef.current
     if (!map) return
+    if (MAPTILER_KEY && map.getSource('terrain-dem')) {
+      map.setTerrain(tilted ? { source: 'terrain-dem', exaggeration: 1.2 } : null)
+    }
     if (map.getLayer('building-3d')) map.setLayoutProperty('building-3d', 'visibility', tilted ? 'visible' : 'none')
     map.easeTo({ pitch: tilted ? 60 : 0, bearing: tilted ? -20 : 0, duration: 800 })
   }, [tilted])

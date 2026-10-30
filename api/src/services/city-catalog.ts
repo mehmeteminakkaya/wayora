@@ -1,5 +1,6 @@
 import { CITY_CATALOG, catalogGooglePlaceId } from '../data/city-catalog.ts'
 import type { CatalogCity } from '../data/city-catalog.ts'
+import { CATALOG_COORDS as EXTRA_COORDS } from '../data/catalog-coords.ts'
 import type { Db } from '../lib/prisma.ts'
 
 type SeededExperience = {
@@ -115,11 +116,11 @@ export function summarizeCity(
 const CATALOG_COORDS = new Map<string, { lat: number; lng: number }>()
 for (const city of CITY_CATALOG) {
   for (const experience of city.experiences) {
-    if (experience.lat !== undefined && experience.lng !== undefined) {
-      CATALOG_COORDS.set(catalogGooglePlaceId(city.slug, experience.slug), {
-        lat: experience.lat,
-        lng: experience.lng,
-      })
+    const extra = EXTRA_COORDS[`${city.slug}/${experience.slug}`]
+    const lat = experience.lat ?? extra?.[0]
+    const lng = experience.lng ?? extra?.[1]
+    if (lat !== undefined && lng !== undefined) {
+      CATALOG_COORDS.set(catalogGooglePlaceId(city.slug, experience.slug), { lat, lng })
     }
   }
 }
@@ -253,8 +254,8 @@ export function staticCities(): Array<CitySummary & { experiences: CityExperienc
       tags: experience.tags,
       openingHours: experience.openingHours,
       bookingUrl: experience.bookingUrl,
-      lat: experience.lat ?? null,
-      lng: experience.lng ?? null,
+      lat: CATALOG_COORDS.get(catalogGooglePlaceId(city.slug, experience.slug))?.lat ?? null,
+      lng: CATALOG_COORDS.get(catalogGooglePlaceId(city.slug, experience.slug))?.lng ?? null,
     }))
     return { ...staticSummary(city), experiences }
   })

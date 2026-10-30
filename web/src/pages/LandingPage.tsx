@@ -1,4 +1,4 @@
-import { ArrowRight, Search } from 'lucide-react'
+import { ArrowRight, Check, Search } from 'lucide-react'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -69,7 +69,11 @@ export function LandingPage() {
               Şehir
             </label>
             <div className="search-box">
-              <Search size={24} strokeWidth={1.75} aria-hidden="true" />
+              {destination.trim() ? (
+                <Check size={24} strokeWidth={2} aria-hidden="true" />
+              ) : (
+                <Search size={24} strokeWidth={1.75} aria-hidden="true" />
+              )}
               <input
                 className="input"
                 id="landing-city"
@@ -82,6 +86,41 @@ export function LandingPage() {
                 placeholder="Şehir ara: Berlin, Roma, Lizbon..."
               />
             </div>
+
+            <div className="field">
+              <span className="field-label">Popüler şehirler</span>
+              <div
+                className="chip-row"
+                role="group"
+                aria-label="Popüler şehirler"
+                style={{ flexWrap: 'wrap', overflow: 'visible' }}
+              >
+                {CITIES.map((city) => {
+                  const selected =
+                    destination.trim().toLocaleLowerCase('tr-TR') ===
+                    city.name.toLocaleLowerCase('tr-TR')
+                  return (
+                    <button
+                      key={city.name}
+                      type="button"
+                      className="chip"
+                      aria-pressed={selected}
+                      onClick={() => setDestination(city.name)}
+                    >
+                      <span
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                      >
+                        {selected && (
+                          <Check size={14} strokeWidth={2.5} aria-hidden="true" />
+                        )}
+                        {city.name}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
             <button className="btn btn-primary btn-block" type="submit">
               {user ? 'Rotanı planla' : 'Planı başlat'}
               <ArrowRight size={20} strokeWidth={1.75} aria-hidden="true" />

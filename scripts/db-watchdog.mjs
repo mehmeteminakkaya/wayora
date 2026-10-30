@@ -29,10 +29,30 @@ function runNpm(script) {
   })
 }
 
+function killHungDaemons() {
+  return new Promise((resolve) => {
+    if (process.platform !== 'win32') {
+      resolve()
+      return
+    }
+    // Asılı kalan daemon "Lock file is already being held" bırakıyor; süreci
+    // öldürünce kilit serbest kalıyor. Port zaten kapalı olduğu için güvenli.
+    const ps = spawn(
+      'powershell',
+      [
+        '-NoProfile',
+        '-Command',
+        "Get-CimInstance Win32_Process -Filter \"Name='node.exe'\" | Where-Object { $_.CommandLine -match 'daemon.cjs' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }",
+      ],
+      { stdio: 'ignore' },
+    )
+    ps.on('exit', () => resolve())
+    ps.on('error', () => resolve())
+  })
+}
+
 async function startDb() {
-  // Asılı kalan daemon "Lock file is already being held" bırakabiliyor; önce
-  // durdurup kilidi bırak, sonra yeniden başlat. (Port zaten kapalı olduğu için
-  // durdurmak güvenli.)
+  await killHungDaemons()
   await runNpm('db:stop')
   await runNpm('db:start')
 }

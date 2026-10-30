@@ -6,6 +6,9 @@ export type CatalogExperience = {
   category: ActivityCategory
   neighborhood: string
   address: string
+  // Haritada işaretlemek için yaklaşık koordinat; yoksa şehir merkezine düşülür.
+  lat?: number
+  lng?: number
   estimatedCost: number
   currency: 'EUR'
   priceNote: string
@@ -58,6 +61,8 @@ export const CITY_CATALOG: CatalogCity[] = [
         category: 'landmark',
         neighborhood: 'Sultanahmet',
         address: 'Sultan Ahmet, Fatih',
+        lat: 41.0086,
+        lng: 28.9802,
         estimatedCost: 25,
         durationMinutes: 90,
         rating: 4.8,
@@ -73,6 +78,8 @@ export const CITY_CATALOG: CatalogCity[] = [
         category: 'museum',
         neighborhood: 'Cankurtaran',
         address: 'Cankurtaran, Fatih',
+        lat: 41.0115,
+        lng: 28.9833,
         estimatedCost: 30,
         durationMinutes: 150,
         rating: 4.7,
@@ -88,6 +95,8 @@ export const CITY_CATALOG: CatalogCity[] = [
         category: 'shopping',
         neighborhood: 'Beyazıt',
         address: 'Beyazıt, Fatih',
+        lat: 41.0108,
+        lng: 28.968,
         estimatedCost: 0,
         durationMinutes: 90,
         rating: 4.5,
@@ -102,6 +111,8 @@ export const CITY_CATALOG: CatalogCity[] = [
         category: 'landmark',
         neighborhood: 'Beyoğlu',
         address: 'Bereketzade, Beyoğlu',
+        lat: 41.0256,
+        lng: 28.9741,
         estimatedCost: 20,
         durationMinutes: 60,
         rating: 4.7,
@@ -117,6 +128,8 @@ export const CITY_CATALOG: CatalogCity[] = [
         category: 'food',
         neighborhood: 'Kadıköy',
         address: 'Caferağa, Kadıköy',
+        lat: 40.9906,
+        lng: 29.027,
         estimatedCost: 18,
         durationMinutes: 120,
         rating: 4.6,
@@ -131,6 +144,8 @@ export const CITY_CATALOG: CatalogCity[] = [
         category: 'nature',
         neighborhood: 'Cankurtaran',
         address: 'Cankurtaran, Fatih',
+        lat: 41.0125,
+        lng: 28.981,
         estimatedCost: 0,
         durationMinutes: 90,
         rating: 4.6,
@@ -145,6 +160,8 @@ export const CITY_CATALOG: CatalogCity[] = [
         category: 'landmark',
         neighborhood: 'Eminönü',
         address: 'Eminönü İskelesi, Fatih',
+        lat: 41.0175,
+        lng: 28.973,
         estimatedCost: 8,
         durationMinutes: 90,
         rating: 4.8,
@@ -159,6 +176,8 @@ export const CITY_CATALOG: CatalogCity[] = [
         category: 'museum',
         neighborhood: 'Karaköy',
         address: 'Kılıçali Paşa, Beyoğlu',
+        lat: 41.025,
+        lng: 28.976,
         estimatedCost: 12,
         durationMinutes: 90,
         rating: 4.5,
@@ -174,6 +193,8 @@ export const CITY_CATALOG: CatalogCity[] = [
         category: 'landmark',
         neighborhood: 'Balat',
         address: 'Balat, Fatih',
+        lat: 41.032,
+        lng: 28.945,
         estimatedCost: 0,
         durationMinutes: 90,
         rating: 4.4,
@@ -188,6 +209,8 @@ export const CITY_CATALOG: CatalogCity[] = [
         category: 'nature',
         neighborhood: 'Adalar',
         address: 'Büyükada İskelesi, Adalar',
+        lat: 40.876,
+        lng: 29.121,
         estimatedCost: 12,
         durationMinutes: 240,
         rating: 4.7,

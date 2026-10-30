@@ -3,9 +3,11 @@ import { useState } from 'react'
 import type { FormEvent, MouseEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import { useLang } from '../i18n.tsx'
 
 export function LoginPage() {
   const { login } = useAuth()
+  const { t } = useLang()
   const navigate = useNavigate()
   const location = useLocation()
   const from = (location.state as { from?: string } | null)?.from ?? '/trips'
@@ -25,7 +27,7 @@ export function LoginPage() {
       await login({ email, password })
       navigate(from, { replace: true })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Giriş yapılamadı')
+      setError(err instanceof Error ? err.message : 'Login failed')
     } finally {
       setBusy(false)
     }
@@ -34,14 +36,14 @@ export function LoginPage() {
   function handleForgotPassword(event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault()
     setError(null)
-    setNotice('Şifre sıfırlama henüz yapılandırılmadı.')
+    setNotice(t('auth.forgotNotice'))
   }
 
   return (
     <div className="auth-page">
       <section className="auth-card" aria-labelledby="login-title">
-        <h1 id="login-title">Giriş yap.</h1>
-        <p className="auth-sub">Rotaların, tercihlerin ve planların hesabında durur.</p>
+        <h1 id="login-title">{t('auth.loginTitle')}</h1>
+        <p className="auth-sub">{t('auth.loginSub')}</p>
 
         {error && (
           <p className="notice error" role="alert">
@@ -57,7 +59,7 @@ export function LoginPage() {
 
         <form className="form" onSubmit={handleSubmit}>
           <label className="field">
-            <span>E-posta</span>
+            <span>{t('auth.email')}</span>
             <input
               className="input"
               type="email"
@@ -71,7 +73,7 @@ export function LoginPage() {
           </label>
 
           <label className="field">
-            <span>Şifre</span>
+            <span>{t('auth.password')}</span>
             <input
               className="input"
               type="password"
@@ -80,18 +82,18 @@ export function LoginPage() {
               required
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="Şifren"
+              placeholder="••••••••"
             />
           </label>
 
           <div className="auth-links" style={{ justifyContent: 'flex-end', marginTop: 0 }}>
             <a
               href="#"
-              title="Şifre sıfırlama henüz yapılandırılmadı"
+              title={t('auth.forgotNotice')}
               style={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
               onClick={handleForgotPassword}
             >
-              Şifremi unuttum
+              {t('auth.forgot')}
             </a>
           </div>
 
@@ -102,31 +104,31 @@ export function LoginPage() {
             aria-busy={busy}
           >
             <LogIn size={20} strokeWidth={1.75} aria-hidden="true" />
-            {busy ? 'Giriş yapılıyor...' : 'Giriş yap'}
+            {busy ? `${t('auth.loginBtn')}...` : t('auth.loginBtn')}
           </button>
         </form>
 
-        <div className="auth-divider">veya</div>
+        <div className="auth-divider">{t('auth.or')}</div>
 
         <button
           className="btn btn-secondary btn-block google-btn"
           type="button"
           onClick={() => {
             setError(null)
-            setNotice('Google girişi henüz yapılandırılmadı.')
+            setNotice(t('auth.googleNotice'))
           }}
         >
-          Google ile devam et
+          {t('auth.google')}
         </button>
 
         <div className="auth-links">
-          <span>Hesabın yok mu?</span>
+          <span>{t('auth.noAccount')}</span>
           <Link
             to="/register"
             state={{ from }}
             style={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
           >
-            Hesap aç
+            {t('auth.createAccount')}
           </Link>
         </div>
       </section>

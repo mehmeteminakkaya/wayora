@@ -235,6 +235,29 @@ p {
   text-decoration: underline;
 }
 
+.lang-switch {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.lang-switch button {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 0;
+  background: var(--surface);
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.lang-switch button.is-active {
+  background: var(--ink);
+  color: var(--surface);
+}
+
 .site-main {
   width: 100%;
   min-height: calc(100vh - 56px);

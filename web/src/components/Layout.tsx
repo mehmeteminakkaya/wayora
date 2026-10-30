@@ -2,6 +2,7 @@ import { Compass, Map, Plus, UserRound, Users } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigationType } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import { useLang } from '../i18n.tsx'
 import { WayoraLogo } from './WayoraLogo'
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
@@ -11,6 +12,7 @@ const mobileClass = ({ isActive }: { isActive: boolean }) => (isActive ? 'is-act
 
 export function Layout() {
   const { user } = useAuth()
+  const { lang, setLang, t } = useLang()
   const location = useLocation()
   const navigationType = useNavigationType()
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register'
@@ -43,56 +45,74 @@ export function Layout() {
   return (
     <div className={`app-shell${showBottomNav ? ' has-bottom-nav' : ''}`}>
       <a className="skip-link" href="#main">
-        İçeriğe geç
+        {t('nav.skip')}
       </a>
 
       <header className="topbar">
         <div className="topbar-inner">
-          <Link to="/" className="logo" aria-label="Wayora ana sayfa">
+          <Link to="/" className="logo" aria-label={t('nav.home')}>
             <WayoraLogo />
           </Link>
 
           {!isAuthPage && (
-            <nav className="topbar-nav" aria-label="Ana menü">
+            <nav className="topbar-nav" aria-label="Main menu">
               <NavLink to="/kesfet" className={navClass}>
-                Keşfet
+                {t('nav.explore')}
               </NavLink>
               {user ? (
                 <>
                   <NavLink to="/trips" className={navClass}>
-                    Rotalarım
+                    {t('nav.trips')}
                   </NavLink>
                   <NavLink to="/yol-arkadaslari" className={navClass}>
-                    Yol Arkadaşları
+                    {t('nav.social')}
                   </NavLink>
                   <NavLink to="/trips/new" className={navClass}>
-                    Planla
+                    {t('nav.plan')}
                   </NavLink>
                   <NavLink to="/profil" className={navClass}>
-                    Profil
+                    {t('nav.profile')}
                   </NavLink>
                 </>
               ) : (
                 <NavLink to="/login" className={navClass}>
-                  Giriş yap
+                  {t('nav.login')}
                 </NavLink>
               )}
             </nav>
           )}
 
-          {!isAuthPage && (
-            <div className="topbar-actions">
-              {user ? (
-                <Link className="icon-btn" to="/profil" aria-label="Profil">
+          <div className="topbar-actions">
+            <div className="lang-switch" role="group" aria-label="Language">
+              <button
+                type="button"
+                className={lang === 'tr' ? 'is-active' : ''}
+                aria-pressed={lang === 'tr'}
+                onClick={() => setLang('tr')}
+              >
+                TR
+              </button>
+              <button
+                type="button"
+                className={lang === 'en' ? 'is-active' : ''}
+                aria-pressed={lang === 'en'}
+                onClick={() => setLang('en')}
+              >
+                EN
+              </button>
+            </div>
+
+            {!isAuthPage &&
+              (user ? (
+                <Link className="icon-btn" to="/profil" aria-label={t('nav.profile')}>
                   <UserRound size={22} strokeWidth={1.75} />
                 </Link>
               ) : (
                 <Link className="topbar-login" to="/login">
-                  Giriş yap
+                  {t('nav.login')}
                 </Link>
-              )}
-            </div>
-          )}
+              ))}
+          </div>
         </div>
       </header>
 
@@ -104,37 +124,37 @@ export function Layout() {
         <footer className="landing-footer">
           <strong>WAYORA</strong>
           <div className="landing-footer-links">
-            <span>Hakkında</span>
-            <span>Gizlilik</span>
+            <span>{t('landing.footerAbout')}</span>
+            <span>{t('landing.footerPrivacy')}</span>
             <a href="/photo-credits.html" target="_blank" rel="noreferrer">
-              Fotoğraf kaynakları
+              {t('landing.footerPhotos')}
             </a>
-            <span>İletişim</span>
+            <span>{t('landing.footerContact')}</span>
           </div>
         </footer>
       )}
 
       {showBottomNav && (
-        <nav className="bottom-nav" aria-label="Mobil menü">
+        <nav className="bottom-nav" aria-label="Mobile menu">
           <NavLink to="/kesfet" className={mobileClass} end>
             <Compass size={24} strokeWidth={1.75} aria-hidden="true" />
-            <span>Keşfet</span>
+            <span>{t('nav.explore')}</span>
           </NavLink>
           <NavLink to="/trips" className={mobileClass} end>
             <Map size={24} strokeWidth={1.75} aria-hidden="true" />
-            <span>Rotalarım</span>
+            <span>{t('nav.trips')}</span>
           </NavLink>
           <NavLink to="/yol-arkadaslari" className={mobileClass} end>
             <Users size={24} strokeWidth={1.75} aria-hidden="true" />
-            <span>Yol</span>
+            <span>{t('nav.social')}</span>
           </NavLink>
           <NavLink to="/trips/new" className={mobileClass}>
             <Plus size={24} strokeWidth={1.75} aria-hidden="true" />
-            <span>Planla</span>
+            <span>{t('nav.plan')}</span>
           </NavLink>
           <NavLink to="/profil" className={mobileClass}>
             <UserRound size={24} strokeWidth={1.75} aria-hidden="true" />
-            <span>Profil</span>
+            <span>{t('nav.profile')}</span>
           </NavLink>
         </nav>
       )}

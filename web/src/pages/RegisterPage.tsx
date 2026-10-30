@@ -3,9 +3,11 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import { useLang } from '../i18n.tsx'
 
 export function RegisterPage() {
   const { register } = useAuth()
+  const { t } = useLang()
   const navigate = useNavigate()
   const location = useLocation()
   const from = (location.state as { from?: string } | null)?.from ?? '/trips'
@@ -19,7 +21,7 @@ export function RegisterPage() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (password.length < 8) {
-      setError('Şifre en az 8 karakter olmalı.')
+      setError('Password must be at least 8 characters.')
       return
     }
     setBusy(true)
@@ -28,7 +30,7 @@ export function RegisterPage() {
       await register({ email, password, name: name.trim() || undefined })
       navigate('/onboarding', { replace: true, state: { from } })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Hesap oluşturulamadı')
+      setError(err instanceof Error ? err.message : 'Could not create account')
     } finally {
       setBusy(false)
     }
@@ -37,10 +39,8 @@ export function RegisterPage() {
   return (
     <div className="auth-page">
       <section className="auth-card" aria-labelledby="register-title">
-        <h1 id="register-title">Hesap aç.</h1>
-        <p className="auth-sub">
-          Tercihlerini bir kez seç. Wayora her yeni planda bunları hatırlar.
-        </p>
+        <h1 id="register-title">{t('auth.registerTitle')}</h1>
+        <p className="auth-sub">{t('auth.registerSub')}</p>
 
         {error && (
           <p className="notice error" role="alert">
@@ -50,7 +50,7 @@ export function RegisterPage() {
 
         <form className="form" onSubmit={handleSubmit}>
           <label className="field">
-            <span>Adın (opsiyonel)</span>
+            <span>{t('auth.name')}</span>
             <input
               className="input"
               type="text"
@@ -58,12 +58,12 @@ export function RegisterPage() {
               autoComplete="name"
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="Adın"
+              placeholder={t('auth.namePlaceholder')}
             />
           </label>
 
           <label className="field">
-            <span>E-posta</span>
+            <span>{t('auth.email')}</span>
             <input
               className="input"
               type="email"
@@ -77,7 +77,7 @@ export function RegisterPage() {
           </label>
 
           <label className="field">
-            <span>Şifre</span>
+            <span>{t('auth.password')}</span>
             <input
               className="input"
               type="password"
@@ -87,11 +87,11 @@ export function RegisterPage() {
               minLength={8}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="En az 8 karakter"
+              placeholder="••••••••"
               aria-describedby="password-hint"
             />
             <span className="helper" id="password-hint">
-              En az 8 karakter. Boşluk ve Türkçe karakter kullanabilirsin.
+              {t('auth.passwordHint')}
             </span>
           </label>
 
@@ -102,17 +102,17 @@ export function RegisterPage() {
             aria-busy={busy}
           >
             <UserPlus size={20} strokeWidth={1.75} aria-hidden="true" />
-            {busy ? 'Hesap açılıyor...' : 'Hesap aç'}
+            {busy ? `${t('auth.registerBtn')}...` : t('auth.registerBtn')}
           </button>
         </form>
 
         <div className="auth-links">
-          <span>Hesabın var mı?</span>
+          <span>{t('auth.haveAccount')}</span>
           <Link
             to="/login"
             style={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
           >
-            Giriş yap
+            {t('auth.loginBtn')}
           </Link>
         </div>
       </section>

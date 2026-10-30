@@ -17,12 +17,16 @@ const CITIES = [
   { name: 'Londra', country: 'Birleşik Krallık' },
   { name: 'Prag', country: 'Çekya' },
   { name: 'Viyana', country: 'Avusturya' },
+  { name: 'Madrid', country: 'İspanya' },
+  { name: 'Floransa', country: 'İtalya' },
+  { name: 'Venedik', country: 'İtalya' },
+  { name: 'Atina', country: 'Yunanistan' },
 ]
 
 const STEPS = [
   {
     title: 'Şehri seç',
-    text: 'Berlin, Roma, Lizbon ve yedi şehir daha. Tarihlerini sen belirle.',
+    text: 'Berlin, Roma, Lizbon, Madrid ve daha fazlası. Tarihlerini sen belirle.',
   },
   {
     title: 'Tercihlerini söyle',
@@ -127,7 +131,7 @@ export function LandingPage() {
             </button>
           </form>
 
-          <p className="hero-stat">10 şehir · 100 deneyim · ücretsiz</p>
+          <p className="hero-stat">14 şehir · 120 deneyim · ücretsiz</p>
           {user && (
             <Link className="section-link" to="/trips">
               Rotalarıma dön

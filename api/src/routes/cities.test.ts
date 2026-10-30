@@ -19,7 +19,7 @@ describe('şehir keşif API', () => {
   it('veritabanı boşken statik katalogla 10 şehir döner', async () => {
     const response = await request(appWithoutCityTables()).get('/api/cities')
     expect(response.status).toBe(200)
-    expect(response.body.cities).toHaveLength(10)
+    expect(response.body.cities).toHaveLength(14)
     expect(response.body.cities[0]).toMatchObject({
       slug: 'istanbul',
       experienceCount: 10,

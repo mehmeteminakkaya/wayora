@@ -66,26 +66,30 @@ const STYLE_LABELS: Array<[StyleKey, string]> = [
 ]
 
 function markerEl(index: number, active: boolean): HTMLButtonElement {
+  // MapLibre dış öğenin transform'unu kendisi yönettiği için şekil iç öğede döner.
   const el = document.createElement('button')
   el.type = 'button'
-  el.textContent = String(index)
-  el.style.cssText = [
-    'width:32px',
-    'height:32px',
-    'border-radius:50% 50% 50% 4px',
-    'transform-origin:center',
-    `transform:rotate(-45deg) scale(${active ? 1.2 : 1})`,
+  el.style.cssText = 'width:34px;height:42px;padding:0;border:0;background:none;cursor:pointer'
+  const pin = document.createElement('span')
+  pin.style.cssText = [
+    'display:flex',
+    'align-items:center',
+    'justify-content:center',
+    'width:30px',
+    'height:30px',
+    'margin:2px auto 0',
+    'border-radius:50% 50% 50% 0',
     `background:${active ? '#121212' : '#FFC400'}`,
-    `color:${active ? '#FFC400' : '#121212'}`,
     'border:2.5px solid #fff',
-    'font:800 12px Overpass,sans-serif',
-    'cursor:pointer',
     'box-shadow:0 4px 12px rgba(18,18,18,.3)',
+    `transform:translateY(-4px) rotate(-45deg) scale(${active ? 1.2 : 1})`,
     'transition:transform .2s cubic-bezier(.34,1.56,.64,1)',
-    'padding:0',
   ].join(';')
-  // Metni dik tutmak için içeriği ters çevir.
-  el.innerHTML = `<span style="display:block;transform:rotate(45deg)">${index}</span>`
+  const label = document.createElement('span')
+  label.textContent = String(index)
+  label.style.cssText = `transform:rotate(45deg);font:800 12px Overpass,sans-serif;color:${active ? '#FFC400' : '#121212'}`
+  pin.appendChild(label)
+  el.appendChild(pin)
   return el
 }
 
@@ -236,7 +240,7 @@ export function InteractiveMap({
       const el = markerEl(i + 1, p.id === selectedId)
       el.setAttribute('aria-label', p.label)
       el.addEventListener('click', () => onSelectRef.current?.(p.id))
-      const marker = new maplibregl.Marker({ element: el })
+      const marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
         .setLngLat([p.lng, p.lat])
         .setPopup(
           new maplibregl.Popup({ offset: 20, closeButton: false }).setDOMContent(

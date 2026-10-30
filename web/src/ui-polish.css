@@ -86,7 +86,7 @@ p {
 }
 
 .btn-danger:hover {
-  background: #fff4f2;
+  background: var(--stop-tint);
 }
 
 .btn[disabled],

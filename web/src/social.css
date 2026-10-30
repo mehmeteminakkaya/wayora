@@ -618,7 +618,7 @@
   width: 100%;
   padding: 10px;
   border: 1px solid var(--stop);
-  background: #fff6f4;
+  background: var(--stop-tint);
   color: var(--stop);
   font-size: 13px;
 }

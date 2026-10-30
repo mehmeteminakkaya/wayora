@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -54,18 +54,26 @@ export function InteractiveMap({
   const host = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markers = useRef<maplibregl.Marker[]>([])
+  const [failed, setFailed] = useState(false)
   const onSelectRef = useRef(onSelect)
   onSelectRef.current = onSelect
 
   useEffect(() => {
     if (!host.current) return
-    const map = new maplibregl.Map({
-      container: host.current,
-      style: STYLE_URL,
-      center: [center[1], center[0]],
-      zoom,
-      attributionControl: { compact: true },
-    })
+    let map: maplibregl.Map
+    try {
+      map = new maplibregl.Map({
+        container: host.current,
+        style: STYLE_URL,
+        center: [center[1], center[0]],
+        zoom,
+        attributionControl: { compact: true },
+      })
+    } catch {
+      // WebGL yoksa (eski cihaz, test ortamı) harita yerine bağlantı gösterilir.
+      setFailed(true)
+      return
+    }
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right')
     map.addControl(new maplibregl.FullscreenControl(), 'top-right')
     map.addControl(
@@ -118,12 +126,29 @@ export function InteractiveMap({
     }
   }, [points, selectedId, center, zoom])
 
+  if (failed) {
+    const [lat, lng] = center
+    return (
+      <p className="notice" role="status">
+        Harita bu cihazda açılamadı.{' '}
+        <a
+          className="section-link"
+          href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=13/${lat}/${lng}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          OpenStreetMap&apos;te aç
+        </a>
+      </p>
+    )
+  }
+
   return (
     <div
       ref={host}
       role="region"
       aria-label={title}
-      style={{ width: '100%', height }}
+      style={{ width: '100%', height: `min(${height}px, 62vh)` }}
     />
   )
 }

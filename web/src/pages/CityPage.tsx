@@ -5,12 +5,14 @@ import { api } from '../api'
 import type { CityDetail, CityExperience } from '../api'
 import { BottomSheet } from '../components/BottomSheet'
 import { CityEvents } from '../components/CityEvents'
+import { InteractiveMap } from '../components/InteractiveMap'
 import { Photo } from '../components/Photo'
 import { DetailSkeleton } from '../components/Skeletons'
 import { formatMoney } from '../lib/format'
 import {
   categoryLabel,
   categoryPhoto,
+  cityCoords,
   cityPhoto,
   cityPhotoLabel,
   normalizeCityKey,
@@ -236,6 +238,26 @@ export function CityPage() {
           <p className="city-hero-summary">{city.summary}</p>
         </div>
       </header>
+
+      <section className="info-block" aria-label={`${city.name} haritası`}>
+        <div className="map-frame">
+          <InteractiveMap
+            title={`${city.name} haritası`}
+            center={cityCoords(city.name)}
+            points={[
+              {
+                id: 'center',
+                lat: cityCoords(city.name)[0],
+                lng: cityCoords(city.name)[1],
+                label: city.name,
+                detail: city.country,
+              },
+            ]}
+            zoom={12}
+            height={300}
+          />
+        </div>
+      </section>
 
       <section className="city-filter-bar" aria-label="Deneyim filtresi">
         <div className="chip-row" role="group" aria-label="Deneyimleri filtrele">

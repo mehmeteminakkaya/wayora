@@ -23,12 +23,31 @@ import type {
   SocialProfile,
   SocialProfileInput,
 } from '../api'
+import { InteractiveMap } from '../components/InteractiveMap'
+import { cityCoords } from '../lib/photos'
 import { BottomSheet } from '../components/BottomSheet'
 import { DetailSkeleton } from '../components/Skeletons'
 import { formatShortDate, interestLabel } from '../lib/format'
 
 type SocialTab = 'matches' | 'requests' | 'chats'
 type MatchFilter = 'all' | 'shared' | 'hosting'
+
+// Konum gizliliği: kimsenin gerçek konumu yok. Eşleşmeler yalnızca rota şehri
+// çevresinde, kullanıcı kimliğinden türetilen yaklaşık bir noktada gösterilir.
+function approxPoint(match: SocialMatch) {
+  const [lat, lng] = cityCoords(match.destination)
+  let hash = 0
+  for (const char of match.userId) hash = (hash * 31 + char.charCodeAt(0)) >>> 0
+  const angle = (hash % 360) * (Math.PI / 180)
+  const radius = 0.006 + ((hash >>> 9) % 100) / 100 * 0.018
+  return {
+    id: match.userId,
+    lat: lat + Math.sin(angle) * radius,
+    lng: lng + (Math.cos(angle) * radius) / Math.max(Math.cos((lat * Math.PI) / 180), 0.3),
+    label: match.displayName,
+    detail: `${match.destination} · ${match.score}% uyum`,
+  }
+}
 
 const LANGUAGE_HINTS = 'Türkçe, İngilizce, Almanca'
 
@@ -644,6 +663,22 @@ export function HitchhikerPage() {
                       </button>
                     ))}
                   </div>
+                  {filteredMatches.length > 0 && (
+                    <div className="info-block">
+                      <div className="map-frame">
+                        <InteractiveMap
+                          title="Yol arkadaşları haritası"
+                          center={cityCoords(filteredMatches[0].destination)}
+                          zoom={11}
+                          height={340}
+                          points={filteredMatches.map(approxPoint)}
+                        />
+                      </div>
+                      <p className="helper" style={{ marginTop: 8 }}>
+                        Konumlar yaklaşıktır: yalnızca rota şehrini gösterir, gerçek adres paylaşılmaz.
+                      </p>
+                    </div>
+                  )}
                   {filteredMatches.length === 0 ? (
                     <div className="social-empty small-empty">
                       <p>Bu filtreye uyan eşleşme yok.</p>

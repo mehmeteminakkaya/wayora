@@ -884,11 +884,11 @@ export function TripDetailPage() {
                             className={`timeline-item${draggedActivityId === activity.id ? ' is-dragging' : ''}${dropTargetId === activity.id ? ' is-drop-target' : ''}`}
                             key={activity.id}
                             data-activity-id={activity.id}
-                            draggable
-                            onDragStart={() => {
-                              setConfirmActivityId(null)
-                              setDraggedActivityId(activity.id)
-                            }}
+                            // Not: `draggable` ve dragstart/dragend burada degil, .drag-handle
+                            // butonunda. Chromium ve WebKit, mousedown'u bir <button> uzerinde
+                            // baslayan gercek bir dragstart'a cevirmiyor; ust elemanin
+                            // draggable=true olmasi yetmiyordu, tutamactan surukleme hic
+                            // calismiyordu (gercek fareyle dogrulandi, bkz. ilgili PR).
                             onDragOver={(event) => {
                               event.preventDefault()
                               setDropTargetId(activity.id)
@@ -896,10 +896,6 @@ export function TripDetailPage() {
                             onDrop={(event) => {
                               event.preventDefault()
                               void handleDrop(activity.id)
-                            }}
-                            onDragEnd={() => {
-                              setDraggedActivityId(null)
-                              setDropTargetId(null)
                             }}
                           >
                             <span className="timeline-time">
@@ -985,6 +981,19 @@ export function TripDetailPage() {
                                     type="button"
                                     title="Sürükle veya ok tuşlarıyla sırala"
                                     aria-label={`${activity.title} durağını sırala`}
+                                    // Native suruklemenin kaynagi burasi (li degil): draggable
+                                    // ancak bu dugmede tanimli, cunku dragstart tam olarak
+                                    // kullanicinin tuttugu elemandan baslamali.
+                                    draggable
+                                    onDragStart={(event) => {
+                                      event.stopPropagation()
+                                      setConfirmActivityId(null)
+                                      setDraggedActivityId(activity.id)
+                                    }}
+                                    onDragEnd={() => {
+                                      setDraggedActivityId(null)
+                                      setDropTargetId(null)
+                                    }}
                                     onKeyDown={(event) => {
                                       if (event.key === 'ArrowUp') {
                                         event.preventDefault()

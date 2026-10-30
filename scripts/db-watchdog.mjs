@@ -18,15 +18,23 @@ function isListening() {
   })
 }
 
-function startDb() {
+function runNpm(script) {
   return new Promise((resolve) => {
-    const child = spawn('npm', ['run', 'db:start', '-w', 'api'], {
+    const child = spawn('npm', ['run', script, '-w', 'api'], {
       stdio: 'inherit',
       shell: true,
     })
     child.on('exit', () => resolve())
     child.on('error', () => resolve())
   })
+}
+
+async function startDb() {
+  // Asılı kalan daemon "Lock file is already being held" bırakabiliyor; önce
+  // durdurup kilidi bırak, sonra yeniden başlat. (Port zaten kapalı olduğu için
+  // durdurmak güvenli.)
+  await runNpm('db:stop')
+  await runNpm('db:start')
 }
 
 let starting = false

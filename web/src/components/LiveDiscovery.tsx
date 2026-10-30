@@ -106,6 +106,38 @@ export function LiveDiscovery({
   const duffelMissing = status?.providers.duffel === 'missing'
   const statusPending = !status && !statusError
 
+  // Sağlayıcı anahtarı yoksa demo/örnek içerik gösterilir; gerçek veri değildir.
+  const demoEvents: EventOffer[] = [
+    {
+      id: 'demo-event-1',
+      name: 'Şehir Caz Festivali',
+      url: null,
+      imageUrl: null,
+      startDate,
+      startTime: '20:00',
+      venue: 'Harbiye Açıkhava',
+      city: null,
+      priceMin: 750,
+      priceMax: 750,
+      currency: 'TRY',
+      status: null,
+    },
+    {
+      id: 'demo-event-2',
+      name: 'Boğaz’da Akustik Konser',
+      url: null,
+      imageUrl: null,
+      startDate: endDate,
+      startTime: '19:30',
+      venue: 'Zorlu PSM',
+      city: null,
+      priceMin: 450,
+      priceMax: 450,
+      currency: 'TRY',
+      status: null,
+    },
+  ]
+
   return (
     <section className="live-discovery" aria-labelledby="live-discovery-title">
       <div className="section-head">
@@ -137,10 +169,12 @@ export function LiveDiscovery({
           ) : statusPending ? (
             <EventFeed events={[]} loading />
           ) : ticketmasterMissing ? (
-            <p className="discovery-empty">
-              Canlı etkinlikler bu ortamda yapılandırılmadı. Anahtar eklendiğinde şehirdeki
-              etkinlikler burada görünür.
-            </p>
+            <>
+              <p className="test-label">
+                Örnek veri · canlı etkinlikler için Ticketmaster anahtarı eklenmeli
+              </p>
+              <EventFeed events={demoEvents} />
+            </>
           ) : (
             <EventFeed
               events={events}
@@ -173,10 +207,21 @@ export function LiveDiscovery({
               <span className="skeleton-line short" />
             </div>
           ) : duffelMissing ? (
-            <p className="discovery-empty">
-              Uçuş denemeleri bu ortamda yapılandırılmadı. Test token'ı eklendiğinde burada
-              görünür.
-            </p>
+            <>
+              <p className="test-label">
+                Örnek veri · canlı uçuşlar için Duffel test token'ı eklenmeli
+              </p>
+              <ul className="flight-list">
+                <li className="flight-row">
+                  <div>
+                    <strong>Türk Hava Yolları</strong>
+                    <span>{formatShortDate(startDate)} · 09:30 → 11:00</span>
+                    <span>Direkt · 1s 30dk</span>
+                  </div>
+                  <strong className="flight-price">{formatMoney(189, 'EUR')}</strong>
+                </li>
+              </ul>
+            </>
           ) : (
             <form className="flight-form" onSubmit={handleFlightSearch}>
               <label className="field">

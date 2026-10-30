@@ -260,6 +260,15 @@ export type CreateActivityInput = {
   notes: string | null
 }
 
+export type AgentAction = {
+  label: string
+  path?: string
+  url?: string
+  kind: 'navigate' | 'ticket' | 'flight'
+}
+
+export type AgentReply = { reply: string; actions: AgentAction[] }
+
 export class ApiError extends Error {
   status: number
   code: string
@@ -372,7 +381,7 @@ export const api = {
   deleteActivity: (id: string) => request<void>(`/api/activities/${id}`, { method: 'DELETE' }),
 
   chatAgent: (messages: Array<{ role: 'user' | 'assistant'; content: string }>) =>
-    request<{ reply: string }>('/api/agent/chat', {
+    request<AgentReply>('/api/agent/chat', {
       method: 'POST',
       body: JSON.stringify({ messages }),
     }),

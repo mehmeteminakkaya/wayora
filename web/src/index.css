@@ -3214,3 +3214,7 @@ p {
 .agent-form input { flex: 1; min-width: 0; padding: 8px 10px; border: 1px solid #deded9; border-radius: 4px; font: inherit; }
 .agent-form button { padding: 8px 12px; border: 0; border-radius: 4px; background: #121212; color: #fff; cursor: pointer; }
 @media (min-width: 900px) { .agent-fab, .agent-panel { bottom: 24px; } }
+
+.agent-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.agent-chip { padding: 6px 10px; border: 1px solid #121212; border-radius: 4px; background: #fff; color: #121212; font-size: 13px; font-weight: 700; text-decoration: none; }
+.agent-chip:hover { background: #ffc400; }

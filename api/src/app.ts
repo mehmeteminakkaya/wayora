@@ -100,7 +100,7 @@ export function createApp({ corsOrigin, checkDb, db, config, generateLimiter }: 
       message: { error: { code: 'AGENT_RATE_LIMITED', message: 'Çok fazla mesaj gönderdin. Biraz sonra tekrar dene.' } },
     }),
   )
-  app.use('/api/agent', agentRouter({ config }))
+  app.use('/api/agent', agentRouter({ db, config }))
   app.use('/api/social', socialRouter({ db, config }))
   app.use('/api/activities', activityRouter({ db, config }))
   app.use('/api/places', placeRouter({ db, config }))

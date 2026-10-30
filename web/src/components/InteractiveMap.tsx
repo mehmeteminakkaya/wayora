@@ -24,7 +24,46 @@ type Props = {
   height?: number
 }
 
-const STYLE_URL = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
+type StyleKey = 'map' | 'satellite' | 'dark'
+
+const SATELLITE_STYLE: maplibregl.StyleSpecification = {
+  version: 8,
+  sources: {
+    imagery: {
+      type: 'raster',
+      tiles: [
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      ],
+      tileSize: 256,
+      maxzoom: 19,
+      attribution: 'Tiles © Esri — Maxar, Earthstar Geographics',
+    },
+    labels: {
+      type: 'raster',
+      tiles: [
+        'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+      ],
+      tileSize: 256,
+      maxzoom: 19,
+    },
+  },
+  layers: [
+    { id: 'imagery', type: 'raster', source: 'imagery' },
+    { id: 'labels', type: 'raster', source: 'labels' },
+  ],
+}
+
+const STYLES: Record<StyleKey, string | maplibregl.StyleSpecification> = {
+  map: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+  satellite: SATELLITE_STYLE,
+  dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+}
+
+const STYLE_LABELS: Array<[StyleKey, string]> = [
+  ['map', 'Harita'],
+  ['satellite', 'Uydu'],
+  ['dark', 'Koyu'],
+]
 
 function markerEl(index: number, active: boolean): HTMLButtonElement {
   const el = document.createElement('button')
@@ -59,6 +98,9 @@ export function InteractiveMap({
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markers = useRef<maplibregl.Marker[]>([])
   const [failed, setFailed] = useState(false)
+  const [styleKey, setStyleKey] = useState<StyleKey>('map')
+  const [tilted, setTilted] = useState(false)
+  const appliedStyle = useRef<StyleKey>('map')
   const refit = useRef<() => void>(() => {})
   const onSelectRef = useRef(onSelect)
   onSelectRef.current = onSelect
@@ -69,7 +111,7 @@ export function InteractiveMap({
     try {
       map = new maplibregl.Map({
         container: host.current,
-        style: STYLE_URL,
+        style: STYLES.map,
         center: [center[1], center[0]],
         zoom,
         attributionControl: { compact: true },
@@ -102,6 +144,17 @@ export function InteractiveMap({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    // Stil değişince işaretçiler DOM öğesi olduğu için korunur.
+    if (appliedStyle.current === styleKey) return
+    appliedStyle.current = styleKey
+    mapRef.current?.setStyle(STYLES[styleKey])
+  }, [styleKey])
+
+  useEffect(() => {
+    mapRef.current?.easeTo({ pitch: tilted ? 60 : 0, bearing: tilted ? -20 : 0, duration: 700 })
+  }, [tilted])
 
   // Üst bileşen her render'da yeni dizi verir; haritayı yalnızca içerik değişince güncelle.
   const pointsKey = JSON.stringify(points.map((p) => [p.id, p.lat, p.lng]))
@@ -174,13 +227,52 @@ export function InteractiveMap({
   }
 
   return (
-    <div
-      ref={host}
-      role="region"
-      aria-label={title}
-      style={{ width: '100%', height: `min(${height}px, 62vh)` }}
-    />
+    <div style={{ position: 'relative', width: '100%' }}>
+      <div
+        ref={host}
+        role="region"
+        aria-label={title}
+        style={{ width: '100%', height: `min(${height}px, 62vh)` }}
+      />
+      <div
+        role="group"
+        aria-label="Harita stili"
+        style={{ position: 'absolute', top: 10, left: 10, display: 'flex', gap: 4, zIndex: 2 }}
+      >
+        {STYLE_LABELS.map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            aria-pressed={styleKey === key}
+            onClick={() => setStyleKey(key)}
+            style={mapButton(styleKey === key)}
+          >
+            {label}
+          </button>
+        ))}
+        <button
+          type="button"
+          aria-pressed={tilted}
+          onClick={() => setTilted((value) => !value)}
+          style={mapButton(tilted)}
+        >
+          3B
+        </button>
+      </div>
+    </div>
   )
+}
+
+function mapButton(active: boolean): React.CSSProperties {
+  return {
+    padding: '6px 10px',
+    border: '1px solid #121212',
+    borderRadius: 4,
+    background: active ? '#FFC400' : '#fff',
+    color: '#121212',
+    font: '700 12px Overpass, sans-serif',
+    cursor: 'pointer',
+  }
 }
 
 function popupContent(p: MapPoint): HTMLElement {

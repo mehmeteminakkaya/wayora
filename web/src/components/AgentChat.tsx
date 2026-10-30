@@ -1,8 +1,10 @@
 import { MessageCircle, Send, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { api } from '../api'
+import type { AgentAction } from '../api'
 
-type Msg = { role: 'user' | 'assistant'; content: string }
+type Msg = { role: 'user' | 'assistant'; content: string; actions?: AgentAction[] }
 
 const GREETING: Msg = {
   role: 'assistant',
@@ -29,8 +31,13 @@ export function AgentChat() {
     setText('')
     setBusy(true)
     try {
-      const { reply } = await api.chatAgent(next.slice(1).slice(-20))
-      setMessages([...next, { role: 'assistant', content: reply }])
+      const { reply, actions } = await api.chatAgent(
+        next
+          .slice(1)
+          .slice(-20)
+          .map(({ role, content }) => ({ role, content })),
+      )
+      setMessages([...next, { role: 'assistant', content: reply, actions }])
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Bir hata oluştu.'
       setMessages([...next, { role: 'assistant', content: message }])
@@ -59,6 +66,21 @@ export function AgentChat() {
         {messages.map((m, i) => (
           <div key={i} className={m.role === 'user' ? 'agent-msg is-user' : 'agent-msg'}>
             {m.content}
+            {m.actions && m.actions.length > 0 && (
+              <div className="agent-actions">
+                {m.actions.map((a) =>
+                  a.path ? (
+                    <Link key={a.path} to={a.path} className="agent-chip" onClick={() => setOpen(false)}>
+                      {a.label} →
+                    </Link>
+                  ) : (
+                    <a key={a.url} href={a.url} className="agent-chip" target="_blank" rel="noreferrer">
+                      {a.label} ↗
+                    </a>
+                  ),
+                )}
+              </div>
+            )}
           </div>
         ))}
         {busy && <div className="agent-msg">Yazıyor…</div>}

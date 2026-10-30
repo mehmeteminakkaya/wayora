@@ -12,7 +12,8 @@ Tüm dosyalar Türkçedir ve projedeki gerçek kod, test ve sprint durumuyla hiz
 | [Wayora-User-Stories.docx](Wayora-User-Stories.docx) | Word | 23 user story, kabul kriterleri, öncelik, durum ve güncel test kanıtları |
 | [Wayora-User-Stories.pdf](Wayora-User-Stories.pdf) | PDF | Güncel user story kataloğu (30 Ekim 2026) |
 | [Wayora-Proje-Yonetimi.pdf](Wayora-Proje-Yonetimi.pdf) | PDF | Güncel proje yönetimi planı (30 Ekim 2026) |
-| [professor/Wayora-Profesor-Teslimi.zip](professor/Wayora-Profesor-Teslimi.zip) | ZIP | Hocaya sunum için 5 PDF + DOCX + Markdown paketi |
+| [professor/Wayora-Profesor-Teslimi.zip](professor/Wayora-Profesor-Teslimi.zip) | ZIP | Hocaya sunum için 5 PDF + DOCX + Markdown + tek PDF paketi |
+| [professor/Wayora-Profesor-Teslimi-Tum.pdf](professor/Wayora-Profesor-Teslimi-Tum.pdf) | PDF | Beş belgenin tek 29 sayfalık PDF birleşimi |
 | [professor/00-Sunum-Rehberi.pdf](professor/00-Sunum-Rehberi.pdf) | PDF | 10 dakikalık sunum akışı ve demo rehberi |
 | [professor/01-Yapilanlar.pdf](professor/01-Yapilanlar.pdf) | PDF | Alan alan yapılanlar ve kanıtlar |
 | [professor/02-User-Stories.pdf](professor/02-User-Stories.pdf) | PDF | Ayrıntılı user story kataloğu |

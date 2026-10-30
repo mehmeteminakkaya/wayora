@@ -15,7 +15,8 @@
     "typecheck": "npm run typecheck --workspaces",
     "test": "npm run test --workspaces",
     "setup": "npm install && node -e \"require('fs').existsSync('api/.env')||require('fs').copyFileSync('api/.env.example','api/.env')\" && npm run db:start -w api && npm run db:deploy -w api",
-    "hooks:install": "git config core.hooksPath .githooks"
+    "hooks:install": "git config core.hooksPath .githooks",
+    "docs:professor": "python scripts/generate_professor_docs.py"
   },
   "engines": {
     "node": "^22.22.2 || >=24.15.0"

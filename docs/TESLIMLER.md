@@ -9,9 +9,15 @@ Tüm dosyalar Türkçedir ve projedeki gerçek kod, test ve sprint durumuyla hiz
 | :--- | :--- | :--- |
 | [Wayora-Proje-Raporu.docx](Wayora-Proje-Raporu.docx) | Word | Detaylı proje raporu: problem, kapsam, ekip, mimari, veri modeli, API, AI, tasarım, güvenlik, test, sonuç |
 | [Wayora-Proje-Yonetimi.docx](Wayora-Proje-Yonetimi.docx) | Word | Proje yönetimi planı: hedefler, RACI, WBS, sprint takvimi, kaynak, kalite, risk, iletişim, KPI, kapanış |
-| [Wayora-User-Stories.docx](Wayora-User-Stories.docx) | Word | 20 user story, kabul kriterleri, öncelik, puan, sprint, durum ve test kanıtları |
-| [Wayora-Proje-Raporu.pdf](Wayora-Proje-Raporu.pdf) | PDF | Proje raporunun PDF çıktısı (29 Ekim 15:27 export'u) |
-| [Wayora-User-Stories.pdf](Wayora-User-Stories.pdf) | PDF | User story kataloğunun PDF çıktısı (29 Ekim 15:27 export'u) |
+| [Wayora-User-Stories.docx](Wayora-User-Stories.docx) | Word | 23 user story, kabul kriterleri, öncelik, durum ve güncel test kanıtları |
+| [Wayora-User-Stories.pdf](Wayora-User-Stories.pdf) | PDF | Güncel user story kataloğu (30 Ekim 2026) |
+| [Wayora-Proje-Yonetimi.pdf](Wayora-Proje-Yonetimi.pdf) | PDF | Güncel proje yönetimi planı (30 Ekim 2026) |
+| [professor/Wayora-Profesor-Teslimi.zip](professor/Wayora-Profesor-Teslimi.zip) | ZIP | Hocaya sunum için 5 PDF + DOCX + Markdown paketi |
+| [professor/00-Sunum-Rehberi.pdf](professor/00-Sunum-Rehberi.pdf) | PDF | 10 dakikalık sunum akışı ve demo rehberi |
+| [professor/01-Yapilanlar.pdf](professor/01-Yapilanlar.pdf) | PDF | Alan alan yapılanlar ve kanıtlar |
+| [professor/02-User-Stories.pdf](professor/02-User-Stories.pdf) | PDF | Ayrıntılı user story kataloğu |
+| [professor/03-Proje-Yonetimi.pdf](professor/03-Proje-Yonetimi.pdf) | PDF | Proje yönetimi, risk, sprint ve deploy |
+| [professor/04-Ders-Konseptleri.pdf](professor/04-Ders-Konseptleri.pdf) | PDF | Week 1–5 konsept izlenebilirliği ve dürüst boşluklar |
 | [Wayora-Sunum-Tasarim.pptx](Wayora-Sunum-Tasarim.pptx) | PowerPoint | **Sunulan deste.** 13 slayt; elle tasarlandı, gerçek ekran görüntüleriyle. Konuşmacı notu yoktur. |
 | [Wayora-Sunum.pptx](Wayora-Sunum.pptx) | PowerPoint | `generate_slides.py` ile üretilen 14 slaytlık yedek deste; her slaytta konuşmacı notu var |
 | [Wayora-V2-Full-Frontend-Raporu.pdf](Wayora-V2-Full-Frontend-Raporu.pdf) | PDF | V2 full frontend raporu: tüm ekranlar, tasarım sistemi, routing, state, erişilebilirlik ve testler |

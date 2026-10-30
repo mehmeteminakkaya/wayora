@@ -122,6 +122,76 @@ export type FlightSearchResult = {
   disclaimer: string
 }
 
+export type SocialProfile = {
+  displayName: string
+  bio: string
+  languages: string[]
+  hostingAvailable: boolean
+  hostingNote: string | null
+  visible: boolean
+  safetyAccepted: boolean
+}
+
+export type SocialProfileInput = {
+  displayName: string
+  bio: string
+  languages: string[]
+  hostingAvailable: boolean
+  hostingNote: string | null
+  visible: boolean
+  safetyAccepted: boolean
+}
+
+export type SocialPreferences = {
+  interests: string[]
+  pace: Pace
+  budgetLevel: BudgetLevel
+  travelStyle: TravelStyle
+}
+
+export type SocialMatch = {
+  userId: string
+  displayName: string
+  bio: string
+  languages: string[]
+  interests: string[]
+  pace: Pace
+  travelStyle: TravelStyle
+  hostingAvailable: boolean
+  hostingNote: string | null
+  destination: string
+  startDate: string
+  endDate: string
+  overlapDays: number
+  score: number
+  sharedInterests: string[]
+  reasons: string[]
+}
+
+export type SocialConnection = {
+  id: string
+  status: 'pending' | 'accepted' | 'declined' | 'cancelled'
+  message: string | null
+  createdAt: string
+  direction: 'incoming' | 'outgoing'
+  other: { id: string; name: string }
+}
+
+export type SocialConnections = {
+  incoming: SocialConnection[]
+  outgoing: SocialConnection[]
+  accepted: SocialConnection[]
+}
+
+export type SocialMessage = {
+  id: string
+  body: string
+  senderId: string
+  senderName: string
+  mine: boolean
+  createdAt: string
+}
+
 export type CitySummary = {
   slug: string
   name: string
@@ -320,4 +390,57 @@ export const api = {
     if (input.adults) params.set('adults', String(input.adults))
     return request<FlightSearchResult>(`/api/discovery/flights?${params.toString()}`)
   },
+
+  getSocialProfile: () =>
+    request<{ profile: SocialProfile | null; preferences: SocialPreferences | null }>(
+      '/api/social/profile',
+    ),
+
+  saveSocialProfile: (input: SocialProfileInput) =>
+    request<{ profile: SocialProfile }>('/api/social/profile', {
+      method: 'PUT',
+      body: JSON.stringify(input),
+    }),
+
+  getSocialMatches: () =>
+    request<{ matches: SocialMatch[]; reason?: string }>('/api/social/matches'),
+
+  sendSocialRequest: (recipientId: string, message?: string) =>
+    request<{ connection: SocialConnection }>('/api/social/requests', {
+      method: 'POST',
+      body: JSON.stringify({ recipientId, message: message?.trim() || undefined }),
+    }),
+
+  getSocialConnections: () => request<SocialConnections>('/api/social/connections'),
+
+  updateSocialConnection: (id: string, action: 'accept' | 'decline' | 'cancel') =>
+    request<{ connection: SocialConnection }>(`/api/social/connections/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ action }),
+    }),
+
+  getSocialMessages: (connectionId: string) =>
+    request<{ messages: SocialMessage[] }>(`/api/social/connections/${connectionId}/messages`),
+
+  sendSocialMessage: (connectionId: string, body: string) =>
+    request<{ message: SocialMessage }>(`/api/social/connections/${connectionId}/messages`, {
+      method: 'POST',
+      body: JSON.stringify({ body }),
+    }),
+
+  reportSocialConnection: (
+    connectionId: string,
+    reason: 'harassment' | 'spam' | 'safety' | 'other',
+    details?: string,
+  ) =>
+    request<{ ok: boolean; message: string }>(`/api/social/connections/${connectionId}/report`, {
+      method: 'POST',
+      body: JSON.stringify({ reason, details }),
+    }),
+
+  blockSocialUser: (userId: string) =>
+    request<{ ok: boolean }>('/api/social/block', {
+      method: 'POST',
+      body: JSON.stringify({ userId }),
+    }),
 }

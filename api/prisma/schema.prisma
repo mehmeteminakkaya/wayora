@@ -19,6 +19,14 @@ model User {
   updatedAt    DateTime    @updatedAt
   preference   Preference?
   trips        Trip[]
+  travelerProfile TravelerProfile?
+  connectionsSent TravelConnection[] @relation("ConnectionRequester")
+  connectionsReceived TravelConnection[] @relation("ConnectionRecipient")
+  messagesSent ConnectionMessage[] @relation("MessageSender")
+  blocksMade   BlockedUser[] @relation("UserBlocks")
+  blocksReceived BlockedUser[] @relation("BlockedBy")
+  reportsMade  SafetyReport[] @relation("ReportsMade")
+  reportsReceived SafetyReport[] @relation("ReportsReceived")
 }
 
 model Preference {
@@ -49,6 +57,7 @@ model Trip {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   days        TripDay[]
+  connections TravelConnection[]
 
   @@index([userId])
 }
@@ -141,4 +150,80 @@ model CityExperience {
   @@unique([cityId, slug])
   @@index([cityId, category])
   @@index([cityId, sortOrder])
+}
+
+// Yol Arkadaşları: kullanıcıların açıkça görünür olduğu sosyal eşleşme katmanı.
+model TravelerProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName     String
+  bio             String
+  languages       String[] @default([])
+  hostingAvailable Boolean @default(false)
+  hostingNote     String?
+  visible         Boolean  @default(false)
+  safetyAcceptedAt DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([visible])
+}
+
+model TravelConnection {
+  id          String   @id @default(uuid())
+  requesterId String
+  recipientId String
+  tripId      String?
+  status      String   @default("pending") // pending | accepted | declined | cancelled
+  message     String?
+  requester   User     @relation("ConnectionRequester", fields: [requesterId], references: [id], onDelete: Cascade)
+  recipient   User     @relation("ConnectionRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  trip        Trip?    @relation(fields: [tripId], references: [id], onDelete: SetNull)
+  messages    ConnectionMessage[]
+  reports     SafetyReport[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([requesterId, status])
+  @@index([recipientId, status])
+}
+
+model ConnectionMessage {
+  id           String   @id @default(uuid())
+  connectionId String
+  senderId     String
+  body         String
+  connection   TravelConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  sender       User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+
+  @@index([connectionId, createdAt])
+}
+
+model BlockedUser {
+  id        String   @id @default(uuid())
+  blockerId String
+  blockedId String
+  blocker   User     @relation("UserBlocks", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked   User     @relation("BlockedBy", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+  @@index([blockedId])
+}
+
+model SafetyReport {
+  id             String   @id @default(uuid())
+  reporterId     String
+  reportedUserId String
+  connectionId   String?
+  reason         String
+  details        String?
+  reporter       User     @relation("ReportsMade", fields: [reporterId], references: [id], onDelete: Cascade)
+  reportedUser   User     @relation("ReportsReceived", fields: [reportedUserId], references: [id], onDelete: Cascade)
+  connection     TravelConnection? @relation(fields: [connectionId], references: [id], onDelete: SetNull)
+  createdAt      DateTime @default(now())
+
+  @@index([reportedUserId, createdAt])
 }

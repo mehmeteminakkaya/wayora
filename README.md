@@ -55,6 +55,8 @@ Mevcut sürümde kullanıcı:
 6. Oluşan rotayı gün şeridinde gezer; durak ekler, siler ve sıralamayı değiştirir.
 7. Rota detayında Ticketmaster etkinliklerini ve Duffel test uçuşlarını görür.
 8. Tercihlerini profilden günceller; rotalarını yaklaşan, taslak ve geçmiş olarak görür.
+9. **Yol Arkadaşları** ekranında aynı şehir ve tarihlerdeki gezginlerle eşleşir; karşılıklı
+   kabulden sonra güvenli biçimde mesajlaşır, engeller veya bildirir.
 
 ## Öne çıkanlar
 
@@ -72,6 +74,9 @@ Mevcut sürümde kullanıcı:
   Duffel test token'ı varsa uçuş fikri.
 - Rotalarım ekranında yaklaşan, taslak ve geçmiş rotalar; silme onayı.
 - Profilde kayıtlı tercihleri görüntüleme ve düzenleme.
+- **Yol Arkadaşları:** aynı şehir ve tarih kesişimine göre açıklanabilir eşleşme, karşılıklı
+  bağlantı isteği, kabul sonrası sohbet, engelleme ve bildirim. Ev sahipliği yalnızca niyet
+  bilgisidir; adres, rezervasyon veya ödeme yoktur.
 - **Canlı keşif:** Ticketmaster Discovery ile şehir sayfasında ve rota detayında
   şehir etkinlikleri; Duffel test token'ı varsa uçuş fikri. Anahtar yoksa bölüm uydurma
   veri üretmez, yapılandırma notu gösterir. Otel/rezervasyon satışı bu sürümde yoktur.
@@ -400,6 +405,14 @@ web/src/
 | `GET` | `/api/discovery/status` | Ticketmaster/Duffel yapılandırma durumu |
 | `GET` | `/api/discovery/events?city=&startDate=&endDate=` | Ticketmaster etkinlik keşfi |
 | `GET` | `/api/discovery/flights?origin=&destination=&departureDate=&returnDate=` | Duffel uçuş araması (oturum gerekli) |
+| `GET` / `PUT` | `/api/social/profile` | Yol arkadaşı profilini getir / kaydet |
+| `GET` | `/api/social/matches` | Aynı şehir ve tarih kesişimine göre eşleşmeler |
+| `POST` | `/api/social/requests` | Karşılıklı bağlantı isteği |
+| `GET` | `/api/social/connections` | Gelen, giden ve kabul edilen bağlantılar |
+| `PATCH` | `/api/social/connections/:id` | İsteği kabul et / reddet / iptal et |
+| `GET` / `POST` | `/api/social/connections/:id/messages` | Kabul edilen bağlantıda mesajlar |
+| `POST` | `/api/social/connections/:id/report` | Güvenlik bildirimi ve engelleme |
+| `POST` | `/api/social/block` | Kullanıcıyı engelle |
 
 `/api/discovery/events` herkese açıktır; `/api/discovery/flights` oturum ister ve
 `DUFFEL_ACCESS_TOKEN` yoksa 503 `DUFFEL_NOT_CONFIGURED` döner. Anahtarlar hiçbir zaman

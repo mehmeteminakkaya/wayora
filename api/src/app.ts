@@ -14,6 +14,7 @@ import { healthRouter } from './routes/health.ts'
 import { placeRouter } from './routes/places.ts'
 import { preferenceRouter } from './routes/preferences.ts'
 import { activityRouter, tripRouter } from './routes/trips.ts'
+import { socialRouter } from './routes/social.ts'
 
 export type AppDeps = {
   corsOrigin: string
@@ -87,6 +88,7 @@ export function createApp({ corsOrigin, checkDb, db, config, generateLimiter }: 
   app.use('/api/auth', authRouter({ db, config }))
   app.use('/api/me/preferences', preferenceRouter({ db, config }))
   app.use('/api/trips', tripRouter({ db, config, generateLimiter: aiLimiter }))
+  app.use('/api/social', socialRouter({ db, config }))
   app.use('/api/activities', activityRouter({ db, config }))
   app.use('/api/places', placeRouter({ db, config }))
 

@@ -20,6 +20,20 @@ type StoredPreference = {
   updatedAt: Date
 }
 
+type StoredTravelerProfile = {
+  id: string
+  userId: string
+  displayName: string
+  bio: string
+  languages: string[]
+  hostingAvailable: boolean
+  hostingNote: string | null
+  visible: boolean
+  safetyAcceptedAt: Date | null
+  createdAt: Date
+  updatedAt: Date
+}
+
 class UniqueConstraintError extends Error {
   code = 'P2002'
 }
@@ -30,6 +44,7 @@ export function createFakeDb() {
   const usersByEmail = new Map<string, StoredUser>()
   const usersById = new Map<string, StoredUser>()
   const preferences = new Map<string, StoredPreference>()
+  const travelerProfiles = new Map<string, StoredTravelerProfile>()
 
   const db = {
     user: {
@@ -80,6 +95,36 @@ export function createFakeDb() {
       },
       async findUnique(args: { where: { userId: string } }) {
         return preferences.get(args.where.userId) ?? null
+      },
+    },
+    travelerProfile: {
+      async findUnique(args: { where: { userId: string } }) {
+        return travelerProfiles.get(args.where.userId) ?? null
+      },
+      async upsert(args: {
+        where: { userId: string }
+        create: Omit<StoredTravelerProfile, 'id' | 'createdAt' | 'updatedAt'>
+        update: Partial<StoredTravelerProfile>
+      }) {
+        const existing = travelerProfiles.get(args.where.userId)
+        const now = new Date()
+        const record: StoredTravelerProfile = {
+          id: existing?.id ?? randomUUID(),
+          userId: args.where.userId,
+          displayName: args.update.displayName ?? args.create.displayName,
+          bio: args.update.bio ?? args.create.bio,
+          languages: args.update.languages ?? args.create.languages,
+          hostingAvailable:
+            args.update.hostingAvailable ?? args.create.hostingAvailable ?? false,
+          hostingNote: args.update.hostingNote ?? args.create.hostingNote ?? null,
+          visible: args.update.visible ?? args.create.visible ?? false,
+          safetyAcceptedAt:
+            args.update.safetyAcceptedAt ?? args.create.safetyAcceptedAt ?? null,
+          createdAt: existing?.createdAt ?? now,
+          updatedAt: now,
+        }
+        travelerProfiles.set(args.where.userId, record)
+        return record
       },
     },
     async $queryRaw() {

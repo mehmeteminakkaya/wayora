@@ -64,4 +64,84 @@ describe('App', () => {
     renderAt('/trips')
     expect(await screen.findByRole('heading', { name: 'Henüz rota yok.' })).toBeInTheDocument()
   })
+
+  it('profili olmayan kullanıcıya güvenli profil başlangıcını gösterir', async () => {
+    mockApi((url) => {
+      if (url.endsWith('/api/auth/me')) {
+        return jsonResponse({ user: { id: 'u1', email: 'ada@example.com', name: 'Ada' } })
+      }
+      if (url.endsWith('/api/social/profile')) {
+        return jsonResponse({ profile: null, preferences: null })
+      }
+      if (url.endsWith('/api/social/connections')) {
+        return jsonResponse({ incoming: [], outgoing: [], accepted: [] })
+      }
+      return jsonResponse({ error: { code: 'NOT_FOUND', message: 'yok' } }, 404)
+    })
+
+    renderAt('/yol-arkadaslari')
+    expect(await screen.findByRole('heading', { name: 'Aynı yöne gidenler.' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Profilini aç, yol arkadaşını bul.' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Yol arkadaşı profili oluştur' })).toBeInTheDocument()
+  })
+
+  it('yol arkadaşı eşleşmesini ve güvenli bağlantı eylemini gösterir', async () => {
+    mockApi((url) => {
+      if (url.endsWith('/api/auth/me')) {
+        return jsonResponse({ user: { id: 'u1', email: 'ada@example.com', name: 'Ada' } })
+      }
+      if (url.endsWith('/api/social/profile')) {
+        return jsonResponse({
+          profile: {
+            displayName: 'Ada',
+            bio: 'Müzeleri ve yerel mutfağı seven sakin bir gezgin.',
+            languages: ['Türkçe'],
+            hostingAvailable: false,
+            hostingNote: null,
+            visible: true,
+            safetyAccepted: true,
+          },
+          preferences: {
+            interests: ['Müze', 'Yemek'],
+            pace: 'moderate',
+            budgetLevel: 'mid',
+            travelStyle: 'balanced',
+          },
+        })
+      }
+      if (url.endsWith('/api/social/connections')) {
+        return jsonResponse({ incoming: [], outgoing: [], accepted: [] })
+      }
+      if (url.endsWith('/api/social/matches')) {
+        return jsonResponse({
+          matches: [
+            {
+              userId: 'u2',
+              displayName: 'Deniz',
+              bio: 'Berlin’i yürüyerek keşfeden bir gezgin.',
+              languages: ['Türkçe'],
+              interests: ['Müze'],
+              pace: 'moderate',
+              travelStyle: 'balanced',
+              hostingAvailable: true,
+              hostingNote: 'Kısa bir çay sohbeti.',
+              destination: 'Berlin',
+              startDate: '2026-11-06',
+              endDate: '2026-11-10',
+              overlapDays: 3,
+              score: 86,
+              sharedInterests: ['museum'],
+              reasons: ['3 gün aynı şehirde', 'Ortak ilgi: Müze'],
+            },
+          ],
+        })
+      }
+      return jsonResponse({ error: { code: 'NOT_FOUND', message: 'yok' } }, 404)
+    })
+
+    renderAt('/yol-arkadaslari')
+    expect(await screen.findByRole('heading', { name: 'Aynı yöne gidenler.' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Deniz' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Bağlantı iste/ })).toBeInTheDocument()
+  })
 })

@@ -1,4 +1,4 @@
-import { Compass, Map, Plus, UserRound } from 'lucide-react'
+import { Compass, Map, Plus, UserRound, Users } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigationType } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
@@ -18,7 +18,8 @@ export function Layout() {
   const isExplore = location.pathname === '/kesfet'
   const isTrips = location.pathname === '/trips'
   const isProfile = location.pathname === '/profil'
-  const showBottomNav = !!user && !isAuthPage && (isExplore || isTrips || isProfile)
+  const isSocial = location.pathname === '/yol-arkadaslari'
+  const showBottomNav = !!user && !isAuthPage && (isExplore || isTrips || isProfile || isSocial)
 
   const previousPathRef = useRef(location.pathname)
 
@@ -60,6 +61,9 @@ export function Layout() {
                 <>
                   <NavLink to="/trips" className={navClass}>
                     Rotalarım
+                  </NavLink>
+                  <NavLink to="/yol-arkadaslari" className={navClass}>
+                    Yol Arkadaşları
                   </NavLink>
                   <NavLink to="/trips/new" className={navClass}>
                     Planla
@@ -119,6 +123,10 @@ export function Layout() {
           <NavLink to="/trips" className={mobileClass} end>
             <Map size={24} strokeWidth={1.75} aria-hidden="true" />
             <span>Rotalarım</span>
+          </NavLink>
+          <NavLink to="/yol-arkadaslari" className={mobileClass} end>
+            <Users size={24} strokeWidth={1.75} aria-hidden="true" />
+            <span>Yol</span>
           </NavLink>
           <NavLink to="/trips/new" className={mobileClass}>
             <Plus size={24} strokeWidth={1.75} aria-hidden="true" />

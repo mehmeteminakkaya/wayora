@@ -4,6 +4,7 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { CityPage } from './pages/CityPage'
 import { ExperiencePage } from './pages/ExperiencePage'
 import { ExplorePage } from './pages/ExplorePage'
+import { HitchhikerPage } from './pages/HitchhikerPage'
 import { LandingPage } from './pages/LandingPage'
 import { LoginPage } from './pages/LoginPage'
 import { NewTripPage } from './pages/NewTripPage'
@@ -32,6 +33,7 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="onboarding" element={<OnboardingPage />} />
           <Route path="trips" element={<TripsPage />} />
+          <Route path="yol-arkadaslari" element={<HitchhikerPage />} />
           <Route path="trips/new" element={<NewTripPage />} />
           <Route path="trips/:id" element={<TripDetailPage />} />
           <Route path="profil" element={<ProfilePage />} />

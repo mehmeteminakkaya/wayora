@@ -1,0 +1,81 @@
+{
+  "note": "50 developer personas ve 100 user personas ile deterministik ürün laboratuvarı simülasyonu. Gerçek kullanıcı testi değildir.",
+  "generatedAt": "2026-10-30T00:33:33.900Z",
+  "developerPersonas": 50,
+  "userPersonas": 100,
+  "segments": [
+    {
+      "label": "solo",
+      "weight": 0.35
+    },
+    {
+      "label": "friend-group",
+      "weight": 0.25
+    },
+    {
+      "label": "budget",
+      "weight": 0.2
+    },
+    {
+      "label": "first-time",
+      "weight": 0.2
+    }
+  ],
+  "iterations": [
+    {
+      "round": 1,
+      "developerSignals": 35,
+      "userSignals": 85,
+      "issues": [
+        "Profil görünürlüğü ve güvenlik onayı yeterince açık değil.",
+        "Eşleşme gerekçesi skorun arkasında kalıyor."
+      ],
+      "score": 7.7
+    },
+    {
+      "round": 2,
+      "developerSignals": 50,
+      "userSignals": 85,
+      "issues": [
+        "Kabul sonrası sohbet geçişi daha belirgin olmalı.",
+        "Boş rota durumunda kullanıcı ne yapacağını hemen anlamalı."
+      ],
+      "score": 8.4
+    },
+    {
+      "round": 3,
+      "developerSignals": 50,
+      "userSignals": 86,
+      "issues": [
+        "Engelleme ve bildirme aynı yerde, geri alınamaz etkisi açık olmalı.",
+        "Mobil alt navigasyonda beşinci sekme etiketleri kısa kalmalı."
+      ],
+      "score": 9
+    }
+  ],
+  "finalRubric": {
+    "clarity": 8.9,
+    "safety": 9.1,
+    "discovery": 8.7,
+    "interaction": 8.4,
+    "trust": 8.8,
+    "mobile": 9.3,
+    "accessibility": 9.2,
+    "performance": 9.6
+  },
+  "finalScore": 9,
+  "topFindings": [
+    "Güvenlik onayı ve görünürlük ayrımı ilk ekranda açık olmalı.",
+    "Eşleşme kartında skor yerine ortak noktalar öne çıkmalı.",
+    "Kabul sonrası sohbet geçişi kullanıcıyı kaybetmemeli.",
+    "Anlaşılır boş durumlar rota oluşturmaya yönlendirmeli.",
+    "Bildir/engelle aynı güvenlik alanında ve onaylı olmalı.",
+    "Beş sekmeli mobil navigasyon kısa etiket kullanmalı."
+  ],
+  "nextPhase": [
+    "Gerçek 5-8 kişilik kullanılabilirlik testi.",
+    "Telefon/e-posta doğrulaması ve moderasyon paneli.",
+    "Kullanıcı şikâyet kuyruğu ve SLA.",
+    "Realtime mesajlaşma (şimdilik polling)."
+  ]
+}

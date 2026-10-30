@@ -64,5 +64,21 @@ export const CATEGORY_LABELS: Record<string, string> = {
   nature: 'Doğa',
   landmark: 'Gezilecek yer',
   shopping: 'Alışveriş',
+  nightlife: 'Gece',
+  history: 'Tarih',
   other: 'Diğer',
+}
+
+const INTEREST_LABELS: Record<string, string> = {
+  ...CATEGORY_LABELS,
+  müze: 'Müze',
+  yemek: 'Yemek',
+  doğa: 'Doğa',
+  tarih: 'Tarih',
+  alışveriş: 'Alışveriş',
+  gece: 'Gece',
+}
+
+export function interestLabel(value: string): string {
+  return INTEREST_LABELS[value.toLocaleLowerCase('tr-TR')] ?? value
 }

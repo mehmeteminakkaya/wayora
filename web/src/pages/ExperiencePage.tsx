@@ -171,7 +171,7 @@ export function ExperiencePage() {
           priority
         />
         <div className="experience-hero-body city-hero-body">
-          <p className="label">{categoryLabel(experience.category)}</p>
+          <p className="eyebrow">{categoryLabel(experience.category)}</p>
           <h1 className="experience-detail-title">{experience.name}</h1>
           <span className="image-context">ŞEHİR ARŞİVİ · MEKÂNIN KENDİ FOTOĞRAFI DEĞİL</span>
           <p className="experience-detail-meta">

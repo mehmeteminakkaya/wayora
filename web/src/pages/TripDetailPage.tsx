@@ -46,18 +46,32 @@ function priceLabel(value: number | null, currency: string): string {
   return formatMoney(value, currency)
 }
 
-function mapSrc(destination: string): string {
-  const [lat, lng] = cityCoords(destination)
-  const delta = 0.045
+// Günün ilk durağının gerçek koordinatını kullan; yoksa şehir merkezine düş.
+function mapCoords(
+  destination: string,
+  activities: Activity[],
+): { lat: number; lng: number; hasPlace: boolean } {
+  const place = activities.find((activity) => activity.place !== null)?.place ?? null
+  const [fallbackLat, fallbackLng] = cityCoords(destination)
+  // (0, 0) "koordinat yok" demek; o durumda şehir merkezine düş.
+  if (place && (place.lat !== 0 || place.lng !== 0)) {
+    return { lat: place.lat, lng: place.lng, hasPlace: true }
+  }
+  return { lat: fallbackLat, lng: fallbackLng, hasPlace: false }
+}
+
+function mapSrc(destination: string, activities: Activity[]): string {
+  const { lat, lng, hasPlace } = mapCoords(destination, activities)
+  const delta = hasPlace ? 0.012 : 0.045
   const bbox = [lng - delta, lat - delta, lng + delta, lat + delta]
     .map((value) => value.toFixed(5))
     .join('%2C')
   return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat.toFixed(5)}%2C${lng.toFixed(5)}`
 }
 
-function mapLink(destination: string): string {
-  const [lat, lng] = cityCoords(destination)
-  return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=13/${lat}/${lng}`
+function mapLink(destination: string, activities: Activity[]): string {
+  const { lat, lng, hasPlace } = mapCoords(destination, activities)
+  return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=${hasPlace ? 16 : 13}/${lat}/${lng}`
 }
 
 function ActivityForm({
@@ -716,24 +730,18 @@ export function TripDetailPage() {
               {view === 'map' ? (
                 <div className="trip-map">
                   <div className="map-frame">
-                    <p
-                      className="map-fallback"
-                      style={{ position: 'absolute', inset: 0, minHeight: 0 }}
-                    >
-                      Harita yüklenemedi. Aşağıdaki bağlantıdan OpenStreetMap'te açabilirsin.
-                    </p>
                     <iframe
-                      src={mapSrc(trip.destination)}
+                      src={mapSrc(trip.destination, activeDay.activities)}
                       title={`${trip.destination} haritası`}
                       loading="lazy"
                     />
                   </div>
                   <p className="trip-note">
-                    Harita {trip.destination} merkezini gösterir. Durakların adresleri aşağıda.
+                    Harita günün ilk durağını işaretler; diğer durakların adresleri aşağıda.
                   </p>
                   <a
                     className="section-link"
-                    href={mapLink(trip.destination)}
+                    href={mapLink(trip.destination, activeDay.activities)}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -748,7 +756,15 @@ export function TripDetailPage() {
                       <ul className="info-list">
                         {activeDay.activities.map((activity) => (
                           <li key={activity.id}>
-                            <span>{activity.title}</span>
+                            <span>
+                              {activity.title}
+                              {(activity.startTime || activity.endTime) && (
+                                <span className="small muted">
+                                  {' '}· {activity.startTime ?? '--:--'}
+                                  {activity.endTime ? `–${activity.endTime}` : ''}
+                                </span>
+                              )}
+                            </span>
                             <strong>
                               {activity.place?.address ??
                                 CATEGORY_LABELS[activity.category] ??

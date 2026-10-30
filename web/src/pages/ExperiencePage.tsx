@@ -234,7 +234,12 @@ export function ExperiencePage() {
             <span>Rezervasyon</span>
             <strong>
               {experience.bookingUrl ? (
-                <a href={experience.bookingUrl} target="_blank" rel="noreferrer">
+                <a
+                  className="section-link"
+                  href={experience.bookingUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Resmî siteyi aç
                 </a>
               ) : (

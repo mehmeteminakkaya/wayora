@@ -1198,7 +1198,7 @@ p {
 }
 
 .sort-select {
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 8px;
   border: 1px solid var(--line);
   border-radius: 4px;

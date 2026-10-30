@@ -1,6 +1,6 @@
 {
   "note": "470 persona ile deterministik ürün laboratuvarı simülasyonu. Gerçek 470 canlı kullanıcı testi değildir.",
-  "generatedAt": "2026-10-30T01:25:57.789Z",
+  "generatedAt": "2026-10-30T01:38:06.354Z",
   "cohorts": [
     {
       "name": "Apple frontend engineers",
@@ -25,7 +25,7 @@
   ],
   "totalPersonas": 470,
   "auditChecks": 22,
-  "auditIssuesAtStart": 22,
+  "auditIssuesAtStart": 0,
   "iterations": [
     {
       "round": 1,
@@ -56,7 +56,8 @@
         "catalog-count-drift",
         "touch-targets",
         "social-discovery",
-        "demo-empty-state"
+        "demo-empty-state",
+        "social-total-count"
       ],
       "score": 8.1
     },
@@ -70,7 +71,6 @@
       },
       "signals": 470,
       "findings": [
-        "social-pagination",
         "real-user-verification"
       ],
       "score": 8.3
@@ -110,12 +110,12 @@
       "status": "fixed"
     },
     {
-      "id": "social-pagination",
+      "id": "social-total-count",
       "severity": "medium",
       "source": "35 product developers",
       "finding": "75 demo profilin yalnızca ilk 20’si gösteriliyor; kullanıcı bunu bilmiyor.",
-      "action": "Filtreler eklendi; toplam/offset bilgisi sonraki faza bırakıldı.",
-      "status": "open"
+      "action": "Eşleşme API’si toplam sayıyı döndürüyor; ekran “20 / 69 eşleşme” gösteriyor.",
+      "status": "fixed"
     },
     {
       "id": "real-user-verification",
@@ -130,10 +130,10 @@
     "catalog-count-drift",
     "touch-targets",
     "social-discovery",
-    "demo-empty-state"
+    "demo-empty-state",
+    "social-total-count"
   ],
   "open": [
-    "social-pagination",
     "real-user-verification"
   ],
   "finalRubric": {

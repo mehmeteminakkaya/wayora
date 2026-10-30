@@ -1,67 +1,8 @@
 {
-  "generatedAt": "2026-10-30T01:33:55.836Z",
+  "generatedAt": "2026-10-30T01:37:52.894Z",
   "base": "https://wayora-ten.vercel.app",
   "checks": 22,
-  "routeIssues": [
-    {
-      "viewport": "mobile",
-      "route": "explore",
-      "path": "/kesfet",
-      "metrics": {
-        "path": "/kesfet",
-        "title": "Wayora · Şehri hisset, gününü şekillendir",
-        "h1": [
-          "Keşfet"
-        ],
-        "scrollWidth": 390,
-        "viewportWidth": 390,
-        "horizontalOverflow": false,
-        "overflow": [],
-        "shortTargets": [
-          {
-            "text": "Önerilen sıraFiyat: düşükten yükseğeFiyat: yüksekt",
-            "height": 40
-          }
-        ],
-        "imageCount": 14,
-        "imagesMissingAlt": 0,
-        "duplicateIds": [],
-        "bodyTextLength": 1153,
-        "mainText": "Keşfet\nTümü\nYemek\nMüze\nDoğa\nGece\n\n14 ŞEHİR\n\nÖnerilen sıra\nFiyat: düşükten yükseğe\nFiyat: yüksekten düşüğe\nİsim: A-Z\nİsta"
-      },
-      "runtimeErrors": [],
-      "networkFailures": []
-    },
-    {
-      "viewport": "mobile",
-      "route": "experience",
-      "path": "/kesfet/berlin/museum-island",
-      "metrics": {
-        "path": "/kesfet/berlin/museum-island",
-        "title": "Wayora · Şehri hisset, gününü şekillendir",
-        "h1": [
-          "Museum Island"
-        ],
-        "scrollWidth": 390,
-        "viewportWidth": 390,
-        "horizontalOverflow": false,
-        "overflow": [],
-        "shortTargets": [
-          {
-            "text": "Resmî siteyi aç",
-            "height": 16
-          }
-        ],
-        "imageCount": 1,
-        "imagesMissingAlt": 0,
-        "duplicateIds": [],
-        "bodyTextLength": 564,
-        "mainText": "Berlin\n\nMÜZE\n\nMuseum Island\nŞEHİR ARŞİVİ · MEKÂNIN KENDİ FOTOĞRAFI DEĞİL\n\nBerlin\n·\nMitte\n\nPergamon, Neues ve Alte Nation"
-      },
-      "runtimeErrors": [],
-      "networkFailures": []
-    }
-  ],
+  "routeIssues": [],
   "results": [
     {
       "viewport": "mobile",
@@ -142,12 +83,7 @@
         "viewportWidth": 390,
         "horizontalOverflow": false,
         "overflow": [],
-        "shortTargets": [
-          {
-            "text": "Önerilen sıraFiyat: düşükten yükseğeFiyat: yüksekt",
-            "height": 40
-          }
-        ],
+        "shortTargets": [],
         "imageCount": 14,
         "imagesMissingAlt": 0,
         "duplicateIds": [],
@@ -195,12 +131,7 @@
         "viewportWidth": 390,
         "horizontalOverflow": false,
         "overflow": [],
-        "shortTargets": [
-          {
-            "text": "Resmî siteyi aç",
-            "height": 16
-          }
-        ],
+        "shortTargets": [],
         "imageCount": 1,
         "imagesMissingAlt": 0,
         "duplicateIds": [],

@@ -42,6 +42,14 @@ const SAMPLE_STOPS = [
   { time: '09:30', title: 'East Side Gallery', price: 'Ücretsiz' },
   { time: '12:30', title: 'Markthalle Neun', price: '14 €' },
   { time: '15:00', title: 'Tempelhofer Feld', price: 'Ücretsiz' },
+  { time: '17:30', title: 'Hackescher Markt', price: 'Ücretsiz' },
+  { time: '19:30', title: 'Akşam yemeği · Kreuzberg', price: '22 €' },
+]
+
+const SAMPLE_POINTS = [
+  'Gün gün, saat saat plan',
+  'Bütçene göre duraklar',
+  'İstediğin durağı değiştir',
 ]
 
 export function LandingPage() {
@@ -201,15 +209,27 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="sample-title">
-          <div className="section-head">
+        <section className="section sample-section" aria-labelledby="sample-title">
+          <div className="sample-copy">
+            <p className="eyebrow">ÖRNEK PLAN</p>
             <h2 id="sample-title">Örnek bir gün</h2>
-            <span className="small muted">Berlin · 3 durak</span>
+            <p className="muted">
+              Wayora bir günü saat saat sıralar: sabah bir müze, öğlen yerel bir pazar, akşamüstü
+              açık hava. Sen sadece şehri, tarihleri ve temponu seçersin.
+            </p>
+            <ul className="sample-points">
+              {SAMPLE_POINTS.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ul>
+            <Link className="btn btn-primary" to="/trips/new">
+              Kendi planını oluştur
+            </Link>
           </div>
           <div className="sample-day" aria-label="Berlin için örnek gün planı">
             <div className="sample-day-head">
               <span>BERLİN / GÜN 01</span>
-              <span>09:30-17:00</span>
+              <span>09:30-19:30</span>
             </div>
             {SAMPLE_STOPS.map((stop) => (
               <div className="sample-row" key={stop.time}>

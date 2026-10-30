@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { api } from '../api'
 import type { CityDetail } from '../api'
+import { InteractiveMap } from '../components/InteractiveMap'
 import { Photo } from '../components/Photo'
 import { DetailSkeleton } from '../components/Skeletons'
 import { formatMoney } from '../lib/format'
@@ -22,33 +23,18 @@ function priceText(value: number, currency: string): string {
 
 function MapBlock({ cityName }: { cityName: string }) {
   const [lat, lng] = cityCoords(cityName)
-  const delta = 0.02
-  const bbox = [lng - delta, lat - delta, lng + delta, lat + delta]
-    .map((value) => value.toFixed(5))
-    .join(',')
-  const embedSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(
-    bbox,
-  )}&layer=mapnik&marker=${encodeURIComponent(`${lat},${lng}`)}`
-  const mapLink = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=14/${lat}/${lng}`
-
   return (
     <section className="info-block" aria-labelledby="harita-baslik">
       <h2 id="harita-baslik">Harita</h2>
       <div className="map-frame">
-        <iframe
-          src={embedSrc}
+        <InteractiveMap
           title={`${cityName} haritası`}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
+          center={[lat, lng]}
+          points={[{ id: 'city', lat, lng, label: cityName }]}
+          zoom={13}
+          height={340}
         />
       </div>
-      <p className="small muted" style={{ marginTop: 8 }}>
-        Harita şehir merkezini gösterir. Yüklenmezse{' '}
-        <a className="section-link" href={mapLink} target="_blank" rel="noreferrer">
-          OpenStreetMap&apos;te aç
-        </a>
-        .
-      </p>
     </section>
   )
 }

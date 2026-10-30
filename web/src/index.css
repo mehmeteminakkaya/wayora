@@ -1776,6 +1776,12 @@ p {
   font-weight: 700;
 }
 
+.day-add-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
 .timeline {
   margin-top: 8px;
 }

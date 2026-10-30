@@ -523,7 +523,7 @@ export function TripDetailPage() {
   }
 
   return (
-    <div className="page with-sticky-action">
+    <div className="page">
       <Link className="back-link" to="/trips">
         Rotalarım
       </Link>
@@ -708,6 +708,20 @@ export function TripDetailPage() {
               )
             })}
           </div>
+
+          {activeDay && (
+            <div className="day-add-row">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={openAddForm}
+                aria-controls="add-activity-form"
+                aria-expanded={showAddForm}
+              >
+                Güne durak ekle
+              </button>
+            </div>
+          )}
 
           {activeDay && (
             <section
@@ -993,21 +1007,6 @@ export function TripDetailPage() {
         onAddEvent={(event) => void handleAddEvent(event)}
       />
 
-      <div className="sticky-action trip-sticky">
-        <span className="selection-count">
-          {activeDay ? `Gün ${activeDay.dayIndex}` : 'Gün seçilmedi'}
-        </span>
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={openAddForm}
-          disabled={!activeDay}
-          aria-controls="add-activity-form"
-          aria-expanded={showAddForm}
-        >
-          Güne durak ekle
-        </button>
-      </div>
     </div>
   )
 }

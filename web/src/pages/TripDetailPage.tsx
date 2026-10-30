@@ -6,6 +6,7 @@ import { api } from '../api'
 import type { Activity, ActivityCategory, CreateActivityInput, EventOffer, Trip } from '../api'
 import { DetailSkeleton } from '../components/Skeletons'
 import { LiveDiscovery } from '../components/LiveDiscovery'
+import { InteractiveMap } from '../components/InteractiveMap'
 import { Photo } from '../components/Photo'
 import { CATEGORY_LABELS, formatMoney, formatShortDate } from '../lib/format'
 import { categoryLabel, categoryPhoto, cityCoords, citySlug } from '../lib/photos'
@@ -103,15 +104,6 @@ function mapCoords(
     return { lat: place.lat, lng: place.lng, hasPlace: true }
   }
   return { lat: fallbackLat, lng: fallbackLng, hasPlace: false }
-}
-
-function mapSrc(destination: string, activity: Activity | null): string {
-  const { lat, lng, hasPlace } = mapCoords(destination, activity)
-  const delta = hasPlace ? 0.012 : 0.045
-  const bbox = [lng - delta, lat - delta, lng + delta, lat + delta]
-    .map((value) => value.toFixed(5))
-    .join('%2C')
-  return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat.toFixed(5)}%2C${lng.toFixed(5)}`
 }
 
 function mapLink(destination: string, activity: Activity | null): string {
@@ -801,10 +793,26 @@ export function TripDetailPage() {
               {view === 'map' ? (
                 <div className="trip-map">
                   <div className="map-frame">
-                    <iframe
-                      src={mapSrc(trip.destination, mapActivity)}
+                    <InteractiveMap
                       title={`${trip.destination} haritası`}
-                      loading="lazy"
+                      center={cityCoords(trip.destination)}
+                      zoom={13}
+                      height={380}
+                      selectedId={mapActivity?.id ?? null}
+                      onSelect={setMapActivityId}
+                      points={activeDay.activities.flatMap((activity) =>
+                        activity.place && (activity.place.lat !== 0 || activity.place.lng !== 0)
+                          ? [
+                              {
+                                id: activity.id,
+                                lat: activity.place.lat,
+                                lng: activity.place.lng,
+                                label: activity.title,
+                                detail: activity.place.address,
+                              },
+                            ]
+                          : [],
+                      )}
                     />
                   </div>
                   <p className="trip-note">

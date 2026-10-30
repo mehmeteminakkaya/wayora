@@ -765,6 +765,12 @@ p {
   padding-bottom: 64px;
 }
 
+/* Hero'dan sonraki ilk bölüm, sayfa dolgusu zaten boşluk verdiği için
+   fazladan margin almasın (aradaki boşluk 80px'ten ~32px'e iner). */
+.landing-page .page > .section:first-child {
+  margin-top: 0;
+}
+
 .landing-hero {
   display: grid;
   width: 100%;

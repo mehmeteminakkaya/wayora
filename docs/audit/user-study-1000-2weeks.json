@@ -1,6 +1,6 @@
 {
   "note": "1000 kişi x 14 gün deterministik kullanım simülasyonu. Gerçek kullanıcı çalışması değildir; bulgular önceliklendirme ve demo kararları içindir.",
-  "generatedAt": "2026-10-30T01:48:11.749Z",
+  "generatedAt": "2026-10-30T01:53:22.007Z",
   "period": {
     "days": 14,
     "start": "2026-10-31",
@@ -32,7 +32,7 @@
       "taskCompletionRate": 68.4,
       "csat": 3.82,
       "nps": 17,
-      "reports": 835.8,
+      "reports": 836,
       "mobileShare": 70,
       "accessibilityShare": 18
     },
@@ -44,7 +44,7 @@
       "taskCompletionRate": 77.8,
       "csat": 4.21,
       "nps": 31,
-      "reports": 483.4,
+      "reports": 483,
       "mobileShare": 70,
       "accessibilityShare": 18
     }

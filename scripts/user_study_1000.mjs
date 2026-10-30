@@ -177,7 +177,7 @@ function simulateWeek(week) {
   const weekIssues = issueCatalog.filter(
     (issue) => week === 1 || issue.phase === 'week-1' || issue.week2Affected >= 0,
   )
-  const reported = round(
+  const reported = Math.round(
     weekIssues.reduce((sum, issue) => sum + (week === 1 ? issue.affected : issue.week2Affected), 0) *
       0.42,
   )

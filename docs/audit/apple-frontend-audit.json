@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-30T01:37:52.894Z",
+  "generatedAt": "2026-10-30T01:52:55.835Z",
   "base": "https://wayora-ten.vercel.app",
   "checks": 22,
   "routeIssues": [],
@@ -180,10 +180,10 @@
         "horizontalOverflow": false,
         "overflow": [],
         "shortTargets": [],
-        "imageCount": 0,
+        "imageCount": 6,
         "imagesMissingAlt": 0,
         "duplicateIds": [],
-        "bodyTextLength": 888,
+        "bodyTextLength": 1451,
         "mainText": "Rotalarım\n\nBERLİN · 5 GÜN\n\nElif · Berlin\n\n05.12.2026 - 09.12.2026 · 5 gün · Toplam bütçe €900\n\nDemo hesabının Berlin rot"
       },
       "runtimeErrors": [],
@@ -231,7 +231,7 @@
         "imageCount": 0,
         "imagesMissingAlt": 0,
         "duplicateIds": [],
-        "bodyTextLength": 6179,
+        "bodyTextLength": 6210,
         "mainText": "YOL ARKADAŞLARI\n\nAynı yöne gidenler.\n\nAynı şehirde, benzer tarihlerde olacağın gezginleri bul. Ortak noktalarınızı gör, "
       },
       "runtimeErrors": [],
@@ -536,7 +536,7 @@
         "imageCount": 0,
         "imagesMissingAlt": 0,
         "duplicateIds": [],
-        "bodyTextLength": 6191,
+        "bodyTextLength": 6222,
         "mainText": "YOL ARKADAŞLARI\n\nAynı yöne gidenler.\n\nAynı şehirde, benzer tarihlerde olacağın gezginleri bul. Ortak noktalarınızı gör, "
       },
       "runtimeErrors": [],

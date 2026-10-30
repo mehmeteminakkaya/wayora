@@ -266,6 +266,20 @@ vercel deploy --prod
 
 Yerel veritabanını sıfırlamadan tekrar denemek için yeni bir e-posta ile kayıt olabilirsin.
 
+### Yol Arkadaşları demo verisi
+
+Sunumda boş eşleşme ekranı göstermemek için local veritabanına 75 örnek gezgin eklenebilir:
+
+```bash
+npm run demo:seed -w api
+```
+
+- Demo hesabı: `demo@wayora.app` / `demo1234`
+- Demo rota: 5-9 Aralık 2026, Berlin
+- İçerik: 75 görünür profil, 20 eşleşme, 3 gelen istek, 1 giden istek, 2 kabul edilmiş sohbet.
+- Komut yalnızca local `DATABASE_URL` ile çalışır; production veya uzak veritabanında kasıtlı olarak durur.
+- Bu profiller üretim seed'ine dahil değildir; yalnızca sunum/local demo verisidir.
+
 ## Mimari
 
 ```text

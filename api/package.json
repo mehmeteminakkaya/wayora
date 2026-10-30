@@ -16,7 +16,8 @@
     "postinstall": "prisma generate",
     "db:start": "node scripts/db-start.mjs",
     "db:stop": "prisma dev stop wayora",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "demo:seed": "tsx scripts/seed-demo.ts"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",

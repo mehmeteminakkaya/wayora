@@ -3,8 +3,8 @@ import { CITY_CATALOG, catalogGooglePlaceId } from './city-catalog.ts'
 import { findCandidates } from './places.ts'
 
 describe('şehir kataloğu', () => {
-  it('10 şehir ve her şehirde en az 10 deneyim içerir', () => {
-    expect(CITY_CATALOG).toHaveLength(10)
+  it('14 şehir ve her şehirde en az 10 deneyim içerir', () => {
+    expect(CITY_CATALOG).toHaveLength(14)
     for (const city of CITY_CATALOG) {
       expect(city.experiences.length, city.name).toBeGreaterThanOrEqual(10)
       expect(city.summary.length, city.name).toBeGreaterThan(20)
@@ -24,7 +24,7 @@ describe('şehir kataloğu', () => {
         expect(experience.description.length).toBeGreaterThan(20)
       }
     }
-    expect(ids.size).toBe(100)
+    expect(ids.size).toBe(140)
   })
 
   it('şehir adları ve takma adları aday üretir', () => {

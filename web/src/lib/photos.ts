@@ -15,6 +15,13 @@ const CITY_SLUGS: Record<string, string> = {
   vienna: 'vienna',
   lizbon: 'lisbon',
   lisbon: 'lisbon',
+  madrid: 'madrid',
+  floransa: 'florence',
+  florence: 'florence',
+  venedik: 'venice',
+  venice: 'venice',
+  atina: 'athens',
+  athens: 'athens',
 }
 
 const CITY_LABELS: Record<string, string> = {
@@ -28,6 +35,10 @@ const CITY_LABELS: Record<string, string> = {
   prague: 'Prag',
   vienna: 'Viyana',
   lisbon: 'Lizbon',
+  madrid: 'Madrid',
+  florence: 'Floransa',
+  venice: 'Venedik',
+  athens: 'Atina',
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -80,6 +91,10 @@ const CITY_COORDS: Record<string, [number, number]> = {
   prague: [50.0755, 14.4378],
   vienna: [48.2082, 16.3738],
   lisbon: [38.7223, -9.1393],
+  madrid: [40.4168, -3.7038],
+  florence: [43.7696, 11.2558],
+  venice: [45.4408, 12.3155],
+  athens: [37.9838, 23.7275],
 }
 
 export function cityCoords(value: string): [number, number] {

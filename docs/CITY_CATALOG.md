@@ -2,7 +2,7 @@
 
 ## Kapsam
 
-Keşif rehberi 10 şehir ve toplam 100 deneyim içerir:
+Keşif rehberi 14 şehir ve toplam 140 deneyim içerir:
 
 | Şehir | Ülke | Deneyim |
 | :--- | :--- | ---: |
@@ -50,7 +50,7 @@ tutuyor ve API üzerinden sunuyor.
 
 | Endpoint | Açıklama |
 | :--- | :--- |
-| `GET /api/cities` | 10 şehir özeti, deneyim sayısı ve ortalama maliyet |
+| `GET /api/cities` | 14 şehir özeti, deneyim sayısı ve ortalama maliyet |
 | `GET /api/cities/:slug` | Şehir özeti ve tüm deneyimler |
 | `GET /api/cities/:slug/experiences?category=museum` | Kategoriye göre deneyimler |
 | `GET /api/cities/_meta/count` | Veritabanı ve statik katalog sayıları |
@@ -60,7 +60,7 @@ Bu endpoint'ler herkese açıktır; kullanıcı verisi döndürmez.
 ## Plan üretimiyle bağlantı
 
 `findCandidates` artık bu kataloğun tamamını kullanır. Yeni bir gezi oluşturulduğunda offline plan
-üreticisi 10 şehir için gerçek deneyim adlarını, kategorilerini ve maliyetlerini kullanır. LLM
+üreticisi 14 şehir için gerçek deneyim adlarını, kategorilerini ve maliyetlerini kullanır. LLM
 sağlayıcısı yapılandırılmışsa aynı aday listesi prompt'a verilir; halüsinasyon filtresi korunur.
 
 ## Bakım

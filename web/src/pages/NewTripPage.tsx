@@ -16,6 +16,10 @@ const CITIES = [
   'Prag',
   'Viyana',
   'Lizbon',
+  'Madrid',
+  'Floransa',
+  'Venedik',
+  'Atina',
 ]
 
 const CURRENCIES = ['EUR', 'USD', 'TRY']
@@ -29,7 +33,7 @@ const PACE_OPTIONS: Array<{ value: Pace; label: string; hint: string }> = [
 const STEP_TITLES = ['Şehir', 'Tarih', 'Bütçe ve tempo']
 
 const STEP_INTROS = [
-  'Şehri seç. Katalogdaki 10 şehirde plan daha isabetli hazırlanır.',
+  'Şehri seç. Katalogdaki 14 şehirde plan daha isabetli hazırlanır.',
   'Tarih aralığını gir ya da hızlı seçeneklerden birini kullan.',
   'Bütçe ve temponu belirle, özeti kontrol et. Plan gün gün hazırlanacak.',
 ]
@@ -283,7 +287,7 @@ export function NewTripPage() {
                   ))}
                 </datalist>
                 <span className="helper" id="destination-hint">
-                  Katalogdaki 10 şehirde plan daha isabetli hazırlanır. Diğer şehirler genel
+                  Katalogdaki 14 şehirde plan daha isabetli hazırlanır. Diğer şehirler genel
                   şablonla planlanır.
                 </span>
               </label>

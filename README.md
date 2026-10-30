@@ -9,7 +9,7 @@ planı gün gün düzenler.
 
 İstinye Üniversitesi **JOB-191** ders projesi (GrepThink ekibi).
 
-> **Durum:** V2 çalışıyor. 10 şehir ve 100 deneyimlik katalog, keşif, deneyim seçimi,
+> **Durum:** V2 çalışıyor. 14 şehir ve 140 deneyimlik katalog, keşif, deneyim seçimi,
 > kimlik doğrulama, onboarding, rota oluşturma, gün planlama, bütçe özeti ve profil
 > akışları uçtan uca hazır. Uygulama **API anahtarı olmadan** çalışır.
 
@@ -62,7 +62,7 @@ Mevcut sürümde kullanıcı:
 
 ### Ürün akışı
 
-- 10 şehir ve 100 lisanslı deneyimden oluşan sürümlenmiş katalog.
+- 14 şehir ve 100 lisanslı deneyimden oluşan sürümlenmiş katalog.
 - Şehir/deneyim arama, kategori filtresi, sıralama ve boş sonuç durumu.
 - Deneyim detayında süre, tahmini kişi başı maliyet, katalog puanı, pratik bilgiler ve
   OpenStreetMap bağlantısı.
@@ -148,7 +148,7 @@ npm run setup
 
 npm run dev
 # veritabanı + API :4000 + web :5180
-# API açılışta 10 şehir / 100 deneyim kataloğunu idempotent seed eder
+# API açılışta 14 şehir / 140 deneyim kataloğunu idempotent seed eder
 ```
 
 Tarayıcıda [http://localhost:5180](http://localhost:5180) açılır.
@@ -241,7 +241,7 @@ sözleşmesi, ödeme ve iade süreçleri gerektirir; ayrı bir faz olarak planla
 - **Mimari:** Vercel Services; `web/` Vite servisi, `api/` Express servisi
 - **API sağlık:** https://wayora-ten.vercel.app/api/health
 
-Canlı ortamda Prisma migration'ları uygulanmış ve 10 şehir / 100 deneyim kataloğu
+Canlı ortamda Prisma migration'ları uygulanmış ve 14 şehir / 140 deneyim kataloğu
 seed edilmiştir. API anahtarları ve veritabanı URL'si Vercel Environment Variables
 üzerinden yönetilir; repoda tutulmaz.
 
@@ -409,7 +409,7 @@ web/src/
 | `POST` | `/api/trips/:id/experiences` | Seçilen katalog deneyimlerini rotaya aktar |
 | `POST` | `/api/trips/:tripId/days/:dayId/activities` | Güne aktivite ekle |
 | `PATCH` / `DELETE` | `/api/activities/:id` | Aktiviteyi güncelle / sil |
-| `GET` | `/api/cities` | 10 şehir özeti |
+| `GET` | `/api/cities` | 14 şehir özeti |
 | `GET` | `/api/cities/search?q=...` | Şehir/deneyim arama |
 | `GET` | `/api/cities/:slug` | Şehir ve deneyimleri |
 | `GET` | `/api/cities/:slug/experiences?category=...` | Kategoriye göre deneyimler |
@@ -479,7 +479,7 @@ Detaylı şema: [`api/prisma/schema.prisma`](api/prisma/schema.prisma).
 
 ## Şehir kataloğu
 
-Kapsam: **10 şehir, 100 deneyim**.
+Kapsam: **14 şehir, 140 deneyim**.
 
 | Şehir | Ülke | Deneyim |
 | :--- | :--- | ---: |

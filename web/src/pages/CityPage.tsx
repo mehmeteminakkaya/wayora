@@ -244,19 +244,26 @@ export function CityPage() {
           <InteractiveMap
             title={`${city.name} haritası`}
             center={cityCoords(city.name)}
-            points={[
-              {
-                id: 'center',
-                lat: cityCoords(city.name)[0],
-                lng: cityCoords(city.name)[1],
-                label: city.name,
-                detail: city.country,
-              },
-            ]}
+            points={visibleExperiences.flatMap((experience) =>
+              experience.lat !== null && experience.lng !== null
+                ? [
+                    {
+                      id: experience.id,
+                      lat: experience.lat,
+                      lng: experience.lng,
+                      label: experience.name,
+                      detail: experience.neighborhood ?? experience.address,
+                    },
+                  ]
+                : [],
+            )}
             zoom={12}
-            height={300}
+            height={420}
           />
         </div>
+        <p className="helper" style={{ marginTop: 8 }}>
+          Numaralı noktalar deneyimlerin yaklaşık konumudur. Filtreyi değiştirince harita da güncellenir.
+        </p>
       </section>
 
       <section className="city-filter-bar" aria-label="Deneyim filtresi">

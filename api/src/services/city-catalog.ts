@@ -52,6 +52,8 @@ export type CityExperienceResponse = {
   tags: string[]
   openingHours: string | null
   bookingUrl: string | null
+  lat: number | null
+  lng: number | null
 }
 
 export type CityExperienceSearchResult = CityExperienceResponse & {
@@ -109,6 +111,19 @@ export function summarizeCity(
   }
 }
 
+// Koordinatlar veritabanında değil, statik katalogda tutulur.
+const CATALOG_COORDS = new Map<string, { lat: number; lng: number }>()
+for (const city of CITY_CATALOG) {
+  for (const experience of city.experiences) {
+    if (experience.lat !== undefined && experience.lng !== undefined) {
+      CATALOG_COORDS.set(catalogGooglePlaceId(city.slug, experience.slug), {
+        lat: experience.lat,
+        lng: experience.lng,
+      })
+    }
+  }
+}
+
 export function serializeExperience(experience: SeededExperience): CityExperienceResponse {
   return {
     id: experience.id,
@@ -127,6 +142,8 @@ export function serializeExperience(experience: SeededExperience): CityExperienc
     tags: experience.tags,
     openingHours: experience.openingHours,
     bookingUrl: experience.bookingUrl,
+    lat: CATALOG_COORDS.get(experience.googlePlaceId)?.lat ?? null,
+    lng: CATALOG_COORDS.get(experience.googlePlaceId)?.lng ?? null,
   }
 }
 
@@ -236,6 +253,8 @@ export function staticCities(): Array<CitySummary & { experiences: CityExperienc
       tags: experience.tags,
       openingHours: experience.openingHours,
       bookingUrl: experience.bookingUrl,
+      lat: experience.lat ?? null,
+      lng: experience.lng ?? null,
     }))
     return { ...staticSummary(city), experiences }
   })

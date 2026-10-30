@@ -223,6 +223,8 @@ export type CityExperience = {
   tags: string[]
   openingHours: string | null
   bookingUrl: string | null
+  lat: number | null
+  lng: number | null
 }
 
 export type CityDetail = CitySummary & {

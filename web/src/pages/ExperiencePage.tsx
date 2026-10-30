@@ -21,8 +21,16 @@ function priceText(value: number, currency: string): string {
   return value === 0 ? 'Ücretsiz' : formatMoney(value, currency)
 }
 
-function MapBlock({ cityName }: { cityName: string }) {
-  const [lat, lng] = cityCoords(cityName)
+function MapBlock({
+  cityName,
+  place,
+}: {
+  cityName: string
+  place: { name: string; lat: number | null; lng: number | null; detail: string | null }
+}) {
+  const [cityLat, cityLng] = cityCoords(cityName)
+  const lat = place.lat ?? cityLat
+  const lng = place.lng ?? cityLng
   return (
     <section className="info-block" aria-labelledby="harita-baslik">
       <h2 id="harita-baslik">Harita</h2>
@@ -30,8 +38,8 @@ function MapBlock({ cityName }: { cityName: string }) {
         <InteractiveMap
           title={`${cityName} haritası`}
           center={[lat, lng]}
-          points={[{ id: 'city', lat, lng, label: cityName }]}
-          zoom={13}
+          points={[{ id: 'place', lat, lng, label: place.name, detail: place.detail }]}
+          zoom={place.lat === null ? 12 : 15}
           height={340}
         />
       </div>
@@ -199,7 +207,10 @@ export function ExperiencePage() {
         </div>
       </header>
 
-      <MapBlock cityName={city.name} />
+      <MapBlock
+        cityName={city.name}
+        place={{ name: experience.name, lat: experience.lat, lng: experience.lng, detail: experience.address }}
+      />
 
       <section className="info-block" aria-labelledby="bilmen-baslik">
         <h2 id="bilmen-baslik">Bilmen gerekenler</h2>

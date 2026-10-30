@@ -126,7 +126,13 @@ export function InteractiveMap({
         )
         .addTo(map)
       markers.current.push(marker)
-      bounds.extend([p.lng, p.lat])
+    })
+    // Uzaktaki tek bir nokta (ör. ada) görünümü açmasın: medyana yakın noktalara sığdır.
+    const med = (values: number[]) => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]
+    const midLat = med(points.map((p) => p.lat))
+    const midLng = med(points.map((p) => p.lng))
+    points.forEach((p) => {
+      if (Math.abs(p.lat - midLat) < 0.1 && Math.abs(p.lng - midLng) < 0.12) bounds.extend([p.lng, p.lat])
     })
     const selected = points.find((p) => p.id === selectedId)
     refit.current = () => {

@@ -11,7 +11,8 @@
 
 .social-hero h1 {
   margin-bottom: 10px;
-  font-size: clamp(32px, 6vw, 52px);
+  font-size: 52px;
+  line-height: 56px;
 }
 
 .social-hero > p:last-child {

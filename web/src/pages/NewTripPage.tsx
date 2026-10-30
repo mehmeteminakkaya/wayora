@@ -3,7 +3,7 @@ import type { FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { api } from '../api'
 import type { Pace } from '../api'
-import { formatMoney, formatShortDate, todayIso, tripDayCount } from '../lib/format'
+import { formatMoney, formatShortDate, titleCaseTr, todayIso, tripDayCount } from '../lib/format'
 
 const CITIES = [
   'İstanbul',
@@ -78,8 +78,8 @@ export function NewTripPage() {
     ),
   ]
 
-  const [step, setStep] = useState(1)
-  const [destination, setDestination] = useState(destinationParam)
+  const [step, setStep] = useState(destinationParam ? 2 : 1)
+  const [destination, setDestination] = useState(titleCaseTr(destinationParam))
   const [startDate, setStartDate] = useState(todayIso(7))
   const [endDate, setEndDate] = useState(todayIso(9))
   const [preset, setPreset] = useState<DatePreset>(null)
@@ -139,6 +139,12 @@ export function NewTripPage() {
     return null
   }
 
+  function selectCity(city: string) {
+    setDestination(city)
+    setError(null)
+    if (step === 1) setStep(2)
+  }
+
   function goNext() {
     const message = validateStep(step)
     if (message) {
@@ -176,8 +182,8 @@ export function NewTripPage() {
     try {
       const noteLines = [notes.trim(), `Tempo tercihi: ${paceLabel(pace)}`].filter(Boolean)
       const { trip } = await api.createTrip({
-        title: title.trim() || `${destination.trim()} rotası`,
-        destination: destination.trim(),
+        title: title.trim() || `${titleCaseTr(destination)} rotası`,
+        destination: titleCaseTr(destination),
         startDate,
         endDate,
         budget: budget === '' ? null : Number(budget),
@@ -229,8 +235,35 @@ export function NewTripPage() {
         <form className="form" onSubmit={handleSubmit} noValidate>
           {step === 1 && (
             <div className="wizard-step is-active">
+              <div className="field">
+                <span className="field-label">Popüler şehirler</span>
+                <div
+                  className="chip-row"
+                  role="group"
+                  aria-label="Popüler şehirler"
+                  style={{ flexWrap: 'wrap', overflow: 'visible' }}
+                >
+                  {CITIES.map((city) => {
+                    const selected =
+                      destination.trim().toLocaleLowerCase('tr-TR') ===
+                      city.toLocaleLowerCase('tr-TR')
+                    return (
+                      <button
+                        key={city}
+                        type="button"
+                        className="chip"
+                        aria-pressed={selected}
+                        onClick={() => selectCity(city)}
+                      >
+                        {city}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
               <label className="field">
-                <span>Şehir</span>
+                <span>Ya da başka bir şehir yaz</span>
                 <input
                   className="input"
                   type="text"
@@ -239,10 +272,9 @@ export function NewTripPage() {
                   required
                   minLength={2}
                   maxLength={120}
-                  autoFocus
                   value={destination}
                   onChange={(event) => setDestination(event.target.value)}
-                  placeholder="Örn. Paris"
+                  placeholder="Örn. Nice"
                   aria-describedby="destination-hint"
                 />
                 <datalist id="sehirler">
@@ -251,8 +283,8 @@ export function NewTripPage() {
                   ))}
                 </datalist>
                 <span className="helper" id="destination-hint">
-                  İstanbul, Paris, Roma, Barselona, Londra, Amsterdam, Berlin, Prag, Viyana ve
-                  Lizbon. Diğer şehirler genel şablonla planlanır.
+                  Katalogdaki 10 şehirde plan daha isabetli hazırlanır. Diğer şehirler genel
+                  şablonla planlanır.
                 </span>
               </label>
 
@@ -414,7 +446,7 @@ export function NewTripPage() {
               <div className="summary-card" aria-label="Rota özeti">
                 <div className="summary-row">
                   <span>Şehir</span>
-                  <strong>{destination.trim() || 'Belirtilmedi'}</strong>
+                  <strong>{titleCaseTr(destination) || 'Belirtilmedi'}</strong>
                 </div>
                 <div className="summary-row">
                   <span>Tarih</span>
@@ -525,7 +557,7 @@ export function NewTripPage() {
                 Geri
               </button>
             ) : (
-              <Link className="btn btn-ghost" to="/trips">
+              <Link className="btn btn-secondary" to="/trips">
                 Vazgeç
               </Link>
             )}

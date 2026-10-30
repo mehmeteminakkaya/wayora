@@ -35,6 +35,20 @@ export function tripDayCount(startDate: string, endDate: string): number {
   return Math.max(1, Math.round((end - start) / 86_400_000) + 1)
 }
 
+// "istanbul" -> "İstanbul", "new york" -> "New York" (Türkçe i/İ kuralına uygun).
+export function titleCaseTr(value: string): string {
+  return value
+    .trim()
+    .split(/\s+/)
+    .map((word) =>
+      word.length === 0
+        ? word
+        : word.charAt(0).toLocaleUpperCase('tr-TR') +
+          word.slice(1).toLocaleLowerCase('tr-TR'),
+    )
+    .join(' ')
+}
+
 export function todayIso(offsetDays = 0): string {
   const date = new Date()
   date.setDate(date.getDate() + offsetDays)

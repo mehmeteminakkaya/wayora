@@ -95,11 +95,15 @@ export function InteractiveMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Üst bileşen her render'da yeni dizi verir; haritayı yalnızca içerik değişince güncelle.
+  const pointsKey = JSON.stringify(points.map((p) => [p.id, p.lat, p.lng]))
+
   useEffect(() => {
     const map = mapRef.current
     if (!map) return
     markers.current.forEach((m) => m.remove())
     markers.current = []
+    map.resize()
     const bounds = new maplibregl.LngLatBounds()
     points.forEach((p, i) => {
       const el = markerEl(i + 1, p.id === selectedId)
@@ -122,13 +126,14 @@ export function InteractiveMap({
       const idx = points.indexOf(selected)
       markers.current[idx]?.togglePopup()
     } else if (points.length > 1) {
-      map.fitBounds(bounds, { padding: 60, maxZoom: 15, duration: 600 })
+      map.fitBounds(bounds, { padding: 60, maxZoom: 15, duration: 0 })
     } else if (points.length === 1) {
       map.flyTo({ center: [points[0].lng, points[0].lat], zoom: Math.min(zoom + 1, 15) })
     } else {
       map.flyTo({ center: [center[1], center[0]], zoom })
     }
-  }, [points, selectedId, center, zoom])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pointsKey, selectedId, center[0], center[1], zoom])
 
   if (failed) {
     const [lat, lng] = center

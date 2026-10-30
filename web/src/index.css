@@ -3201,3 +3201,16 @@ p {
   }
 
 }
+
+/* Wayora Agent sohbet */
+.agent-fab { position: fixed; right: 16px; bottom: 88px; z-index: 60; display: flex; align-items: center; gap: 8px; padding: 12px 16px; border: 0; border-radius: 4px; background: #121212; color: #fff; font: 700 14px Overpass, sans-serif; cursor: pointer; }
+.agent-panel { position: fixed; right: 16px; bottom: 88px; z-index: 61; display: flex; flex-direction: column; width: min(380px, calc(100vw - 32px)); height: min(520px, 70vh); border: 1px solid #deded9; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
+.agent-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #deded9; }
+.agent-head button { border: 0; background: none; cursor: pointer; }
+.agent-log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 12px; }
+.agent-msg { max-width: 85%; padding: 8px 12px; border-radius: 8px; background: #f3f3f1; white-space: pre-wrap; font-size: 14px; }
+.agent-msg.is-user { align-self: flex-end; background: #ffc400; }
+.agent-form { display: flex; gap: 8px; padding: 10px; border-top: 1px solid #deded9; }
+.agent-form input { flex: 1; min-width: 0; padding: 8px 10px; border: 1px solid #deded9; border-radius: 4px; font: inherit; }
+.agent-form button { padding: 8px 12px; border: 0; border-radius: 4px; background: #121212; color: #fff; cursor: pointer; }
+@media (min-width: 900px) { .agent-fab, .agent-panel { bottom: 24px; } }

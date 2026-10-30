@@ -7,6 +7,7 @@ import helmet from 'helmet'
 import type { Config } from './config.ts'
 import type { Db } from './lib/prisma.ts'
 import { errorHandler, notFound } from './middleware/error.ts'
+import { agentRouter } from './routes/agent.ts'
 import { authRouter } from './routes/auth.ts'
 import { cityRouter } from './routes/cities.ts'
 import { discoveryRouter } from './routes/discovery.ts'
@@ -88,6 +89,18 @@ export function createApp({ corsOrigin, checkDb, db, config, generateLimiter }: 
   app.use('/api/auth', authRouter({ db, config }))
   app.use('/api/me/preferences', preferenceRouter({ db, config }))
   app.use('/api/trips', tripRouter({ db, config, generateLimiter: aiLimiter }))
+  app.use(
+    '/api/agent',
+    rateLimit({
+      windowMs: 60 * 60 * 1000,
+      limit: 60,
+      standardHeaders: 'draft-8',
+      legacyHeaders: false,
+      skip: () => isTest,
+      message: { error: { code: 'AGENT_RATE_LIMITED', message: 'Çok fazla mesaj gönderdin. Biraz sonra tekrar dene.' } },
+    }),
+  )
+  app.use('/api/agent', agentRouter({ config }))
   app.use('/api/social', socialRouter({ db, config }))
   app.use('/api/activities', activityRouter({ db, config }))
   app.use('/api/places', placeRouter({ db, config }))

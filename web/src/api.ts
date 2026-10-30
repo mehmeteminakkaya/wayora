@@ -369,6 +369,11 @@ export const api = {
 
   deleteActivity: (id: string) => request<void>(`/api/activities/${id}`, { method: 'DELETE' }),
 
+  chatAgent: (messages: Array<{ role: 'user' | 'assistant'; content: string }>) =>
+    request<{ reply: string }>('/api/agent/chat', {
+      method: 'POST',
+      body: JSON.stringify({ messages }),
+    }),
   getDiscoveryStatus: () => request<DiscoveryStatus>('/api/discovery/status'),
 
   listEvents: (city: string, startDate: string, endDate: string) => {

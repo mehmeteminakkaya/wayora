@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigationType } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { useLang } from '../i18n.tsx'
+import { AgentChat } from './AgentChat'
 import { WayoraLogo } from './WayoraLogo'
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
@@ -138,6 +139,8 @@ export function Layout() {
           </div>
         </footer>
       )}
+
+      {user && !isAuthPage && <AgentChat />}
 
       {showBottomNav && (
         <nav className="bottom-nav" aria-label="Mobile menu">

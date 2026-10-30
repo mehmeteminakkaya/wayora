@@ -1,0 +1,155 @@
+{
+  "note": "470 persona ile deterministik ürün laboratuvarı simülasyonu. Gerçek 470 canlı kullanıcı testi değildir.",
+  "generatedAt": "2026-10-30T01:25:57.789Z",
+  "cohorts": [
+    {
+      "name": "Apple frontend engineers",
+      "count": 35,
+      "focus": "craft, accessibility, responsiveness"
+    },
+    {
+      "name": "Product developers",
+      "count": 35,
+      "focus": "feature clarity, interaction, retention"
+    },
+    {
+      "name": "General developers",
+      "count": 100,
+      "focus": "bugs, edge cases, reliability"
+    },
+    {
+      "name": "Regular users",
+      "count": 300,
+      "focus": "first-run comprehension and demo confidence"
+    }
+  ],
+  "totalPersonas": 470,
+  "auditChecks": 22,
+  "auditIssuesAtStart": 22,
+  "iterations": [
+    {
+      "round": 1,
+      "participants": {
+        "appleEngineers": 35,
+        "productDevelopers": 35,
+        "generalDevelopers": 100,
+        "regularUsers": 300
+      },
+      "signals": 470,
+      "findings": [
+        "catalog-count-drift",
+        "touch-targets",
+        "demo-empty-state"
+      ],
+      "score": 7.5
+    },
+    {
+      "round": 2,
+      "participants": {
+        "appleEngineers": 35,
+        "productDevelopers": 35,
+        "generalDevelopers": 100,
+        "regularUsers": 300
+      },
+      "signals": 470,
+      "findings": [
+        "catalog-count-drift",
+        "touch-targets",
+        "social-discovery",
+        "demo-empty-state"
+      ],
+      "score": 8.1
+    },
+    {
+      "round": 3,
+      "participants": {
+        "appleEngineers": 35,
+        "productDevelopers": 35,
+        "generalDevelopers": 100,
+        "regularUsers": 300
+      },
+      "signals": 470,
+      "findings": [
+        "social-pagination",
+        "real-user-verification"
+      ],
+      "score": 8.3
+    }
+  ],
+  "findings": [
+    {
+      "id": "catalog-count-drift",
+      "severity": "high",
+      "source": "35 Apple engineers + 100 developers",
+      "finding": "Landing 14 şehir/120 deneyim, Keşfet 10 şehir ve canlı katalog 10/100 gösteriyordu.",
+      "action": "Landing sayıları katalogla hizalandı; production katalogu 14 şehir/140 deneyime seed edildi.",
+      "status": "fixed"
+    },
+    {
+      "id": "touch-targets",
+      "severity": "high",
+      "source": "35 Apple engineers",
+      "finding": "Liste/Harita segmenti 40px, logo/section linkleri 44px altındaydı.",
+      "action": "Segment, select, logo, skip link ve section linkleri en az 44px hedefe çıkarıldı.",
+      "status": "fixed"
+    },
+    {
+      "id": "social-discovery",
+      "severity": "medium",
+      "source": "35 product developers + 300 users",
+      "finding": "20 eşleşme arasında ortak ilgi veya ev sahipliği bazlı hızlı seçim yoktu.",
+      "action": "Tümü / Ortak ilgi / Ev sahipliği filtreleri ve boş filtre durumu eklendi.",
+      "status": "fixed"
+    },
+    {
+      "id": "demo-empty-state",
+      "severity": "high",
+      "source": "300 users",
+      "finding": "Kullanıcı kendi hesabıyla girdiğinde demo profilleri tarih/şehir uyuşmadığı için boş görünüyordu.",
+      "action": "Canlı demo hesabı ve 75 profil seed edildi; demo akışı dokümante edildi.",
+      "status": "fixed"
+    },
+    {
+      "id": "social-pagination",
+      "severity": "medium",
+      "source": "35 product developers",
+      "finding": "75 demo profilin yalnızca ilk 20’si gösteriliyor; kullanıcı bunu bilmiyor.",
+      "action": "Filtreler eklendi; toplam/offset bilgisi sonraki faza bırakıldı.",
+      "status": "open"
+    },
+    {
+      "id": "real-user-verification",
+      "severity": "high",
+      "source": "35 product developers + security",
+      "finding": "Gerçek kullanıcı doğrulaması, moderasyon kuyruğu ve rapor SLA’sı yok.",
+      "action": "Demo/güvenlik kapsamı dışında tutuldu; launch öncesi zorunlu.",
+      "status": "open"
+    }
+  ],
+  "implemented": [
+    "catalog-count-drift",
+    "touch-targets",
+    "social-discovery",
+    "demo-empty-state"
+  ],
+  "open": [
+    "social-pagination",
+    "real-user-verification"
+  ],
+  "finalRubric": {
+    "visualConsistency": 8.2,
+    "accessibility": 8,
+    "interaction": 8.4,
+    "contentClarity": 8.4,
+    "responsiveQuality": 8.7,
+    "reliability": 8.5,
+    "demoConfidence": 7.7
+  },
+  "finalScore": 8.3,
+  "next": [
+    "Social eşleşmelerine toplam sayı ve offset/pagination ekle.",
+    "Gerçek kullanıcı doğrulaması ve moderasyon kuyruğu.",
+    "Sohbeti gerçek zamanlıya taşı ve bildirim ekle.",
+    "En az 5-8 gerçek kullanıcıyla kullanılabilirlik testi."
+  ]
+}

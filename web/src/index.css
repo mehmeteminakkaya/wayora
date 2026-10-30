@@ -63,6 +63,7 @@ button,
 input,
 select,
 textarea {
+  min-height: 44px;
   font: inherit;
 }
 
@@ -141,6 +142,9 @@ p {
   top: -60px;
   left: 16px;
   z-index: 300;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   padding: 10px 12px;
   background: var(--ink);
   color: var(--surface);
@@ -221,7 +225,7 @@ p {
 }
 
 .topbar-login {
-  min-height: 36px;
+  min-height: 44px;
   padding: 0 10px;
   border: 0;
   background: transparent;
@@ -612,7 +616,7 @@ p {
 }
 
 .segmented button {
-  min-height: 40px;
+  min-height: 44px;
   border: 0;
   border-radius: 2px;
   background: transparent;
@@ -861,6 +865,9 @@ p {
 }
 
 .section-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   color: var(--ink);
   font-size: 14px;
   font-weight: 700;
@@ -996,6 +1003,9 @@ p {
 }
 
 .landing-footer-links a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   color: var(--ink-2);
   text-underline-offset: 3px;
 }

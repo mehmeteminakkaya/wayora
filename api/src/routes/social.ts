@@ -276,12 +276,14 @@ export function socialRouter({ db, config }: { db: Db; config: Config }) {
       })
     }
 
-    const matches = [...byUser.values()]
+    const rankedMatches = [...byUser.values()]
       .map((entry) =>
         scoreCandidate(myTrips, { ...entry.candidate, trips: entry.trips }, context),
       )
       .filter((match): match is NonNullable<typeof match> => Boolean(match))
       .sort((a, b) => b.score - a.score)
+    const total = rankedMatches.length
+    const matches = rankedMatches
       .slice(0, 20)
       .map((match) => ({
         userId: match.candidate.userId,
@@ -302,7 +304,7 @@ export function socialRouter({ db, config }: { db: Db; config: Config }) {
         reasons: match.reasons,
       }))
 
-    res.json({ matches })
+    res.json({ matches, total })
   })
 
   router.get('/connections', async (req, res) => {

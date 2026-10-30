@@ -403,7 +403,7 @@ export const api = {
     }),
 
   getSocialMatches: () =>
-    request<{ matches: SocialMatch[]; reason?: string }>('/api/social/matches'),
+    request<{ matches: SocialMatch[]; total?: number; reason?: string }>('/api/social/matches'),
 
   sendSocialRequest: (recipientId: string, message?: string) =>
     request<{ connection: SocialConnection }>('/api/social/requests', {

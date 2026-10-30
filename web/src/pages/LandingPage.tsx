@@ -139,7 +139,9 @@ export function LandingPage() {
             </button>
           </form>
 
-          <p className="hero-stat">14 şehir · 120 deneyim · ücretsiz</p>
+          <p className="hero-stat">
+            {CITIES.length} şehir · {CITIES.length * 10} deneyim · ücretsiz
+          </p>
           {user && (
             <Link className="section-link" to="/trips">
               Rotalarıma dön

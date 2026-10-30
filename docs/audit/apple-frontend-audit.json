@@ -1,0 +1,1913 @@
+{
+  "generatedAt": "2026-10-30T01:22:20.771Z",
+  "base": "https://wayora-ten.vercel.app",
+  "checks": 22,
+  "routeIssues": [
+    {
+      "viewport": "mobile",
+      "route": "landing",
+      "path": "/",
+      "metrics": {
+        "path": "/",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Bir şehir seç. Günlerini Wayora sıralasın."
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [
+          {
+            "tag": "A",
+            "className": "city-card",
+            "right": 488
+          },
+          {
+            "tag": "DIV",
+            "className": "photo city-card-media",
+            "right": 487
+          },
+          {
+            "tag": "IMG",
+            "className": "",
+            "right": 487
+          },
+          {
+            "tag": "DIV",
+            "className": "city-card-body",
+            "right": 487
+          },
+          {
+            "tag": "DIV",
+            "className": "city-card-title-row",
+            "right": 475
+          },
+          {
+            "tag": "SPAN",
+            "className": "city-card-country",
+            "right": 475
+          },
+          {
+            "tag": "P",
+            "className": "city-card-meta",
+            "right": 475
+          },
+          {
+            "tag": "A",
+            "className": "city-card",
+            "right": 730
+          }
+        ],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Rotalarıma dön",
+            "height": 17
+          },
+          {
+            "text": "Fotoğraf kaynakları",
+            "height": 21
+          }
+        ],
+        "imageCount": 15,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 1616,
+        "mainText": "SEYAHAT PLANLAMA\n\nBir şehir seç. Günlerini Wayora sıralasın.\n\nİlgi alanlarını, bütçeni ve temponu söyle. Wayora şehri gü"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "explore",
+      "path": "/kesfet",
+      "metrics": {
+        "path": "/kesfet",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Keşfet"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Önerilen sıraFiyat: düşükten yükseğeFiyat: yüksekt",
+            "height": 40
+          }
+        ],
+        "imageCount": 10,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 860,
+        "mainText": "Keşfet\nTümü\nYemek\nMüze\nDoğa\nGece\n\n10 ŞEHİR\n\nÖnerilen sıra\nFiyat: düşükten yükseğe\nFiyat: yüksekten düşüğe\nİsim: A-Z\nİsta"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "city",
+      "path": "/kesfet/berlin",
+      "metrics": {
+        "path": "/kesfet/berlin",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Berlin"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Museum Island",
+            "height": 19
+          },
+          {
+            "text": "Brandenburg Kapısı",
+            "height": 19
+          },
+          {
+            "text": "Berlin Duvarı Anıtı",
+            "height": 19
+          },
+          {
+            "text": "East Side Gallery",
+            "height": 19
+          },
+          {
+            "text": "Reichstag Kubbesi",
+            "height": 19
+          },
+          {
+            "text": "Checkpoint Charlie",
+            "height": 19
+          },
+          {
+            "text": "Kreuzberg Sokak Lezzetleri",
+            "height": 19
+          },
+          {
+            "text": "Tempelhofer Feld",
+            "height": 19
+          },
+          {
+            "text": "Berlin Katedrali",
+            "height": 19
+          },
+          {
+            "text": "Potsdam Sarayları",
+            "height": 19
+          }
+        ],
+        "imageCount": 17,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 2473,
+        "mainText": "Keşfet\n\nALMANYA\n\nBerlin\n\n10 deneyim · ort. €21/gün · Mayıs-Eylül\n\nTarih, sokak kültürü, parklar ve gece hayatı. Berlin’d"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "experience",
+      "path": "/kesfet/berlin/museum-island",
+      "metrics": {
+        "path": "/kesfet/berlin/museum-island",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Museum Island"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "OpenStreetMap'te aç",
+            "height": 17
+          },
+          {
+            "text": "Resmî siteyi aç",
+            "height": 16
+          }
+        ],
+        "imageCount": 1,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 564,
+        "mainText": "Berlin\n\nMÜZE\n\nMuseum Island\nŞEHİR ARŞİVİ · MEKÂNIN KENDİ FOTOĞRAFI DEĞİL\n\nBerlin\n·\nMitte\n\nPergamon, Neues ve Alte Nation"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "trips",
+      "path": "/trips",
+      "metrics": {
+        "path": "/trips",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Rotalarım"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Berlin",
+            "height": 27
+          }
+        ],
+        "imageCount": 1,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 264,
+        "mainText": "Rotalarım\n\nYaklaşan, taslak ve geçmiş planların tek yerde.\n\nYeni rota\nYaklaşan\n1\nTaslak\n0\nGeçmiş\n0\nKALKIŞA 36 GÜN\nBerlin"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "trip-detail",
+      "path": "/trips/49a60296-b924-4747-beea-caca72452ced",
+      "metrics": {
+        "path": "/trips/49a60296-b924-4747-beea-caca72452ced",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Elif · Berlin"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Liste",
+            "height": 40
+          },
+          {
+            "text": "Harita",
+            "height": 40
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 889,
+        "mainText": "Rotalarım\n\nBERLİN · 5 GÜN\n\nElif · Berlin\n\n05.12.2026 - 09.12.2026 · 5 gün · Toplam bütçe €900\n\nDemo hesabının Berlin rot"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "new-trip",
+      "path": "/trips/new",
+      "metrics": {
+        "path": "/trips/new",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Yeni rota"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 370,
+        "mainText": "ADIM 1 / 3 · ŞEHİR\n\nYeni rota\n\nŞehri seç. Katalogdaki 14 şehirde plan daha isabetli hazırlanır.\n\nPOPÜLER ŞEHİRLER\nİstanb"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "social",
+      "path": "/yol-arkadaslari",
+      "metrics": {
+        "path": "/yol-arkadaslari",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Aynı yöne gidenler."
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 6159,
+        "mainText": "YOL ARKADAŞLARI\n\nAynı yöne gidenler.\n\nAynı şehirde, benzer tarihlerde olacağın gezginleri bul. Ortak noktalarınızı gör, "
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "profile",
+      "path": "/profil",
+      "metrics": {
+        "path": "/profil",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Hesabın"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 281,
+        "mainText": "PROFİL\n\nHesabın\nE\nElif Yılmaz\n\ndemo@wayora.app\n\nTercihler\nİlgi alanları\nMüze · Yemek · Doğa\nBütçe\nDengeli\nSeyahat tarzı\n"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "onboarding",
+      "path": "/onboarding",
+      "metrics": {
+        "path": "/onboarding",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Nasıl gezersin?"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 329,
+        "mainText": "ADIM 1 / 3\nAtla\nNasıl gezersin?\n\nÜç kısa adımda ilgi alanlarını, bütçeni ve temponu seç. Sonra değiştirebilirsin.\n\nNeler"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "not-found",
+      "path": "/bu-sayfa-yok",
+      "metrics": {
+        "path": "/bu-sayfa-yok",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Aradığın sayfa burada değil."
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 151,
+        "mainText": "404 / SAYFA YOK\n\nAradığın sayfa burada değil.\n\nBağlantı taşınmış olabilir. Keşfet’e dönüp yeni bir rota çizebilirsin.\n\nK"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "landing",
+      "path": "/",
+      "metrics": {
+        "path": "/",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Bir şehir seç. Günlerini Wayora sıralasın."
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [
+          {
+            "tag": "A",
+            "className": "city-card",
+            "right": 1295
+          },
+          {
+            "tag": "DIV",
+            "className": "photo city-card-media",
+            "right": 1294
+          },
+          {
+            "tag": "IMG",
+            "className": "",
+            "right": 1294
+          },
+          {
+            "tag": "DIV",
+            "className": "city-card-body",
+            "right": 1294
+          },
+          {
+            "tag": "A",
+            "className": "city-card",
+            "right": 1537
+          },
+          {
+            "tag": "DIV",
+            "className": "photo city-card-media",
+            "right": 1536
+          },
+          {
+            "tag": "IMG",
+            "className": "",
+            "right": 1536
+          },
+          {
+            "tag": "DIV",
+            "className": "city-card-body",
+            "right": 1536
+          }
+        ],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Rotalarıma dön",
+            "height": 17
+          },
+          {
+            "text": "Fotoğraf kaynakları",
+            "height": 21
+          }
+        ],
+        "imageCount": 15,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 1663,
+        "mainText": "SEYAHAT PLANLAMA\n\nBir şehir seç. Günlerini Wayora sıralasın.\n\nİlgi alanlarını, bütçeni ve temponu söyle. Wayora şehri gü"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "explore",
+      "path": "/kesfet",
+      "metrics": {
+        "path": "/kesfet",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Keşfet"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Önerilen sıraFiyat: düşükten yükseğeFiyat: yüksekt",
+            "height": 40
+          }
+        ],
+        "imageCount": 10,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 871,
+        "mainText": "Keşfet\nTümü\nYemek\nMüze\nDoğa\nGece\n\n10 ŞEHİR\n\nÖnerilen sıra\nFiyat: düşükten yükseğe\nFiyat: yüksekten düşüğe\nİsim: A-Z\nİsta"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "city",
+      "path": "/kesfet/berlin",
+      "metrics": {
+        "path": "/kesfet/berlin",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Berlin"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Museum Island",
+            "height": 20
+          },
+          {
+            "text": "Brandenburg Kapısı",
+            "height": 20
+          },
+          {
+            "text": "Berlin Duvarı Anıtı",
+            "height": 20
+          },
+          {
+            "text": "East Side Gallery",
+            "height": 20
+          },
+          {
+            "text": "Reichstag Kubbesi",
+            "height": 20
+          },
+          {
+            "text": "Checkpoint Charlie",
+            "height": 20
+          },
+          {
+            "text": "Kreuzberg Sokak Lezzetleri",
+            "height": 20
+          },
+          {
+            "text": "Tempelhofer Feld",
+            "height": 20
+          },
+          {
+            "text": "Berlin Katedrali",
+            "height": 20
+          },
+          {
+            "text": "Potsdam Sarayları",
+            "height": 20
+          }
+        ],
+        "imageCount": 17,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 2520,
+        "mainText": "Keşfet\n\nALMANYA\n\nBerlin\n\n10 deneyim · ort. €21/gün · Mayıs-Eylül\n\nTarih, sokak kültürü, parklar ve gece hayatı. Berlin’d"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "experience",
+      "path": "/kesfet/berlin/museum-island",
+      "metrics": {
+        "path": "/kesfet/berlin/museum-island",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Museum Island"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "OpenStreetMap'te aç",
+            "height": 17
+          },
+          {
+            "text": "Resmî siteyi aç",
+            "height": 16
+          }
+        ],
+        "imageCount": 1,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 611,
+        "mainText": "Berlin\n\nMÜZE\n\nMuseum Island\nŞEHİR ARŞİVİ · MEKÂNIN KENDİ FOTOĞRAFI DEĞİL\n\nBerlin\n·\nMitte\n\nPergamon, Neues ve Alte Nation"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "trips",
+      "path": "/trips",
+      "metrics": {
+        "path": "/trips",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Rotalarım"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Berlin",
+            "height": 27
+          }
+        ],
+        "imageCount": 1,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 276,
+        "mainText": "Rotalarım\n\nYaklaşan, taslak ve geçmiş planların tek yerde.\n\nYeni rota\nYaklaşan\n1\nTaslak\n0\nGeçmiş\n0\nKALKIŞA 36 GÜN\nBerlin"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "trip-detail",
+      "path": "/trips/49a60296-b924-4747-beea-caca72452ced",
+      "metrics": {
+        "path": "/trips/49a60296-b924-4747-beea-caca72452ced",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Elif · Berlin"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Liste",
+            "height": 40
+          },
+          {
+            "text": "Harita",
+            "height": 40
+          }
+        ],
+        "imageCount": 6,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 1505,
+        "mainText": "Rotalarım\n\nBERLİN · 5 GÜN\n\nElif · Berlin\n\n05.12.2026 - 09.12.2026 · 5 gün · Toplam bütçe €900\n\nDemo hesabının Berlin rot"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "new-trip",
+      "path": "/trips/new",
+      "metrics": {
+        "path": "/trips/new",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Yeni rota"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 417,
+        "mainText": "ADIM 1 / 3 · ŞEHİR\n\nYeni rota\n\nŞehri seç. Katalogdaki 14 şehirde plan daha isabetli hazırlanır.\n\nPOPÜLER ŞEHİRLER\nİstanb"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "social",
+      "path": "/yol-arkadaslari",
+      "metrics": {
+        "path": "/yol-arkadaslari",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Aynı yöne gidenler."
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 6171,
+        "mainText": "YOL ARKADAŞLARI\n\nAynı yöne gidenler.\n\nAynı şehirde, benzer tarihlerde olacağın gezginleri bul. Ortak noktalarınızı gör, "
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "profile",
+      "path": "/profil",
+      "metrics": {
+        "path": "/profil",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Hesabın"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 293,
+        "mainText": "PROFİL\n\nHesabın\nE\nElif Yılmaz\n\ndemo@wayora.app\n\nTercihler\nİlgi alanları\nMüze · Yemek · Doğa\nBütçe\nDengeli\nSeyahat tarzı\n"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "onboarding",
+      "path": "/onboarding",
+      "metrics": {
+        "path": "/onboarding",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Nasıl gezersin?"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 376,
+        "mainText": "ADIM 1 / 3\nAtla\nNasıl gezersin?\n\nÜç kısa adımda ilgi alanlarını, bütçeni ve temponu seç. Sonra değiştirebilirsin.\n\nNeler"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "not-found",
+      "path": "/bu-sayfa-yok",
+      "metrics": {
+        "path": "/bu-sayfa-yok",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Aradığın sayfa burada değil."
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 198,
+        "mainText": "404 / SAYFA YOK\n\nAradığın sayfa burada değil.\n\nBağlantı taşınmış olabilir. Keşfet’e dönüp yeni bir rota çizebilirsin.\n\nK"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    }
+  ],
+  "results": [
+    {
+      "viewport": "mobile",
+      "route": "landing",
+      "path": "/",
+      "metrics": {
+        "path": "/",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Bir şehir seç. Günlerini Wayora sıralasın."
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [
+          {
+            "tag": "A",
+            "className": "city-card",
+            "right": 488
+          },
+          {
+            "tag": "DIV",
+            "className": "photo city-card-media",
+            "right": 487
+          },
+          {
+            "tag": "IMG",
+            "className": "",
+            "right": 487
+          },
+          {
+            "tag": "DIV",
+            "className": "city-card-body",
+            "right": 487
+          },
+          {
+            "tag": "DIV",
+            "className": "city-card-title-row",
+            "right": 475
+          },
+          {
+            "tag": "SPAN",
+            "className": "city-card-country",
+            "right": 475
+          },
+          {
+            "tag": "P",
+            "className": "city-card-meta",
+            "right": 475
+          },
+          {
+            "tag": "A",
+            "className": "city-card",
+            "right": 730
+          }
+        ],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Rotalarıma dön",
+            "height": 17
+          },
+          {
+            "text": "Fotoğraf kaynakları",
+            "height": 21
+          }
+        ],
+        "imageCount": 15,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 1616,
+        "mainText": "SEYAHAT PLANLAMA\n\nBir şehir seç. Günlerini Wayora sıralasın.\n\nİlgi alanlarını, bütçeni ve temponu söyle. Wayora şehri gü"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "explore",
+      "path": "/kesfet",
+      "metrics": {
+        "path": "/kesfet",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Keşfet"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Önerilen sıraFiyat: düşükten yükseğeFiyat: yüksekt",
+            "height": 40
+          }
+        ],
+        "imageCount": 10,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 860,
+        "mainText": "Keşfet\nTümü\nYemek\nMüze\nDoğa\nGece\n\n10 ŞEHİR\n\nÖnerilen sıra\nFiyat: düşükten yükseğe\nFiyat: yüksekten düşüğe\nİsim: A-Z\nİsta"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "city",
+      "path": "/kesfet/berlin",
+      "metrics": {
+        "path": "/kesfet/berlin",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Berlin"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Museum Island",
+            "height": 19
+          },
+          {
+            "text": "Brandenburg Kapısı",
+            "height": 19
+          },
+          {
+            "text": "Berlin Duvarı Anıtı",
+            "height": 19
+          },
+          {
+            "text": "East Side Gallery",
+            "height": 19
+          },
+          {
+            "text": "Reichstag Kubbesi",
+            "height": 19
+          },
+          {
+            "text": "Checkpoint Charlie",
+            "height": 19
+          },
+          {
+            "text": "Kreuzberg Sokak Lezzetleri",
+            "height": 19
+          },
+          {
+            "text": "Tempelhofer Feld",
+            "height": 19
+          },
+          {
+            "text": "Berlin Katedrali",
+            "height": 19
+          },
+          {
+            "text": "Potsdam Sarayları",
+            "height": 19
+          }
+        ],
+        "imageCount": 17,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 2473,
+        "mainText": "Keşfet\n\nALMANYA\n\nBerlin\n\n10 deneyim · ort. €21/gün · Mayıs-Eylül\n\nTarih, sokak kültürü, parklar ve gece hayatı. Berlin’d"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "experience",
+      "path": "/kesfet/berlin/museum-island",
+      "metrics": {
+        "path": "/kesfet/berlin/museum-island",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Museum Island"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "OpenStreetMap'te aç",
+            "height": 17
+          },
+          {
+            "text": "Resmî siteyi aç",
+            "height": 16
+          }
+        ],
+        "imageCount": 1,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 564,
+        "mainText": "Berlin\n\nMÜZE\n\nMuseum Island\nŞEHİR ARŞİVİ · MEKÂNIN KENDİ FOTOĞRAFI DEĞİL\n\nBerlin\n·\nMitte\n\nPergamon, Neues ve Alte Nation"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "trips",
+      "path": "/trips",
+      "metrics": {
+        "path": "/trips",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Rotalarım"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Berlin",
+            "height": 27
+          }
+        ],
+        "imageCount": 1,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 264,
+        "mainText": "Rotalarım\n\nYaklaşan, taslak ve geçmiş planların tek yerde.\n\nYeni rota\nYaklaşan\n1\nTaslak\n0\nGeçmiş\n0\nKALKIŞA 36 GÜN\nBerlin"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "trip-detail",
+      "path": "/trips/49a60296-b924-4747-beea-caca72452ced",
+      "metrics": {
+        "path": "/trips/49a60296-b924-4747-beea-caca72452ced",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Elif · Berlin"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Liste",
+            "height": 40
+          },
+          {
+            "text": "Harita",
+            "height": 40
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 889,
+        "mainText": "Rotalarım\n\nBERLİN · 5 GÜN\n\nElif · Berlin\n\n05.12.2026 - 09.12.2026 · 5 gün · Toplam bütçe €900\n\nDemo hesabının Berlin rot"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "new-trip",
+      "path": "/trips/new",
+      "metrics": {
+        "path": "/trips/new",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Yeni rota"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 370,
+        "mainText": "ADIM 1 / 3 · ŞEHİR\n\nYeni rota\n\nŞehri seç. Katalogdaki 14 şehirde plan daha isabetli hazırlanır.\n\nPOPÜLER ŞEHİRLER\nİstanb"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "social",
+      "path": "/yol-arkadaslari",
+      "metrics": {
+        "path": "/yol-arkadaslari",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Aynı yöne gidenler."
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 6159,
+        "mainText": "YOL ARKADAŞLARI\n\nAynı yöne gidenler.\n\nAynı şehirde, benzer tarihlerde olacağın gezginleri bul. Ortak noktalarınızı gör, "
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "profile",
+      "path": "/profil",
+      "metrics": {
+        "path": "/profil",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Hesabın"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 281,
+        "mainText": "PROFİL\n\nHesabın\nE\nElif Yılmaz\n\ndemo@wayora.app\n\nTercihler\nİlgi alanları\nMüze · Yemek · Doğa\nBütçe\nDengeli\nSeyahat tarzı\n"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "onboarding",
+      "path": "/onboarding",
+      "metrics": {
+        "path": "/onboarding",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Nasıl gezersin?"
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 329,
+        "mainText": "ADIM 1 / 3\nAtla\nNasıl gezersin?\n\nÜç kısa adımda ilgi alanlarını, bütçeni ve temponu seç. Sonra değiştirebilirsin.\n\nNeler"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "mobile",
+      "route": "not-found",
+      "path": "/bu-sayfa-yok",
+      "metrics": {
+        "path": "/bu-sayfa-yok",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Aradığın sayfa burada değil."
+        ],
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 151,
+        "mainText": "404 / SAYFA YOK\n\nAradığın sayfa burada değil.\n\nBağlantı taşınmış olabilir. Keşfet’e dönüp yeni bir rota çizebilirsin.\n\nK"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "landing",
+      "path": "/",
+      "metrics": {
+        "path": "/",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Bir şehir seç. Günlerini Wayora sıralasın."
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [
+          {
+            "tag": "A",
+            "className": "city-card",
+            "right": 1295
+          },
+          {
+            "tag": "DIV",
+            "className": "photo city-card-media",
+            "right": 1294
+          },
+          {
+            "tag": "IMG",
+            "className": "",
+            "right": 1294
+          },
+          {
+            "tag": "DIV",
+            "className": "city-card-body",
+            "right": 1294
+          },
+          {
+            "tag": "A",
+            "className": "city-card",
+            "right": 1537
+          },
+          {
+            "tag": "DIV",
+            "className": "photo city-card-media",
+            "right": 1536
+          },
+          {
+            "tag": "IMG",
+            "className": "",
+            "right": 1536
+          },
+          {
+            "tag": "DIV",
+            "className": "city-card-body",
+            "right": 1536
+          }
+        ],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Rotalarıma dön",
+            "height": 17
+          },
+          {
+            "text": "Fotoğraf kaynakları",
+            "height": 21
+          }
+        ],
+        "imageCount": 15,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 1663,
+        "mainText": "SEYAHAT PLANLAMA\n\nBir şehir seç. Günlerini Wayora sıralasın.\n\nİlgi alanlarını, bütçeni ve temponu söyle. Wayora şehri gü"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "explore",
+      "path": "/kesfet",
+      "metrics": {
+        "path": "/kesfet",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Keşfet"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Önerilen sıraFiyat: düşükten yükseğeFiyat: yüksekt",
+            "height": 40
+          }
+        ],
+        "imageCount": 10,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 871,
+        "mainText": "Keşfet\nTümü\nYemek\nMüze\nDoğa\nGece\n\n10 ŞEHİR\n\nÖnerilen sıra\nFiyat: düşükten yükseğe\nFiyat: yüksekten düşüğe\nİsim: A-Z\nİsta"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "city",
+      "path": "/kesfet/berlin",
+      "metrics": {
+        "path": "/kesfet/berlin",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Berlin"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Museum Island",
+            "height": 20
+          },
+          {
+            "text": "Brandenburg Kapısı",
+            "height": 20
+          },
+          {
+            "text": "Berlin Duvarı Anıtı",
+            "height": 20
+          },
+          {
+            "text": "East Side Gallery",
+            "height": 20
+          },
+          {
+            "text": "Reichstag Kubbesi",
+            "height": 20
+          },
+          {
+            "text": "Checkpoint Charlie",
+            "height": 20
+          },
+          {
+            "text": "Kreuzberg Sokak Lezzetleri",
+            "height": 20
+          },
+          {
+            "text": "Tempelhofer Feld",
+            "height": 20
+          },
+          {
+            "text": "Berlin Katedrali",
+            "height": 20
+          },
+          {
+            "text": "Potsdam Sarayları",
+            "height": 20
+          }
+        ],
+        "imageCount": 17,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 2520,
+        "mainText": "Keşfet\n\nALMANYA\n\nBerlin\n\n10 deneyim · ort. €21/gün · Mayıs-Eylül\n\nTarih, sokak kültürü, parklar ve gece hayatı. Berlin’d"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "experience",
+      "path": "/kesfet/berlin/museum-island",
+      "metrics": {
+        "path": "/kesfet/berlin/museum-island",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Museum Island"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "OpenStreetMap'te aç",
+            "height": 17
+          },
+          {
+            "text": "Resmî siteyi aç",
+            "height": 16
+          }
+        ],
+        "imageCount": 1,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 611,
+        "mainText": "Berlin\n\nMÜZE\n\nMuseum Island\nŞEHİR ARŞİVİ · MEKÂNIN KENDİ FOTOĞRAFI DEĞİL\n\nBerlin\n·\nMitte\n\nPergamon, Neues ve Alte Nation"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "trips",
+      "path": "/trips",
+      "metrics": {
+        "path": "/trips",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Rotalarım"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Berlin",
+            "height": 27
+          }
+        ],
+        "imageCount": 1,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 276,
+        "mainText": "Rotalarım\n\nYaklaşan, taslak ve geçmiş planların tek yerde.\n\nYeni rota\nYaklaşan\n1\nTaslak\n0\nGeçmiş\n0\nKALKIŞA 36 GÜN\nBerlin"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "trip-detail",
+      "path": "/trips/49a60296-b924-4747-beea-caca72452ced",
+      "metrics": {
+        "path": "/trips/49a60296-b924-4747-beea-caca72452ced",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Elif · Berlin"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          },
+          {
+            "text": "Liste",
+            "height": 40
+          },
+          {
+            "text": "Harita",
+            "height": 40
+          }
+        ],
+        "imageCount": 6,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 1505,
+        "mainText": "Rotalarım\n\nBERLİN · 5 GÜN\n\nElif · Berlin\n\n05.12.2026 - 09.12.2026 · 5 gün · Toplam bütçe €900\n\nDemo hesabının Berlin rot"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "new-trip",
+      "path": "/trips/new",
+      "metrics": {
+        "path": "/trips/new",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Yeni rota"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 417,
+        "mainText": "ADIM 1 / 3 · ŞEHİR\n\nYeni rota\n\nŞehri seç. Katalogdaki 14 şehirde plan daha isabetli hazırlanır.\n\nPOPÜLER ŞEHİRLER\nİstanb"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "social",
+      "path": "/yol-arkadaslari",
+      "metrics": {
+        "path": "/yol-arkadaslari",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Aynı yöne gidenler."
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 6171,
+        "mainText": "YOL ARKADAŞLARI\n\nAynı yöne gidenler.\n\nAynı şehirde, benzer tarihlerde olacağın gezginleri bul. Ortak noktalarınızı gör, "
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "profile",
+      "path": "/profil",
+      "metrics": {
+        "path": "/profil",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Hesabın"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 293,
+        "mainText": "PROFİL\n\nHesabın\nE\nElif Yılmaz\n\ndemo@wayora.app\n\nTercihler\nİlgi alanları\nMüze · Yemek · Doğa\nBütçe\nDengeli\nSeyahat tarzı\n"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "onboarding",
+      "path": "/onboarding",
+      "metrics": {
+        "path": "/onboarding",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Nasıl gezersin?"
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 376,
+        "mainText": "ADIM 1 / 3\nAtla\nNasıl gezersin?\n\nÜç kısa adımda ilgi alanlarını, bütçeni ve temponu seç. Sonra değiştirebilirsin.\n\nNeler"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    },
+    {
+      "viewport": "desktop",
+      "route": "not-found",
+      "path": "/bu-sayfa-yok",
+      "metrics": {
+        "path": "/bu-sayfa-yok",
+        "title": "Wayora · Şehri hisset, gününü şekillendir",
+        "h1": [
+          "Aradığın sayfa burada değil."
+        ],
+        "scrollWidth": 1265,
+        "viewportWidth": 1280,
+        "horizontalOverflow": false,
+        "overflow": [],
+        "shortTargets": [
+          {
+            "text": "İçeriğe geç",
+            "height": 41
+          },
+          {
+            "text": "WAYORA",
+            "height": 30
+          }
+        ],
+        "imageCount": 0,
+        "imagesMissingAlt": 0,
+        "duplicateIds": [],
+        "bodyTextLength": 198,
+        "mainText": "404 / SAYFA YOK\n\nAradığın sayfa burada değil.\n\nBağlantı taşınmış olabilir. Keşfet’e dönüp yeni bir rota çizebilirsin.\n\nK"
+      },
+      "runtimeErrors": [],
+      "networkFailures": []
+    }
+  ]
+}

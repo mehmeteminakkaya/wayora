@@ -28,7 +28,7 @@ import { DetailSkeleton } from '../components/Skeletons'
 import { formatShortDate, interestLabel } from '../lib/format'
 
 type SocialTab = 'matches' | 'requests' | 'chats'
-type Tab = SocialTab
+type MatchFilter = 'all' | 'shared' | 'hosting'
 
 const LANGUAGE_HINTS = 'Türkçe, İngilizce, Almanca'
 
@@ -83,12 +83,14 @@ export function HitchhikerPage() {
   const [profile, setProfile] = useState<SocialProfile | null>(null)
   const [preferences, setPreferences] = useState<SocialPreferences | null>(null)
   const [matches, setMatches] = useState<SocialMatch[]>([])
+  const [matchTotal, setMatchTotal] = useState(0)
   const [connections, setConnections] = useState<SocialConnections>({
     incoming: [],
     outgoing: [],
     accepted: [],
   })
-  const [tab, setTab] = useState<Tab>('matches')
+  const [tab, setTab] = useState<SocialTab>('matches')
+  const [matchFilter, setMatchFilter] = useState<MatchFilter>('all')
   const [loading, setLoading] = useState(true)
   const [matchesLoading, setMatchesLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -142,7 +144,9 @@ export function HitchhikerPage() {
     api
       .getSocialMatches()
       .then((result) => {
-        if (active) setMatches(result.matches)
+        if (!active) return
+        setMatches(result.matches)
+        setMatchTotal(result.total ?? result.matches.length)
       })
       .catch((err) => {
         if (active) setError(err instanceof Error ? err.message : 'Eşleşmeler yüklenemedi.')
@@ -224,6 +228,7 @@ export function HitchhikerPage() {
     try {
       await api.sendSocialRequest(requestTarget.userId, requestMessage)
       setMatches((current) => current.filter((item) => item.userId !== requestTarget.userId))
+      setMatchTotal((current) => Math.max(0, current - 1))
       setRequestTarget(null)
       setRequestMessage('')
       setNotice(`${requestTarget.displayName} kişisine bağlantı isteği gönderildi.`)
@@ -290,6 +295,7 @@ export function HitchhikerPage() {
       if (profile?.visible) {
         const result = await api.getSocialMatches()
         setMatches(result.matches)
+        setMatchTotal(result.total ?? result.matches.length)
       }
     } catch (err) {
       setChatError(err instanceof Error ? err.message : 'Kullanıcı engellenemedi.')
@@ -316,12 +322,17 @@ export function HitchhikerPage() {
   const accepted = connections.accepted
   const hasProfile = Boolean(profile)
   const showProfileForm = editing || (hasProfile && !profile?.visible)
-  const tabCount = (value: Tab) =>
+  const tabCount = (value: SocialTab) =>
     value === 'matches'
       ? matches.length
       : value === 'requests'
         ? incoming.length + outgoing.length
         : accepted.length
+  const filteredMatches = matches.filter((match) => {
+    if (matchFilter === 'shared') return match.sharedInterests.length > 0
+    if (matchFilter === 'hosting') return match.hostingAvailable
+    return true
+  })
 
   return (
     <div className="page social-page">
@@ -544,7 +555,11 @@ export function HitchhikerPage() {
                   <p className="label">ROTANA GÖRE</p>
                   <h2>Yol arkadaşları</h2>
                 </div>
-                <span className="helper">Skor, ortak noktaların özetidir.</span>
+                <span className="helper">
+                  {matchTotal > matches.length
+                    ? `${matches.length} / ${matchTotal} eşleşme`
+                    : 'Skor, ortak noktaların özetidir.'}
+                </span>
               </div>
               {matchesLoading ? (
                 <div className="loading-grid">
@@ -565,8 +580,51 @@ export function HitchhikerPage() {
                   </Link>
                 </div>
               ) : (
-                <div className="match-grid">
-                  {matches.map((match) => (
+                <>
+                  <div
+                    className="match-filters"
+                    role="group"
+                    aria-label="Eşleşmeleri filtrele"
+                  >
+                    {([
+                      ['all', 'Tümü', matches.length],
+                      [
+                        'shared',
+                        'Ortak ilgi',
+                        matches.filter((match) => match.sharedInterests.length > 0).length,
+                      ],
+                      [
+                        'hosting',
+                        'Ev sahipliği',
+                        matches.filter((match) => match.hostingAvailable).length,
+                      ],
+                    ] as const).map(([value, label, count]) => (
+                      <button
+                        key={value}
+                        className={matchFilter === value ? 'match-filter is-active' : 'match-filter'}
+                        type="button"
+                        aria-pressed={matchFilter === value}
+                        onClick={() => setMatchFilter(value)}
+                      >
+                        {label}
+                        <span>{count}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {filteredMatches.length === 0 ? (
+                    <div className="social-empty small-empty">
+                      <p>Bu filtreye uyan eşleşme yok.</p>
+                      <button
+                        className="section-link"
+                        type="button"
+                        onClick={() => setMatchFilter('all')}
+                      >
+                        Tüm eşleşmeleri göster
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="match-grid">
+                      {filteredMatches.map((match) => (
                     <article className="match-card" key={match.userId}>
                       <div className="match-card-head">
                         <div className="social-avatar">{initials(match.displayName)}</div>
@@ -619,8 +677,10 @@ export function HitchhikerPage() {
                         <span className="helper">{match.overlapDays} gün ortak</span>
                       </div>
                     </article>
-                  ))}
-                </div>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
             </section>
           )}

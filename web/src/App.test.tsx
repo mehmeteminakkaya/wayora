@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
@@ -143,5 +143,11 @@ describe('App', () => {
     expect(await screen.findByRole('heading', { name: 'Aynı yöne gidenler.' })).toBeInTheDocument()
     expect(await screen.findByRole('heading', { name: 'Deniz' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Bağlantı iste/ })).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /Ev sahipliği/ }))
+    expect(screen.getByRole('heading', { name: 'Deniz' })).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /Tümü/ }))
+    expect(screen.getByRole('button', { name: /Ortak ilgi/ })).toBeInTheDocument()
   })
 })

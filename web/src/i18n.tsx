@@ -164,9 +164,13 @@ const LangContext = createContext<LangContextValue | null>(null)
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window === 'undefined') return 'tr'
-    const saved = window.localStorage.getItem(STORAGE_KEY)
-    return saved === 'en' ? 'en' : 'tr'
+    // EN, yalnızca menü + giriş/kayıt ekranlarında çevrilmiş durumda; geri kalan
+    // sayfaların tamamı (Rotalarım, rota detayı, Keşfet, Yol Arkadaşları, onboarding,
+    // profil...) hâlâ sabit Türkçe metin kullanıyor. Kapsam tamamlanana kadar EN
+    // düğmesi arayüzde devre dışı (Layout.tsx) ve burada da eski bir 'en' localStorage
+    // değeri varsa geri dönülmüyor; aksi hâlde menü İngilizce, sayfa gövdesi Türkçe
+    // kalan yarım bir görünüm oluşuyordu.
+    return 'tr'
   })
 
   const setLang = useCallback((next: Lang) => {

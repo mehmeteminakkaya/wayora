@@ -431,7 +431,7 @@ export function NewTripPage() {
 
               <div className="field">
                 <span className="field-label">Tempo</span>
-                <div className="chip-row">
+                <div className="pace-options">
                   {PACE_OPTIONS.map((option) => (
                     <button
                       key={option.value}

@@ -1496,6 +1496,47 @@ p {
   text-align: center;
 }
 
+.map-stops {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.map-stop {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 14px;
+  text-align: left;
+}
+
+.map-stop:hover {
+  border-color: var(--ink-2);
+}
+
+.map-stop.is-active {
+  border-color: var(--ink);
+  background: var(--signal);
+}
+
+.map-stop strong {
+  color: var(--ink-2);
+  font-weight: 600;
+  text-align: right;
+}
+
+.map-stop.is-active strong {
+  color: var(--ink);
+}
+
 /* ---------- Trips ---------- */
 
 .page-heading {

@@ -94,9 +94,9 @@ function activityDetailPath(activity: Activity, destination: string): string {
 // Günün ilk durağının gerçek koordinatını kullan; yoksa şehir merkezine düş.
 function mapCoords(
   destination: string,
-  activities: Activity[],
+  activity: Activity | null,
 ): { lat: number; lng: number; hasPlace: boolean } {
-  const place = activities.find((activity) => activity.place !== null)?.place ?? null
+  const place = activity?.place ?? null
   const [fallbackLat, fallbackLng] = cityCoords(destination)
   // (0, 0) "koordinat yok" demek; o durumda şehir merkezine düş.
   if (place && (place.lat !== 0 || place.lng !== 0)) {
@@ -105,8 +105,8 @@ function mapCoords(
   return { lat: fallbackLat, lng: fallbackLng, hasPlace: false }
 }
 
-function mapSrc(destination: string, activities: Activity[]): string {
-  const { lat, lng, hasPlace } = mapCoords(destination, activities)
+function mapSrc(destination: string, activity: Activity | null): string {
+  const { lat, lng, hasPlace } = mapCoords(destination, activity)
   const delta = hasPlace ? 0.012 : 0.045
   const bbox = [lng - delta, lat - delta, lng + delta, lat + delta]
     .map((value) => value.toFixed(5))
@@ -114,8 +114,8 @@ function mapSrc(destination: string, activities: Activity[]): string {
   return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat.toFixed(5)}%2C${lng.toFixed(5)}`
 }
 
-function mapLink(destination: string, activities: Activity[]): string {
-  const { lat, lng, hasPlace } = mapCoords(destination, activities)
+function mapLink(destination: string, activity: Activity | null): string {
+  const { lat, lng, hasPlace } = mapCoords(destination, activity)
   return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=${hasPlace ? 16 : 13}/${lat}/${lng}`
 }
 
@@ -270,6 +270,7 @@ export function TripDetailPage() {
   )
   const [selectedDayId, setSelectedDayId] = useState<string | null>(null)
   const [view, setView] = useState<'list' | 'map'>('list')
+  const [mapActivityId, setMapActivityId] = useState<string | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
   const [confirmTripDelete, setConfirmTripDelete] = useState(false)
   const [deletingTrip, setDeletingTrip] = useState(false)
@@ -473,6 +474,10 @@ export function TripDetailPage() {
   }
 
   const activeDay = trip.days.find((day) => day.id === selectedDayId) ?? trip.days[0] ?? null
+  const mapActivity =
+    activeDay?.activities.find((activity) => activity.id === mapActivityId) ??
+    activeDay?.activities.find((activity) => activity.place) ??
+    null
   const activities = trip.days.flatMap((day) => day.activities)
   const estimatedTotal = activities.reduce((sum, activity) => sum + (activity.estimatedCost ?? 0), 0)
   const activeDayTotal = activeDay
@@ -485,6 +490,7 @@ export function TripDetailPage() {
     setSelectedDayId(dayId)
     setShowAddForm(false)
     setConfirmActivityId(null)
+    setMapActivityId(null)
   }
 
   function openAddForm() {
@@ -796,17 +802,17 @@ export function TripDetailPage() {
                 <div className="trip-map">
                   <div className="map-frame">
                     <iframe
-                      src={mapSrc(trip.destination, activeDay.activities)}
+                      src={mapSrc(trip.destination, mapActivity)}
                       title={`${trip.destination} haritası`}
                       loading="lazy"
                     />
                   </div>
                   <p className="trip-note">
-                    Harita günün ilk durağını işaretler; diğer durakların adresleri aşağıda.
+                    Aşağıdaki listeden bir durağa dokun; harita o durağı işaretler.
                   </p>
                   <a
                     className="section-link"
-                    href={mapLink(trip.destination, activeDay.activities)}
+                    href={mapLink(trip.destination, mapActivity)}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -818,25 +824,35 @@ export function TripDetailPage() {
                     {activeDay.activities.length === 0 ? (
                       <p className="notice">Bu gün için durak yok.</p>
                     ) : (
-                      <ul className="info-list">
-                        {activeDay.activities.map((activity) => (
-                          <li key={activity.id}>
-                            <span>
-                              {activity.title}
-                              {(activity.startTime || activity.endTime) && (
-                                <span className="small muted">
-                                  {' '}· {activity.startTime ?? '--:--'}
-                                  {activity.endTime ? `–${activity.endTime}` : ''}
+                      <ul className="map-stops">
+                        {activeDay.activities.map((activity) => {
+                          const selected = mapActivity?.id === activity.id
+                          return (
+                            <li key={activity.id}>
+                              <button
+                                type="button"
+                                className={selected ? 'map-stop is-active' : 'map-stop'}
+                                aria-pressed={selected}
+                                onClick={() => setMapActivityId(activity.id)}
+                              >
+                                <span>
+                                  {activity.title}
+                                  {(activity.startTime || activity.endTime) && (
+                                    <span className="small muted">
+                                      {' '}· {activity.startTime ?? '--:--'}
+                                      {activity.endTime ? `–${activity.endTime}` : ''}
+                                    </span>
+                                  )}
                                 </span>
-                              )}
-                            </span>
-                            <strong>
-                              {activity.place?.address ??
-                                CATEGORY_LABELS[activity.category] ??
-                                activity.category}
-                            </strong>
-                          </li>
-                        ))}
+                                <strong>
+                                  {activity.place?.address ??
+                                    CATEGORY_LABELS[activity.category] ??
+                                    activity.category}
+                                </strong>
+                              </button>
+                            </li>
+                          )
+                        })}
                       </ul>
                     )}
                   </div>

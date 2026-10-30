@@ -326,7 +326,7 @@ for index, (num, title, body) in enumerate(cards):
     text(slide, num, x + 0.2, y + 0.18, 0.55, 0.25, size=16, font=DISPLAY, color=TERRA)
     text(slide, title, x + 0.85, y + 0.2, 4.5, 0.25, size=9, font=MONO, color=INK)
     text(slide, body, x + 0.85, y + 0.58, 4.65, 0.8, size=11, color=MUTED)
-text(slide, '51 API + 4 web testi · 0 audit vulnerability · CI her PR’da', 0.65, 6.55, 11.8, 0.3, size=9, font=MONO, color=MUTED)
+text(slide, '70 API + 6 web testi · 0 audit vulnerability · CI her PR’da', 0.65, 6.55, 11.8, 0.3, size=9, font=MONO, color=MUTED)
 notes(slide, 'Güvenlik; kimlik, girdi, prompt ve kötüye kullanım olarak dört katmanda ele alındı. Prompt injection testi servis testleri içinde.')
 
 # ---------------------------------------------------------------------------
@@ -383,9 +383,9 @@ notes(slide, 'Sprint 0-3 tamamlandı; Sprint 4’te sürükle-bırak, Sprint 5�
 # 12 · QUALITY
 # ---------------------------------------------------------------------------
 slide = base('Kanıt: testler ve CI.', '11 / Kalite', 12)
-text(slide, '51', 0.65, 2.1, 2.3, 1.1, size=76, font=DISPLAY, color=TERRA)
+text(slide, '70', 0.65, 2.1, 2.3, 1.1, size=76, font=DISPLAY, color=TERRA)
 text(slide, 'API TESTİ', 0.72, 3.25, 2.2, 0.25, size=9, font=MONO, color=INK)
-text(slide, '4', 3.3, 2.1, 1.3, 1.1, size=76, font=DISPLAY, color=TERRA)
+text(slide, '6', 3.3, 2.1, 1.3, 1.1, size=76, font=DISPLAY, color=TERRA)
 text(slide, 'WEB TESTİ', 3.37, 3.25, 1.8, 0.25, size=9, font=MONO, color=INK)
 text(slide, '0', 5.1, 2.1, 1.3, 1.1, size=76, font=DISPLAY, color=OLIVE)
 text(slide, 'AUDIT BULGUSU', 5.17, 3.25, 2.2, 0.25, size=9, font=MONO, color=INK)
@@ -393,7 +393,7 @@ text(slide, 'Lint · typecheck · test · build · audit · gitleaks · CodeQL �
 rect(slide, 0.65, 4.75, 11.9, 0.015, fill=INK, line=None)
 text(slide, 'Kritik akışlar', 0.65, 4.95, 3.0, 0.3, size=13, font=DISPLAY, color=INK)
 bullets(slide, ['Auth başarı + hata yolları', 'Gezi doğrulama ve sahiplik', 'Offline plan + halüsinasyon filtresi', 'Prompt sınırı + fallback', 'Landing, login, korumalı rota, boş liste'], 0.65, 5.35, 11.3, 1.3, size=10, spacing=1.1)
-notes(slide, 'Kalite deterministik guardrail’lere dayanıyor: 51 API, 4 web testi, lint, tip, build, audit, gitleaks, CodeQL ve Semgrep.')
+notes(slide, 'Kalite deterministik guardrail’lere dayanıyor: 70 API, 6 web testi, lint, tip, build, audit, gitleaks, CodeQL ve Semgrep.')
 
 # ---------------------------------------------------------------------------
 # 13 · DEMO

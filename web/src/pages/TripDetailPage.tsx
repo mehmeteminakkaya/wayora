@@ -884,23 +884,14 @@ export function TripDetailPage() {
                             className={`timeline-item${draggedActivityId === activity.id ? ' is-dragging' : ''}${dropTargetId === activity.id ? ' is-drop-target' : ''}`}
                             key={activity.id}
                             data-activity-id={activity.id}
-                            draggable
-                            onDragStart={() => {
-                              setConfirmActivityId(null)
-                              setDraggedActivityId(activity.id)
-                            }}
-                            onDragOver={(event) => {
-                              event.preventDefault()
-                              setDropTargetId(activity.id)
-                            }}
-                            onDrop={(event) => {
-                              event.preventDefault()
-                              void handleDrop(activity.id)
-                            }}
-                            onDragEnd={() => {
-                              setDraggedActivityId(null)
-                              setDropTargetId(null)
-                            }}
+                            // Not: siralama native HTML5 drag-and-drop (draggable/dragstart/
+                            // dragover/drop) ile degil, Pointer Events ile yapiliyor; o yuzden
+                            // bu <li>'de drag* olaylari yok, mantik .drag-handle butonunda.
+                            // Native DnD, <button> uzerinden baslayan gercek suruklemeyi
+                            // Chromium/WebKit'te hic tetiklemiyordu; duzeltildikten sonra bile
+                            // trackpad'de ve otomasyonda guvenilmez kaldi (fareyle dogrulandi).
+                            // Pointer Events, mouse dahil her girdi turunde piksel piksel
+                            // calistigi icin bu sinifin sorunlarini bastan tasimiyor.
                           >
                             <span className="timeline-time">
                               {activity.startTime ?? '--:--'}
@@ -985,6 +976,8 @@ export function TripDetailPage() {
                                     type="button"
                                     title="Sürükle veya ok tuşlarıyla sırala"
                                     aria-label={`${activity.title} durağını sırala`}
+                                    // Siralama Pointer Events ile yapiliyor (mouse + touch ayni
+                                    // yol); native HTML5 drag-and-drop kullanilmiyor.
                                     onKeyDown={(event) => {
                                       if (event.key === 'ArrowUp') {
                                         event.preventDefault()
@@ -996,12 +989,12 @@ export function TripDetailPage() {
                                       }
                                     }}
                                     onPointerDown={(event) => {
-                                      if (event.pointerType === 'mouse') return
+                                      setConfirmActivityId(null)
                                       event.currentTarget.setPointerCapture(event.pointerId)
                                       setDraggedActivityId(activity.id)
                                     }}
                                     onPointerMove={(event) => {
-                                      if (event.pointerType === 'mouse' || draggedActivityId !== activity.id) {
+                                      if (draggedActivityId !== activity.id) {
                                         return
                                       }
                                       const row = document
@@ -1013,7 +1006,7 @@ export function TripDetailPage() {
                                       }
                                     }}
                                     onPointerUp={(event) => {
-                                      if (event.pointerType === 'mouse') return
+                                      event.currentTarget.releasePointerCapture(event.pointerId)
                                       const targetId = dropTargetId
                                       setDraggedActivityId(null)
                                       setDropTargetId(null)

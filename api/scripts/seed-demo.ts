@@ -13,10 +13,11 @@ if (existsSync('.env')) process.loadEnvFile('.env')
 const databaseUrl = process.env.DATABASE_URL ?? ''
 const isLocalDatabase =
   databaseUrl.includes('localhost') || databaseUrl.includes('127.0.0.1')
+const allowRemoteDemo = process.env.DEMO_SEED_ALLOW_PRODUCTION === 'true'
 
-if (process.env.NODE_ENV === 'production' || !isLocalDatabase) {
+if ((!isLocalDatabase || process.env.NODE_ENV === 'production') && !allowRemoteDemo) {
   throw new Error(
-    'Demo verisi yalnızca local veritabanında çalışır. Production veya uzak bir DATABASE_URL ile çalıştırılamaz.',
+    'Demo verisi varsayılan olarak yalnızca local veritabanında çalışır. Production demo için DEMO_SEED_ALLOW_PRODUCTION=true gerekir.',
   )
 }
 

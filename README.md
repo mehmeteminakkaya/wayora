@@ -62,7 +62,7 @@ Mevcut sürümde kullanıcı:
 
 ### Ürün akışı
 
-- 14 şehir ve 100 lisanslı deneyimden oluşan sürümlenmiş katalog.
+- 14 şehir ve 140 lisanslı deneyimden oluşan sürümlenmiş katalog.
 - Şehir/deneyim arama, kategori filtresi, sıralama ve boş sonuç durumu.
 - Deneyim detayında süre, tahmini kişi başı maliyet, katalog puanı, pratik bilgiler ve
   OpenStreetMap bağlantısı.

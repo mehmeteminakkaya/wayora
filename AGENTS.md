@@ -44,9 +44,13 @@ npm run build          # üretim derlemesi
 1. İlgili spec/task ve `AGENTS.md` dosyalarını oku.
 2. Etkilenen kodu ve testleri incele; davranışı ve dosyaları kısaca yaz.
 3. Önce başarısız test, sonra en küçük uygulama.
-4. `npm run lint && npm run typecheck && npm test && npm run build` çalıştır.
-5. Diff'i review et: güvenlik, hata yolları, erişilebilirlik, test boşlukları.
-6. PR açıklamasında problem, yaklaşım, test kanıtı ve riskleri yaz.
+4. Şu durumlarda dur ve insan onayı iste: iki geçerli tasarım arasında seçim yapamıyorsan,
+   aynı test üç denemeden sonra hâlâ kırılıyorsa, kod spec ile çelişiyorsa veya geri alınamaz
+   veri/migration işlemi yapacaksan.
+5. `npm run lint && npm run typecheck && npm test && npm run build` çalıştır.
+6. Diff'i review et: güvenlik, hata yolları, erişilebilirlik, test boşlukları.
+7. PR açıklamasında problem, yaklaşım, test kanıtı ve riskleri yaz.
+8. Oturum sonunda `docs/PROGRESS.md` içindeki Decided / Done / Next listelerini güncelle.
 
 ## Sınırlar
 
@@ -65,5 +69,7 @@ npm run build          # üretim derlemesi
 | Agent iş akışı | `.agents/skills/`, `docs/ORCHESTRATION.md` |
 | Güvenlik | `docs/SECURITY.md` |
 | AI review | `docs/AI_REVIEW.md`, `.coderabbit.yaml` |
+| Ders konsept izlenebilirliği | `docs/COURSE_TRACEABILITY.md` |
+| Oturum handoff | `docs/PROGRESS.md` |
 | MCP | `docs/CONTEXT.md`, `mcp/wayora-context/` |
 | Tasarım dili | `docs/DESIGN_SYSTEM.md`, `web/src/index.css` |

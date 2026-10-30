@@ -45,6 +45,17 @@ hangi görevin hangi bağlamı gerektirdiğini ve MCP ile bağlamı nasıl geni�
 - **Review oturumu:** ayrı başlat; generator'ın gerekçelerini değil diff'i ve spec'i ver.
 - Uzun oturumlarda kararları `docs/` içine yaz; bağlam kaybında yeniden kullan.
 
+### Bağlam bütçesi ve context rot
+
+- Bağlam **sınırsız değil**: her ek dosya ve araç çıktısı dikkat bütçesini tüketir.
+- Uzun oturum belirtileri: aynı hatanın tekrarı, kuralın unutulması, hedefin kayması.
+  Bu durumda yeni oturum aç; eski oturumu büyütmeye çalışma.
+- Kritik kural ve kabul kriterlerini oturum başında ve sonunda tekrar et; uzun bağlamın
+  ortasında kalan talimatlar daha az güvenilirdir.
+- Oturum kapanmadan `docs/PROGRESS.md` içine **Decided / Done / Next** yaz. Yeni oturum
+  önce bu handoff'u, sonra ilgili `AGENTS.md` ve spec'i okur.
+- Context rot belirtisi varsa önce bağlamı küçült; yeni model/araç eklemek ilk çözüm değildir.
+
 ## 4. MCP: Wayora Context
 
 `mcp/wayora-context/` küçük bir MCP sunucusudur; agent'a repo ve API hakkında **canlı** bağlam

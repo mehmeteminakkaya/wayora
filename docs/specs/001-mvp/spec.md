@@ -101,10 +101,10 @@ tek bir akışa indirir: tercihler → gezi → AI planı → düzenleme.
 
 ### US-9: Şehir keşif rehberi
 
-**Olarak** gezgin, **istiyorum ki** 10 büyük şehirde yapılacakları, yaklaşık maliyetleri ve
+**Olarak** gezgin, **istiyorum ki** 14 şehirde yapılacakları, yaklaşık maliyetleri ve
 süreleriyle birlikte görebileyim; beğendiğim şehirle hemen rota oluşturayım.
 
-- [x] 10 şehir ve toplam 100 deneyim veritabanında tutulur (`City`, `CityExperience`).
+- [x] 14 şehir ve toplam 140 deneyim veritabanında tutulur (`City`, `CityExperience`).
 - [x] Her deneyimde kategori, mahalle, adres, süre, tahmini kişi başı maliyet, puan, saat notu
   ve varsa resmî bağlantı bulunur.
 - [x] `/kesfet` tüm şehirleri, `/kesfet/:slug` şehir rehberini herkese açık gösterir.
@@ -125,7 +125,8 @@ süreleriyle birlikte görebileyim; beğendiğim şehirle hemen rota oluşturay�
 ## Kapsam dışı
 
 - Gerçek rezervasyon/ödeme, uçuş/otel entegrasyonu.
-- Çoklu kullanıcı işbirliği, yorum, sosyal özellikler.
+- Çoklu kullanıcı işbirliği, yorum ve genel sosyal akış. Yol Arkadaşları ayrı
+  `docs/specs/003-hitchhiker-match/spec.md` kapsamındadır.
 - Mobil native uygulama.
 - Gerçek zamanlı harita (Google Maps anahtarı olmadan).
 

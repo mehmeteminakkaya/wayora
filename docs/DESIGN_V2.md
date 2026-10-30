@@ -67,7 +67,7 @@ kurallar tek referanstır. Eski Rotasyon tasarımı geçersizdir.
 - Landing: logo, giriş, arama, planı başlat, 3 adım, şehirler, örnek gün, footer.
 - Giriş: e-posta, şifre, şifremi unuttum, giriş, Google, kayıt bağlantısı.
 - Onboarding: 3 adım. Adım 1 ilgi alanları, adım 2 bütçe, adım 3 tempo. Üstte ilerleme.
-- Keşfet: arama, kategori çipleri, 10 şehir, sıralama, fotoğraflı şehir kartları.
+- Keşfet: arama, kategori çipleri, 14 şehir, sıralama, fotoğraflı şehir kartları.
 - Şehir: hero fotoğraf, geri, şehir bilgisi, filtreler, deneyim satırları, seçim, sabit CTA.
 - Deneyim detayı: hero fotoğraf, açıklama, süre/fiyat/puan, harita, bilmen gerekenler, sabit
   "Plana ekle".

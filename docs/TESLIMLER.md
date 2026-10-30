@@ -19,7 +19,7 @@ Tüm dosyalar Türkçedir ve projedeki gerçek kod, test ve sprint durumuyla hiz
 | [preview-rotasyon-se.png](preview-rotasyon-se.png) | Görsel | 375x667 mobil uygulama önizlemesi |
 | [preview-rotasyon-mobile.png](preview-rotasyon-mobile.png) | Görsel | Mobil tam sayfa |
 | [assets/](assets/) | Klasör | Word ve sunum içinde kullanılan ekran görüntüleri |
-| [CITY_CATALOG.md](CITY_CATALOG.md) | Markdown | 10 şehir / 100 deneyim kataloğu, fiyat yaklaşımı, seed ve API |
+| [CITY_CATALOG.md](CITY_CATALOG.md) | Markdown | 14 şehir / 140 deneyim kataloğu, fiyat yaklaşımı, seed ve API |
 | [DESIGN_V2.md](DESIGN_V2.md) | Markdown | Wayora V2 mobil tasarım sistemi ve sayfa kuralları |
 | [PHOTO_CREDITS.md](PHOTO_CREDITS.md) | Markdown | V2 şehir ve kategori fotoğraflarının lisans/atıf kayıtları |
 | [audit/AUDIT_REPORT.md](audit/AUDIT_REPORT.md) | Markdown | 1000 kişilik denetim raporu ve düzeltmeler |

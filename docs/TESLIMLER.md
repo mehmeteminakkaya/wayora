@@ -13,12 +13,16 @@ Tüm dosyalar Türkçedir ve projedeki gerçek kod, test ve sprint durumuyla hiz
 | [Wayora-User-Stories.pdf](Wayora-User-Stories.pdf) | PDF | Güncel user story kataloğu (30 Ekim 2026) |
 | [Wayora-Proje-Yonetimi.pdf](Wayora-Proje-Yonetimi.pdf) | PDF | Güncel proje yönetimi planı (30 Ekim 2026) |
 | [professor/Wayora-Profesor-Teslimi.zip](professor/Wayora-Profesor-Teslimi.zip) | ZIP | Hocaya sunum için 5 PDF + DOCX + Markdown + tek PDF paketi |
-| [professor/Wayora-Profesor-Teslimi-Tum.pdf](professor/Wayora-Profesor-Teslimi-Tum.pdf) | PDF | Beş belgenin tek 29 sayfalık PDF birleşimi |
+| [professor/Wayora-Profesor-Teslimi-Tum.pdf](professor/Wayora-Profesor-Teslimi-Tum.pdf) | PDF | Yedi belgenin tek 46 sayfalık PDF birleşimi |
 | [professor/00-Sunum-Rehberi.pdf](professor/00-Sunum-Rehberi.pdf) | PDF | 10 dakikalık sunum akışı ve demo rehberi |
 | [professor/01-Yapilanlar.pdf](professor/01-Yapilanlar.pdf) | PDF | Alan alan yapılanlar ve kanıtlar |
 | [professor/02-User-Stories.pdf](professor/02-User-Stories.pdf) | PDF | Ayrıntılı user story kataloğu |
 | [professor/03-Proje-Yonetimi.pdf](professor/03-Proje-Yonetimi.pdf) | PDF | Proje yönetimi, risk, sprint ve deploy |
 | [professor/04-Ders-Konseptleri.pdf](professor/04-Ders-Konseptleri.pdf) | PDF | Week 1–5 konsept izlenebilirliği ve dürüst boşluklar |
+| [professor/05-Architecture.pdf](professor/05-Architecture.pdf) | PDF | Sistem bağlamı, AI akışı, veri modeli ve deploy |
+| [professor/06-UI-UX.pdf](professor/06-UI-UX.pdf) | PDF | V2 tasarım dili, gerçek ekranlar ve interaction kararları |
+| [Wayora-Architecture.pdf](Wayora-Architecture.pdf) | PDF | Mimari dokümanının kök kopyası |
+| [Wayora-UI-UX.pdf](Wayora-UI-UX.pdf) | PDF | UI/UX dokümanının kök kopyası |
 | [Wayora-Sunum-Tasarim.pptx](Wayora-Sunum-Tasarim.pptx) | PowerPoint | **Sunulan deste.** 13 slayt; elle tasarlandı, gerçek ekran görüntüleriyle. Konuşmacı notu yoktur. |
 | [Wayora-Sunum.pptx](Wayora-Sunum.pptx) | PowerPoint | `generate_slides.py` ile üretilen 14 slaytlık yedek deste; her slaytta konuşmacı notu var |
 | [Wayora-V2-Full-Frontend-Raporu.pdf](Wayora-V2-Full-Frontend-Raporu.pdf) | PDF | V2 full frontend raporu: tüm ekranlar, tasarım sistemi, routing, state, erişilebilirlik ve testler |

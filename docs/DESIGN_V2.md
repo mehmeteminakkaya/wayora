@@ -51,7 +51,7 @@ kurallar tek referanstır. Eski Rotasyon tasarımı geçersizdir.
 - Gün sekmesi: büyük numara + tarih. Aktif gün sarı.
 - Pano: siyah zemin, sarı mono, tek satır, en fazla 4 veri.
 - İkon: Lucide, 24 px, çizgi 1,75.
-- Alt menü: 64 px + güvenli alan, 4 sekme: Keşfet, Rotalarım, Planla, Profil.
+- Alt menü: 64 px + güvenli alan, 5 sekme: Keşfet, Rotalarım, Yol, Planla, Profil.
   Aktif sekmenin üstünde 3 px sarı çizgi, ikon + 12 px etiket.
 - Sabit alt çubuk: detay ekranlarında birincil eylem + fiyat, 72 px + güvenli alan, beyaz zemin,
   üstte 1 px çizgi.

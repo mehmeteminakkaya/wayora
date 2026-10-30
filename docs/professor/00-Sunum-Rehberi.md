@@ -54,6 +54,15 @@ AI fallback, sosyal güvenlik ve test kanıtı var.”
 - **“Tüm konseptleri kodladık” demeyin.** “Ana mühendislik pratiklerini uyguladık;
   teorik reading’lerin bir kısmını dokümante ettik, bir kısmı kapsam dışı” deyin.
 
+## Ek · Mimari ve UI/UX
+
+Sorular mimari veya tasarıma gelirse:
+
+- `05-Architecture.pdf`: sistem bağlamı, AI akışı, veri modeli, deploy ve güvenlik.
+- `06-UI-UX.pdf`: gerçek mobil ekranlar, V2 tokenları, interaction ve audit.
+
+Bu iki dosya, ana 10 dakikalık akışın yerine değil, **derinleşme** için kullanılmalıdır.
+
 # Dosya Seti
 
 | Dosya | Ne için? |
@@ -62,6 +71,8 @@ AI fallback, sosyal güvenlik ve test kanıtı var.”
 | `02-User-Stories.pdf` | Ürün gereksinimleri ve kabul kriterleri |
 | `03-Proje-Yonetimi.pdf` | Sprint, ekip, risk, kalite, deploy |
 | `04-Ders-Konseptleri.pdf` | Week 1–5 izlenebilirliği ve dürüst boşluklar |
+| `05-Architecture.pdf` | Sistem bağlamı, AI akışı, veri modeli ve deploy |
+| `06-UI-UX.pdf` | V2 tasarım dili, gerçek ekranlar ve interaction kararları |
 
 DOCX sürümleri aynı klasördedir; düzenleme gerekirse DOCX’i kullanın.
 

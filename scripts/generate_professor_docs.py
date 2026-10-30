@@ -36,6 +36,8 @@ DOCS = [
     ("02-User-Stories.md", "02-User-Stories", "Wayora-User-Stories"),
     ("03-Proje-Yonetimi.md", "03-Proje-Yonetimi", "Wayora-Proje-Yonetimi"),
     ("04-Ders-Konseptleri.md", "04-Ders-Konseptleri", "Wayora-Ders-Konseptleri"),
+    ("05-Architecture.md", "05-Architecture", "Wayora-Architecture"),
+    ("06-UI-UX.md", "06-UI-UX", "Wayora-UI-UX"),
 ]
 
 
@@ -269,6 +271,28 @@ def build_docx(source: Path, output: Path) -> None:
         if not stripped or stripped == "---":
             index += 1
             continue
+        image_match = re.match(r"^!\[([^\]]*)\]\(([^)]+)\)$", stripped)
+        if image_match:
+            caption, relative_path = image_match.groups()
+            image_path = (source.parent / relative_path).resolve()
+            if image_path.exists():
+                if "-mobile" in relative_path:
+                    width = Cm(7.2)
+                elif "architecture" in relative_path:
+                    width = Cm(16.2)
+                else:
+                    width = Cm(15.0)
+                doc.add_picture(str(image_path), width=width)
+                doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
+                if caption:
+                    cap = doc.add_paragraph()
+                    cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    run = cap.add_run(caption)
+                    run.font.name = MONO_FONT
+                    run.font.size = Pt(7.6)
+                    run.font.color.rgb = INK_2
+            index += 1
+            continue
         if stripped.startswith("|") and index + 1 < len(lines) and re.match(
             r"^\s*\|?[\s:|-]+\|", lines[index + 1]
         ):
@@ -351,6 +375,15 @@ def build_html(source: Path, output: Path) -> None:
         if not stripped or stripped == "---":
             index += 1
             continue
+        image_match = re.match(r"^!\[([^\]]*)\]\(([^)]+)\)$", stripped)
+        if image_match:
+            caption, relative_path = image_match.groups()
+            parts.append(
+                f'<figure><img src="{html.escape(relative_path)}" alt="{html.escape(caption)}">'
+                f'<figcaption>{inline_html(caption)}</figcaption></figure>'
+            )
+            index += 1
+            continue
         if stripped.startswith("|") and index + 1 < len(lines) and re.match(
             r"^\s*\|?[\s:|-]+\|", lines[index + 1]
         ):
@@ -419,8 +452,8 @@ def build_html(source: Path, output: Path) -> None:
   * {{ box-sizing: border-box; }}
   body {{ margin: 0; color: #121212; background: #fff; font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; line-height: 1.5; }}
   h1 {{ font-family: "Arial Black", Arial, sans-serif; font-size: 24pt; line-height: 1.08; margin: 0 0 8pt; }}
-  h2 {{ font-size: 14pt; margin: 18pt 0 6pt; }}
-  h3 {{ font-size: 11.5pt; margin: 12pt 0 4pt; color: #444; }}
+  h2 {{ font-size: 14pt; margin: 18pt 0 6pt; page-break-after: avoid; break-after: avoid; }}
+  h3 {{ font-size: 11.5pt; margin: 12pt 0 4pt; color: #444; page-break-after: avoid; break-after: avoid; }}
   p {{ margin: 0 0 7pt; }}
   ul, ol {{ margin: 0 0 8pt 18pt; padding: 0; }}
   li {{ margin: 0 0 3pt; }}
@@ -432,6 +465,9 @@ def build_html(source: Path, output: Path) -> None:
   th {{ background: #121212; color: #fff; text-align: left; padding: 6pt 7pt; border: 1px solid #121212; }}
   td {{ padding: 5pt 7pt; border: 1px solid #deded9; vertical-align: top; }}
   tbody tr:nth-child(even) {{ background: #fafafa; }}
+  figure {{ margin: 14pt 0 16pt; page-break-inside: avoid; }}
+  figure img {{ display: block; width: auto; max-width: 100%; max-height: 205mm; margin: 0 auto; border: 1px solid #deded9; }}
+  figcaption {{ margin-top: 5pt; text-align: center; color: #55575c; font-family: Consolas, monospace; font-size: 7.8pt; }}
   .cover {{ min-height: 245mm; page-break-after: always; padding-top: 22mm; }}
   .brand {{ font-family: "Arial Black", Arial, sans-serif; font-size: 26pt; letter-spacing: -0.02em; }}
   .brand span {{ color: #777; font-family: Consolas, monospace; font-size: 9pt; letter-spacing: 0; }}
@@ -501,9 +537,12 @@ def main() -> None:
         html_path.unlink(missing_ok=True)
         # Eski kök dosya adlarını da güncel tut.
         if root_name in {"Wayora-User-Stories", "Wayora-Proje-Yonetimi"}:
-            shutil.copyfile(docx_path, ROOT / "docs" / f"{root_name}.docx")
-            if pdf_path.exists():
-                shutil.copyfile(pdf_path, ROOT / "docs" / f"{root_name}.pdf")
+            try:
+                shutil.copyfile(docx_path, ROOT / "docs" / f"{root_name}.docx")
+                if pdf_path.exists():
+                    shutil.copyfile(pdf_path, ROOT / "docs" / f"{root_name}.pdf")
+            except OSError as error:
+                print("warning: root copy skipped", root_name, error)
         print("ready", docx_path, "pdf", pdf_path.exists())
 
 

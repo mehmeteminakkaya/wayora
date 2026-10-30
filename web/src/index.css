@@ -1821,6 +1821,10 @@ p {
 
 .timeline {
   margin-top: 8px;
+  /* Tarayıcının varsayılan ol listesi dolgusu, maddeleri sağa kaydırıp
+     zaman çizgisiyle noktaları hizasız bırakıyordu. */
+  padding: 0;
+  list-style: none;
 }
 
 .timeline-item {
@@ -1884,6 +1888,21 @@ p {
 
 .timeline-text {
   min-width: 0;
+}
+
+.timeline-detail {
+  align-self: start;
+  justify-self: end;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+
+.timeline-detail:hover {
+  color: var(--ink-2);
 }
 
 .drag-handle {

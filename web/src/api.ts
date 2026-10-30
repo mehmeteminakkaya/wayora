@@ -351,10 +351,14 @@ export const api = {
       body: JSON.stringify({ experienceIds }),
     }),
 
-  reorderActivity: (id: string, order: number) =>
+  reorderActivity: (
+    id: string,
+    order: number,
+    times?: { startTime: string | null; endTime: string | null },
+  ) =>
     request<{ activity: Activity }>(`/api/activities/${id}`, {
       method: 'PATCH',
-      body: JSON.stringify({ order }),
+      body: JSON.stringify({ order, ...times }),
     }),
 
   addActivity: (tripId: string, dayId: string, input: CreateActivityInput) =>

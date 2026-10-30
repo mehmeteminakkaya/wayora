@@ -8,7 +8,7 @@ import { DetailSkeleton } from '../components/Skeletons'
 import { LiveDiscovery } from '../components/LiveDiscovery'
 import { Photo } from '../components/Photo'
 import { CATEGORY_LABELS, formatMoney, formatShortDate } from '../lib/format'
-import { categoryLabel, categoryPhoto, cityCoords } from '../lib/photos'
+import { categoryLabel, categoryPhoto, cityCoords, citySlug } from '../lib/photos'
 
 const CATEGORY_OPTIONS: ActivityCategory[] = [
   'landmark',
@@ -45,6 +45,50 @@ function priceLabel(value: number | null, currency: string): string {
   if (value === null) return 'Fiyat belirtilmedi'
   if (value === 0) return 'Ücretsiz'
   return formatMoney(value, currency)
+}
+
+const DAY_START_MINUTES = 9 * 60
+const BREAK_MINUTES = 30
+
+function timeToMinutes(value: string | null): number | null {
+  if (!value) return null
+  const [hours, minutes] = value.split(':').map(Number)
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null
+  return hours * 60 + minutes
+}
+
+function minutesToTime(minutes: number): string {
+  const hours = Math.floor(minutes / 60) % 24
+  const mins = minutes % 60
+  return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`
+}
+
+// Sıra değişince saatleri de sırayla yeniden dağıt; her durağın süresini koru.
+function reflowTimes(activities: Activity[]): Activity[] {
+  let cursor = DAY_START_MINUTES
+  return activities.map((activity) => {
+    const start = timeToMinutes(activity.startTime)
+    const end = timeToMinutes(activity.endTime)
+    const duration = start !== null && end !== null && end > start ? end - start : 90
+    const newStart = cursor
+    const newEnd = newStart + duration
+    cursor = newEnd + BREAK_MINUTES
+    return {
+      ...activity,
+      startTime: minutesToTime(newStart),
+      endTime: minutesToTime(newEnd),
+    }
+  })
+}
+
+// Katalogdan gelen duraklar için deneyim detay sayfasına, diğerleri için şehir sayfasına git.
+function activityDetailPath(activity: Activity, destination: string): string {
+  const googlePlaceId = activity.place?.googlePlaceId
+  if (googlePlaceId?.startsWith('catalog:')) {
+    const [, city, experience] = googlePlaceId.split(':')
+    if (city && experience) return `/kesfet/${city}/${experience}`
+  }
+  return `/kesfet/${citySlug(destination)}`
 }
 
 // Günün ilk durağının gerçek koordinatını kullan; yoksa şehir merkezine düş.
@@ -452,13 +496,14 @@ export function TripDetailPage() {
   async function persistReorder(reordered: Activity[]) {
     if (!activeDay) return
     const previous = activeDay.activities
+    const reflowed = reflowTimes(reordered)
     setReorderStatus('saving')
     setTrip((current) =>
       current
         ? {
             ...current,
             days: current.days.map((day) =>
-              day.id === activeDay.id ? { ...day, activities: reordered } : day,
+              day.id === activeDay.id ? { ...day, activities: reflowed } : day,
             ),
           }
         : current,
@@ -466,7 +511,12 @@ export function TripDetailPage() {
 
     try {
       await Promise.all(
-        reordered.map((activity, index) => api.reorderActivity(activity.id, index)),
+        reflowed.map((activity, index) =>
+          api.reorderActivity(activity.id, index, {
+            startTime: activity.startTime,
+            endTime: activity.endTime,
+          }),
+        ),
       )
       setReorderStatus('saved')
       window.setTimeout(() => setReorderStatus('idle'), 1800)
@@ -970,6 +1020,12 @@ export function TripDetailPage() {
                                 </div>
                               )}
                             </div>
+                            <Link
+                              className="timeline-detail"
+                              to={activityDetailPath(activity, trip.destination)}
+                            >
+                              Detayları gör
+                            </Link>
                           </li>
                         )
                       })}

@@ -6,8 +6,9 @@ import { api } from '../api'
 import type { Activity, ActivityCategory, CreateActivityInput, EventOffer, Trip } from '../api'
 import { DetailSkeleton } from '../components/Skeletons'
 import { LiveDiscovery } from '../components/LiveDiscovery'
+import { Photo } from '../components/Photo'
 import { CATEGORY_LABELS, formatMoney, formatShortDate } from '../lib/format'
-import { cityCoords } from '../lib/photos'
+import { categoryLabel, categoryPhoto, cityCoords } from '../lib/photos'
 
 const CATEGORY_OPTIONS: ActivityCategory[] = [
   'landmark',
@@ -832,31 +833,43 @@ export function TripDetailPage() {
                             </span>
 
                             <div className="timeline-body">
-                              <h3>{activity.title}</h3>
-                              <p className="meta-line">
-                                <span>
-                                  {CATEGORY_LABELS[activity.category] ?? activity.category}
-                                </span>
-                                {activity.place?.address && (
-                                  <>
-                                    <span className="dot" aria-hidden="true">
-                                      ·
+                              <div className="timeline-main">
+                                <Photo
+                                  className="timeline-thumb"
+                                  src={categoryPhoto(activity.category)}
+                                  alt=""
+                                  label={categoryLabel(activity.category)}
+                                />
+                                <div className="timeline-text">
+                                  <h3>{activity.title}</h3>
+                                  <p className="meta-line">
+                                    <span>
+                                      {CATEGORY_LABELS[activity.category] ?? activity.category}
                                     </span>
-                                    <span>{activity.place.address}</span>
-                                  </>
-                                )}
-                              </p>
-                              <p className="meta-line">
-                                {duration && (
-                                  <>
-                                    <span>{duration}</span>
-                                    <span className="dot" aria-hidden="true">
-                                      ·
+                                    {activity.place?.address && (
+                                      <>
+                                        <span className="dot" aria-hidden="true">
+                                          ·
+                                        </span>
+                                        <span>{activity.place.address}</span>
+                                      </>
+                                    )}
+                                  </p>
+                                  <p className="meta-line">
+                                    {duration && (
+                                      <>
+                                        <span>{duration}</span>
+                                        <span className="dot" aria-hidden="true">
+                                          ·
+                                        </span>
+                                      </>
+                                    )}
+                                    <span>
+                                      {priceLabel(activity.estimatedCost, trip.currency)}
                                     </span>
-                                  </>
-                                )}
-                                <span>{priceLabel(activity.estimatedCost, trip.currency)}</span>
-                              </p>
+                                  </p>
+                                </div>
+                              </div>
 
                               {confirming ? (
                                 <div

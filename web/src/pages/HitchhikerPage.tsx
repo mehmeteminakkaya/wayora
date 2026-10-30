@@ -356,7 +356,7 @@ export function HitchhikerPage() {
   return (
     <div className="page social-page">
       <header className="social-hero">
-        <p className="label">YOL ARKADAŞLARI</p>
+        <p className="eyebrow">YOL ARKADAŞLARI</p>
         <h1>Aynı yöne gidenler.</h1>
         <p>
           Aynı şehirde, benzer tarihlerde olacağın gezginleri bul. Ortak noktalarınızı gör,
@@ -395,7 +395,7 @@ export function HitchhikerPage() {
         <form className="social-profile-form" onSubmit={handleSaveProfile}>
           <div className="section-head">
             <div>
-              <p className="label">{hasProfile ? 'PROFİLİ DÜZENLE' : 'YENİ PROFİL'}</p>
+              <p className="eyebrow">{hasProfile ? 'PROFİLİ DÜZENLE' : 'YENİ PROFİL'}</p>
               <h2>Kendini kısaca anlat.</h2>
             </div>
             <ShieldCheck size={22} strokeWidth={1.75} aria-hidden="true" />
@@ -571,7 +571,7 @@ export function HitchhikerPage() {
             <section className="social-section" aria-label="Eşleşmeler">
               <div className="section-head">
                 <div>
-                  <p className="label">ROTANA GÖRE</p>
+                  <p className="eyebrow">ROTANA GÖRE</p>
                   <h2>Yol arkadaşları</h2>
                 </div>
                 <span className="helper">

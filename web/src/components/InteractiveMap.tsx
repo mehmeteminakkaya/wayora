@@ -223,7 +223,7 @@ export function InteractiveMap({
     const map = mapRef.current
     if (!map) return
     if (map.getLayer('building-3d')) map.setLayoutProperty('building-3d', 'visibility', tilted ? 'visible' : 'none')
-    map.easeTo({ pitch: tilted ? 60 : 0, bearing: tilted ? -20 : 0, zoom: tilted ? Math.max(map.getZoom(), 15) : map.getZoom(), duration: 800 })
+    map.easeTo({ pitch: tilted ? 60 : 0, bearing: tilted ? -20 : 0, duration: 800 })
   }, [tilted])
 
   // Üst bileşen her render'da yeni dizi verir; haritayı yalnızca içerik değişince güncelle.

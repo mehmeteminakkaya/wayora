@@ -229,7 +229,7 @@ export function NewTripPage() {
             <span key={item} className={item <= step ? 'step is-active' : 'step'} />
           ))}
         </div>
-        <p className="label" aria-live="polite">
+        <p className="eyebrow" aria-live="polite">
           Adım {step} / 3 · {STEP_TITLES[step - 1]}
         </p>
 

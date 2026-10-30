@@ -226,7 +226,7 @@ export function CityPage() {
           priority
         />
         <div className="city-hero-body">
-          <p className="label">{city.country}</p>
+          <p className="eyebrow">{city.country}</p>
           <h1>{city.name}</h1>
           <p className="city-hero-meta">
             {city.experienceCount} deneyim · ort.{' '}

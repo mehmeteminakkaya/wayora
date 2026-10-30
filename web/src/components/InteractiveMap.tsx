@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import * as maplibregl from 'maplibre-gl'
-import 'maplibre-gl/dist/maplibre-gl.css'
-import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
+import mapboxgl from 'mapbox-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
 
-// Vite bundle'ında worker'ın doğru URL'den yüklenmesi için açıkça verilir.
-maplibregl.setWorkerUrl(workerUrl)
+// Mapbox genel (pk.) token'ı VITE_MAPBOX_TOKEN ile verilir (Vercel ortam değişkeni).
+// Repoda tutulmaz; Mapbox panelinden URL kısıtı koyun.
+const TOKEN = (import.meta.env.VITE_MAPBOX_TOKEN as string | undefined)?.trim() ?? ''
+mapboxgl.accessToken = TOKEN
 
 export type MapPoint = {
   id: string
@@ -26,49 +27,12 @@ type Props = {
 
 type StyleKey = 'map' | 'satellite' | 'dark'
 
-const SATELLITE_STYLE: maplibregl.StyleSpecification = {
-  version: 8,
-  sources: {
-    imagery: {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-      maxzoom: 19,
-      attribution: 'Tiles © Esri — Maxar, Earthstar Geographics',
-    },
-    labels: {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-      maxzoom: 19,
-    },
-  },
-  layers: [
-    { id: 'imagery', type: 'raster', source: 'imagery' },
-    { id: 'labels', type: 'raster', source: 'labels' },
-  ],
+const STYLES: Record<StyleKey, string> = {
+  // Standard: Mapbox'ın 3B bina ve yer işaretli modern stili.
+  map: 'mapbox://styles/mapbox/standard',
+  satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+  dark: 'mapbox://styles/mapbox/dark-v11',
 }
-
-// MapTiler anahtarı tarayıcıya açık (alan adı kısıtlıdır). Yoksa anahtarsız CARTO/Esri'ye düşülür.
-const MAPTILER_KEY = (import.meta.env.VITE_MAPTILER_KEY as string | undefined)?.trim()
-const maptiler = (name: string) =>
-  `https://api.maptiler.com/maps/${name}/style.json?key=${MAPTILER_KEY}`
-
-const STYLES: Record<StyleKey, string | maplibregl.StyleSpecification> = MAPTILER_KEY
-  ? {
-      map: maptiler('streets-v2'),
-      satellite: maptiler('hybrid'),
-      dark: maptiler('streets-v2-dark'),
-    }
-  : {
-      map: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-      satellite: SATELLITE_STYLE,
-      dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
-    }
 
 const STYLE_LABELS: Array<[StyleKey, string]> = [
   ['map', 'Harita'],
@@ -77,7 +41,7 @@ const STYLE_LABELS: Array<[StyleKey, string]> = [
 ]
 
 function markerEl(index: number, active: boolean): HTMLButtonElement {
-  // MapLibre dış öğenin transform'unu kendisi yönettiği için şekil iç öğede döner.
+  // Mapbox dış öğenin transform'unu kendisi yönettiği için şekil iç öğede döner.
   const el = document.createElement('button')
   el.type = 'button'
   el.style.cssText = 'width:34px;height:42px;padding:0;border:0;background:none;cursor:pointer'
@@ -104,76 +68,6 @@ function markerEl(index: number, active: boolean): HTMLButtonElement {
   return el
 }
 
-// Wayora renkleri: krem zemin, sade yollar, yumuşak su/park, sakin etiketler.
-function applyBrandStyle(map: maplibregl.Map, tilted: boolean) {
-  const style = map.getStyle()
-  if (!style?.layers) return
-  if (MAPTILER_KEY) {
-    add3d(map, tilted)
-    return
-  }
-  const set = (id: string, prop: string, value: unknown) => {
-    try {
-      map.setPaintProperty(id, prop as 'background-color', value as string)
-    } catch {
-      /* katman bu özelliği desteklemiyor */
-    }
-  }
-  for (const layer of style.layers) {
-    const id = layer.id
-    if (layer.type === 'background') set(id, 'background-color', '#F3F3F1')
-    else if (layer.type === 'fill') {
-      if (id === 'water' || id === 'water_shadow') set(id, 'fill-color', '#C9DCE6')
-      else if (id.startsWith('park') || id === 'landcover') set(id, 'fill-color', '#DCE8D3')
-      else if (id.startsWith('landuse')) set(id, 'fill-color', '#EDECE8')
-      else if (id === 'building' || id === 'building-top') {
-        set(id, 'fill-color', '#E4E3DD')
-        set(id, 'fill-outline-color', '#D6D5CE')
-      }
-    } else if (layer.type === 'line') {
-      if (id.endsWith('_fill') || id.includes('_fill_')) set(id, 'line-color', '#FFFFFF')
-      else if (id.includes('_case')) set(id, 'line-color', '#E0DFD9')
-      else if (id.startsWith('boundary')) set(id, 'line-color', '#D2D1CB')
-    } else if (layer.type === 'symbol') {
-      set(id, 'text-color', id.startsWith('watername') ? '#6F8FA3' : '#3E4046')
-      set(id, 'text-halo-color', '#F3F3F1')
-      set(id, 'text-halo-width', 1.6)
-    }
-  }
-  add3d(map, tilted)
-}
-
-// 3B: bina yükseklikleri ve (MapTiler ile) arazi. Yalnızca eğik modda görünür.
-function add3d(map: maplibregl.Map, tilted: boolean) {
-  const layers = map.getStyle()?.layers ?? []
-  const building = layers.find(
-    (l) => 'source-layer' in l && l['source-layer'] === 'building' && l.type === 'fill',
-  )
-  if (MAPTILER_KEY && !map.getSource('terrain-dem')) {
-    map.addSource('terrain-dem', {
-      type: 'raster-dem',
-      url: `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`,
-      tileSize: 256,
-    })
-  }
-  if (building && 'source' in building && typeof building.source === 'string' && !map.getLayer('building-3d')) {
-    map.addLayer({
-      id: 'building-3d',
-      type: 'fill-extrusion',
-      source: building.source,
-      'source-layer': 'building',
-      minzoom: 13,
-      layout: { visibility: tilted ? 'visible' : 'none' },
-      paint: {
-        'fill-extrusion-color': '#E9E8E2',
-        'fill-extrusion-height': ['coalesce', ['get', 'render_height'], 10],
-        'fill-extrusion-base': ['coalesce', ['get', 'render_min_height'], 0],
-        'fill-extrusion-opacity': 0.92,
-      },
-    })
-  }
-}
-
 export function InteractiveMap({
   center,
   points = [],
@@ -184,49 +78,39 @@ export function InteractiveMap({
   height = 360,
 }: Props) {
   const host = useRef<HTMLDivElement>(null)
-  const mapRef = useRef<maplibregl.Map | null>(null)
-  const markers = useRef<maplibregl.Marker[]>([])
+  const mapRef = useRef<mapboxgl.Map | null>(null)
+  const markers = useRef<mapboxgl.Marker[]>([])
   const [failed, setFailed] = useState(false)
   const [styleKey, setStyleKey] = useState<StyleKey>('map')
   const [tilted, setTilted] = useState(false)
   const appliedStyle = useRef<StyleKey>('map')
-  const tiltedRef = useRef(false)
-  const styleKeyRef = useRef<StyleKey>('map')
   const refit = useRef<() => void>(() => {})
   const onSelectRef = useRef(onSelect)
   onSelectRef.current = onSelect
 
   useEffect(() => {
     if (!host.current) return
-    let map: maplibregl.Map
+    let map: mapboxgl.Map
     try {
-      map = new maplibregl.Map({
+      if (!TOKEN) throw new Error('VITE_MAPBOX_TOKEN yok')
+      map = new mapboxgl.Map({
         container: host.current,
         style: STYLES.map,
         center: [center[1], center[0]],
         zoom,
-        attributionControl: { compact: true },
-      })
+        attributionControl: true,
+        config: { basemap: { showPointOfInterestLabels: false, lightPreset: 'day' } },
+      } as mapboxgl.MapOptions)
     } catch {
       // WebGL yoksa (eski cihaz, test ortamı) harita yerine bağlantı gösterilir.
       setFailed(true)
       return
     }
-    map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right')
-    map.addControl(new maplibregl.FullscreenControl(), 'top-right')
-    map.addControl(
-      new maplibregl.GeolocateControl({ trackUserLocation: false }),
-      'top-right',
-    )
-    map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left')
+    map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right')
+    map.addControl(new mapboxgl.FullscreenControl(), 'top-right')
+    map.addControl(new mapboxgl.GeolocateControl({ trackUserLocation: false }), 'top-right')
+    map.addControl(new mapboxgl.ScaleControl({ unit: 'metric' }), 'bottom-left')
     mapRef.current = map
-    map.on('style.load', () => {
-      if (styleKeyRef.current === 'map') applyBrandStyle(map, tiltedRef.current)
-      else if (styleKeyRef.current === 'dark' && MAPTILER_KEY) add3d(map, tiltedRef.current)
-      if (MAPTILER_KEY && tiltedRef.current && map.getSource('terrain-dem')) {
-        map.setTerrain({ source: 'terrain-dem', exaggeration: 1.2 })
-      }
-    })
     // Düzen sonradan değişirse (görsel yüklenmesi, mobil çubuk) boyutu ve görünümü yenile.
     const observer = new ResizeObserver(() => {
       map.resize()
@@ -247,19 +131,18 @@ export function InteractiveMap({
     // Stil değişince işaretçiler DOM öğesi olduğu için korunur.
     if (appliedStyle.current === styleKey) return
     appliedStyle.current = styleKey
-    styleKeyRef.current = styleKey
     mapRef.current?.setStyle(STYLES[styleKey])
   }, [styleKey])
 
   useEffect(() => {
-    tiltedRef.current = tilted
     const map = mapRef.current
     if (!map) return
-    if (MAPTILER_KEY && map.getSource('terrain-dem')) {
-      map.setTerrain(tilted ? { source: 'terrain-dem', exaggeration: 1.2 } : null)
-    }
-    if (map.getLayer('building-3d')) map.setLayoutProperty('building-3d', 'visibility', tilted ? 'visible' : 'none')
-    map.easeTo({ pitch: tilted ? 60 : 0, bearing: tilted ? -20 : 0, duration: 800 })
+    map.easeTo({
+      pitch: tilted ? 62 : 0,
+      bearing: tilted ? -20 : 0,
+      zoom: tilted ? Math.max(map.getZoom(), 15.5) : map.getZoom(),
+      duration: 900,
+    })
   }, [tilted])
 
   // Üst bileşen her render'da yeni dizi verir; haritayı yalnızca içerik değişince güncelle.
@@ -271,17 +154,15 @@ export function InteractiveMap({
     markers.current.forEach((m) => m.remove())
     markers.current = []
     map.resize()
-    const bounds = new maplibregl.LngLatBounds()
+    const bounds = new mapboxgl.LngLatBounds()
     points.forEach((p, i) => {
       const el = markerEl(i + 1, p.id === selectedId)
       el.setAttribute('aria-label', p.label)
       el.addEventListener('click', () => onSelectRef.current?.(p.id))
-      const marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
+      const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
         .setLngLat([p.lng, p.lat])
         .setPopup(
-          new maplibregl.Popup({ offset: 20, closeButton: false }).setDOMContent(
-            popupContent(p),
-          ),
+          new mapboxgl.Popup({ offset: 36, closeButton: false }).setDOMContent(popupContent(p)),
         )
         .addTo(map)
       markers.current.push(marker)
@@ -291,7 +172,9 @@ export function InteractiveMap({
     const midLat = med(points.map((p) => p.lat))
     const midLng = med(points.map((p) => p.lng))
     points.forEach((p) => {
-      if (Math.abs(p.lat - midLat) < 0.1 && Math.abs(p.lng - midLng) < 0.12) bounds.extend([p.lng, p.lat])
+      if (Math.abs(p.lat - midLat) < 0.1 && Math.abs(p.lng - midLng) < 0.12) {
+        bounds.extend([p.lng, p.lat])
+      }
     })
     const selected = points.find((p) => p.id === selectedId)
     refit.current = () => {
@@ -398,4 +281,3 @@ function popupContent(p: MapPoint): HTMLElement {
   }
   return box
 }
-

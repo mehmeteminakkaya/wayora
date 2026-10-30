@@ -120,12 +120,12 @@
 }
 
 /* Harita: Wayora görünümü (denetimler, popup, atıf) */
-.maplibregl-map {
+.mapboxgl-map {
   font-family: Overpass, system-ui, sans-serif;
   border-radius: inherit;
 }
 
-.maplibregl-ctrl-group {
+.mapboxgl-ctrl-group {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 14px;
@@ -135,22 +135,22 @@
   box-shadow: 0 2px 12px rgba(18, 18, 18, 0.16);
 }
 
-.maplibregl-ctrl-group button {
+.mapboxgl-ctrl-group button {
   width: 36px;
   height: 36px;
 }
 
-.maplibregl-popup-content {
+.mapboxgl-popup-content {
   padding: 12px 14px;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(18, 18, 18, 0.22);
 }
 
-.maplibregl-popup-tip {
+.mapboxgl-popup-tip {
   display: none;
 }
 
-.maplibregl-ctrl-attrib {
+.mapboxgl-ctrl-attrib {
   border-radius: 10px 0 0 0;
   background: rgba(255, 255, 255, 0.7) !important;
   font-size: 10px;

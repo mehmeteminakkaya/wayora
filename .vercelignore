@@ -1,0 +1,9 @@
+# Vercel yalnızca kaynak kodu alsın; yerel build ve secret dosyaları yüklenmesin.
+node_modules
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+!**/.env.example
+.vercel
+.git

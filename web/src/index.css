@@ -1981,6 +1981,10 @@ p {
   color: var(--ink-2);
   cursor: grab;
   touch-action: none;
+  /* Safari, draggable=true butonlarda bazen native surukleme icin bu ipucuna
+     ihtiyac duyuyor; Chrome/Firefox draggable attribute'unu zaten yeterli
+     buluyor ama bu satir zarar vermiyor. */
+  -webkit-user-drag: element;
 }
 
 .drag-handle:active {

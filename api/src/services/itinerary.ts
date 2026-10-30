@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { findCatalogCity } from '../data/city-catalog.ts'
 import type { PlaceCandidate } from '../data/places.ts'
 import { cityLabel } from '../data/places.ts'
 import { ACTIVITY_CATEGORIES } from '../domain.ts'
@@ -234,21 +235,52 @@ export function generateOfflinePlan(
     days.reduce((sum, day) => sum + day.activities.reduce((s, a) => s + a.estimatedCost, 0), 0),
   )
 
+  const city = findCatalogCity(input.destination)
   const tips: string[] = []
-  if (input.budget !== null && totalEstimatedCost > input.budget) {
-    tips.push(
-      `Tahmini maliyet (${totalEstimatedCost} EUR) bütçenizi ${roundMoney(totalEstimatedCost - input.budget)} EUR aşıyor. Ücretsiz aktiviteleri artırabilirsiniz.`,
-    )
+
+  if (input.budget !== null) {
+    const difference = roundMoney(Math.abs(input.budget - totalEstimatedCost))
+    if (totalEstimatedCost > input.budget) {
+      tips.push(
+        `Tahmini maliyet (${totalEstimatedCost} EUR) bütçenizi ${difference} EUR aşıyor. Ücretsiz aktiviteleri artırabilirsiniz.`,
+      )
+    } else {
+      tips.push(
+        `Tahmini maliyet (${totalEstimatedCost} EUR), bütçenizin ${difference} EUR altında; bir deneyim daha ekleyebilirsiniz.`,
+      )
+    }
   }
+
+  if (city?.bestSeason) {
+    tips.push(`${city.name} için en iyi ziyaret zamanı: ${city.bestSeason}.`)
+  }
+
+  const popularStop = days
+    .flatMap((day) => day.activities)
+    .find((activity) => activity.category === 'museum' || activity.category === 'landmark')
+  if (popularStop) {
+    tips.push(`${popularStop.title} gibi popüler duraklar için önceden bilet/rezervasyon alın.`)
+  }
+
   if (input.preferences.pace === 'fast') {
     tips.push('Temponuz yoğun; gün içine kısa molalar eklemeyi unutmayın.')
+  } else if (input.preferences.pace === 'slow') {
+    tips.push('Temponuz sakin; boş zamanlarınızda mahalle yürüyüşleri ekleyebilirsiniz.')
   }
-  tips.push('Popüler müze ve restoranlar için önceden rezervasyon yapın.')
+
+  const freeCount =
+    city?.experiences.filter((experience) => experience.estimatedCost === 0).length ?? 0
+  if (freeCount > 0) {
+    tips.push(
+      `${city?.name ?? input.destination}'da ${freeCount} ücretsiz deneyim var; bütçeyi dengelemek için değerlendirin.`,
+    )
+  }
+
   if (candidates.length === 0) {
     tips.push('Bu destinasyon için yerel katalogda kayıt yok; öneriler genel şablonla üretildi.')
   }
 
-  return { days, tips, totalEstimatedCost }
+  return { days, tips: tips.slice(0, 5), totalEstimatedCost }
 }
 
 const llmActivitySchema = z.object({

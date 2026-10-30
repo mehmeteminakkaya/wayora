@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
+
+// Vite bundle'ında worker'ın doğru URL'den yüklenmesi için açıkça verilir.
+maplibregl.setWorkerUrl(workerUrl)
 
 export type MapPoint = {
   id: string
@@ -120,7 +124,7 @@ export function InteractiveMap({
     } else if (points.length > 1) {
       map.fitBounds(bounds, { padding: 60, maxZoom: 15, duration: 600 })
     } else if (points.length === 1) {
-      map.flyTo({ center: [points[0].lng, points[0].lat], zoom: 15 })
+      map.flyTo({ center: [points[0].lng, points[0].lat], zoom: Math.min(zoom + 1, 15) })
     } else {
       map.flyTo({ center: [center[1], center[0]], zoom })
     }

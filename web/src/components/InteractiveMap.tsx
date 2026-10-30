@@ -59,6 +59,7 @@ export function InteractiveMap({
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markers = useRef<maplibregl.Marker[]>([])
   const [failed, setFailed] = useState(false)
+  const refit = useRef<() => void>(() => {})
   const onSelectRef = useRef(onSelect)
   onSelectRef.current = onSelect
 
@@ -86,7 +87,14 @@ export function InteractiveMap({
     )
     map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left')
     mapRef.current = map
+    // Düzen sonradan değişirse (görsel yüklenmesi, mobil çubuk) boyutu ve görünümü yenile.
+    const observer = new ResizeObserver(() => {
+      map.resize()
+      refit.current()
+    })
+    observer.observe(host.current)
     return () => {
+      observer.disconnect()
       markers.current.forEach((m) => m.remove())
       markers.current = []
       map.remove()
@@ -121,6 +129,13 @@ export function InteractiveMap({
       bounds.extend([p.lng, p.lat])
     })
     const selected = points.find((p) => p.id === selectedId)
+    refit.current = () => {
+      if (selected) return
+      if (points.length > 1) map.fitBounds(bounds, { padding: 60, maxZoom: 15, duration: 0 })
+      else if (points.length === 1)
+        map.jumpTo({ center: [points[0].lng, points[0].lat], zoom: Math.min(zoom + 1, 15) })
+      else map.jumpTo({ center: [center[1], center[0]], zoom })
+    }
     if (selected) {
       map.flyTo({ center: [selected.lng, selected.lat], zoom: Math.max(map.getZoom(), 15), speed: 1.3 })
       const idx = points.indexOf(selected)

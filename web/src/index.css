@@ -10,11 +10,13 @@
   --surface: #ffffff;
   --ink: #121212;
   --ink-2: #55575c;
+  --ink-3: #86878b;
   --line: #deded9;
   --signal: #ffc400;
   --board: #141414;
   --go: #1d7a4a;
   --stop: #b42318;
+  --stop-tint: #fff4f2;
   --display: 'Overpass', 'Segoe UI', Arial, sans-serif;
   --radius-control: 4px;
   --radius-surface: 8px;
@@ -687,7 +689,7 @@ p {
   padding: 12px;
   border-radius: 8px;
   background: #d9d9d5;
-  color: #55575c;
+  color: var(--ink-2);
   font-family: var(--mono);
   font-size: 12px;
   line-height: 1.3;
@@ -1432,7 +1434,7 @@ p {
 }
 
 .experience-detail-description {
-  margin-top: 16px;
+  margin-top: 12px;
   color: var(--ink-2);
   font-size: 16px;
   line-height: 24px;
@@ -2914,8 +2916,6 @@ p {
 
 .city-events .section-head h2 {
   margin: 2px 0 0;
-  font-size: 26px;
-  line-height: 31px;
 }
 
 .live-discovery .section-head {

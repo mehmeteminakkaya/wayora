@@ -86,7 +86,7 @@ p {
 }
 
 .btn-danger:hover {
-  background: #fff4f2;
+  background: var(--stop-tint);
 }
 
 .btn[disabled],
@@ -217,7 +217,7 @@ p {
 
 .input::placeholder,
 .textarea::placeholder {
-  color: #86878b;
+  color: var(--ink-3);
   opacity: 1;
 }
 

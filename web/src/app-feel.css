@@ -1,0 +1,120 @@
+/* Mobilde uygulama hissi: iOS tarzı yüzen cam (glass) sekme çubuğu. */
+
+@media (max-width: 720px) {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  .app-shell .bottom-nav {
+    right: 12px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    left: 12px;
+    min-height: 66px;
+    padding: 6px;
+    gap: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.58);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    backdrop-filter: blur(28px) saturate(190%);
+    box-shadow:
+      0 10px 32px rgba(18, 18, 18, 0.16),
+      0 1px 0 rgba(255, 255, 255, 0.8) inset,
+      0 0 0 0.5px rgba(18, 18, 18, 0.08);
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .app-shell .bottom-nav a {
+    min-height: 54px;
+    gap: 2px;
+    border-radius: 24px;
+    color: rgba(18, 18, 18, 0.55);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition:
+      background-color 0.28s cubic-bezier(0.32, 0.72, 0, 1),
+      color 0.2s ease,
+      transform 0.18s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .app-shell .bottom-nav a svg {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .app-shell .bottom-nav a:active {
+    transform: scale(0.92);
+  }
+
+  /* Aktif sekme: iOS'taki gibi cam kapsül; eski üst çizgi kalkar. */
+  .app-shell .bottom-nav a::before {
+    display: none;
+  }
+
+  .app-shell .bottom-nav a.is-active {
+    background: rgba(255, 196, 0, 0.34);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.7) inset,
+      0 0 0 0.5px rgba(18, 18, 18, 0.06);
+    color: #121212;
+  }
+
+  .app-shell .bottom-nav a.is-active svg {
+    transform: translateY(-1px) scale(1.12);
+  }
+
+  .app-shell .bottom-nav a:focus-visible {
+    outline: 2px solid #121212;
+    outline-offset: -2px;
+  }
+
+  /* Yüzen çubuğun içeriği kapatmaması için alt boşluk. */
+  .has-bottom-nav .site-main {
+    padding-bottom: calc(104px + env(safe-area-inset-bottom));
+  }
+
+  /* Sohbet butonu çubuğun üstünde durur. */
+  .has-bottom-nav .agent-fab,
+  .has-bottom-nav .agent-panel {
+    bottom: calc(92px + env(safe-area-inset-bottom));
+  }
+
+  /* Üst bar da cam olur. */
+  .app-shell .topbar {
+    background: rgba(243, 243, 241, 0.72);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  .agent-fab {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 24px;
+    background: rgba(18, 18, 18, 0.82);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 24px rgba(18, 18, 18, 0.28);
+  }
+
+  .agent-panel {
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    backdrop-filter: blur(28px) saturate(180%);
+  }
+}
+
+/* Cam desteklenmiyorsa okunur, opak zemin. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .app-shell .bottom-nav {
+    background: rgba(255, 255, 255, 0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .bottom-nav a,
+  .app-shell .bottom-nav a svg {
+    transition: none;
+  }
+}

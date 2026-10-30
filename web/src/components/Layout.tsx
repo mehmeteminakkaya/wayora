@@ -96,7 +96,12 @@ export function Layout() {
                 type="button"
                 className={lang === 'en' ? 'is-active' : ''}
                 aria-pressed={lang === 'en'}
-                onClick={() => setLang('en')}
+                // Çeviri yalnızca menü + giriş/kayıt ekranlarında tamam; geri kalan
+                // sayfalar hâlâ Türkçe. Yarım bir İngilizce görünüm vermemek için
+                // kapsam tamamlanana kadar devre dışı.
+                disabled
+                title="İngilizce çok yakında"
+                aria-disabled="true"
               >
                 EN
               </button>

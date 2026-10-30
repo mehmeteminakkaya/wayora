@@ -9,7 +9,7 @@
     "api"
   ],
   "scripts": {
-    "dev": "npm run db:start -w api && concurrently -n api,web -c cyan,magenta \"npm run dev -w api\" \"npm run dev -w web\"",
+    "dev": "npm run db:start -w api && concurrently -n api,web,db -c cyan,magenta,yellow \"npm run dev -w api\" \"npm run dev -w web\" \"node scripts/db-watchdog.mjs\"",
     "build": "npm run build --workspaces",
     "lint": "npm run lint --workspaces",
     "typecheck": "npm run typecheck --workspaces",

@@ -17,7 +17,7 @@ Kapsam: Week 1-5 dersleri ve midterm study guide'daki kavramlar.
 
 | Konsept | Durum | Kanıt / not |
 | :--- | :--- | :--- |
-| Vibe coding vs engineering; verification farkı | ✅ | `AGENTS.md` test-first kuralı, CI, `docs/AI_REVIEW.md`, 76 test. |
+| Vibe coding vs engineering; verification farkı | ✅ | `AGENTS.md` test-first kuralı, CI, `docs/AI_REVIEW.md`, 82 test. |
 | Spectrum (vibe → structured → agentic) ve risk | ◐ | Pratikte agentic/structured akış var; spektrum tablosu ayrıca yazılı değil. |
 | Implementer → orchestrator rol değişimi | ✅ | `docs/AI_NATIVE_TEAM.md`, `docs/ORCHESTRATION.md` rolleri. |
 | Human-in-the-loop zorunlu checkpoint | ✅ | `AGENTS.md`, autonomy L0-L4, insan onayı; AI kendi işini onaylamıyor. |

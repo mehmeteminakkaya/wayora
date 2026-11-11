@@ -110,7 +110,7 @@ export function RegisterPage() {
           <span>{t('auth.haveAccount')}</span>
           <Link
             to="/login"
-            style={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
+            className="auth-link"
           >
             {t('auth.loginBtn')}
           </Link>

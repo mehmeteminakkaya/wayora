@@ -89,8 +89,8 @@ export function LoginPage() {
           <div className="auth-links" style={{ justifyContent: 'flex-end', marginTop: 0 }}>
             <a
               href="#"
+              className="auth-link"
               title={t('auth.forgotNotice')}
-              style={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
               onClick={handleForgotPassword}
             >
               {t('auth.forgot')}
@@ -126,7 +126,7 @@ export function LoginPage() {
           <Link
             to="/register"
             state={{ from }}
-            style={{ display: 'inline-flex', minHeight: 44, alignItems: 'center' }}
+            className="auth-link"
           >
             {t('auth.createAccount')}
           </Link>

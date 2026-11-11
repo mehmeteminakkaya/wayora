@@ -378,13 +378,13 @@ export function NewTripPage() {
               {dateFlexible ? (
                 <p className="notice">
                   Kesin tarih yoksa 3 günlük örnek tarihlerle başlarız:{' '}
-                  {formatShortDate(startDate)} - {formatShortDate(endDate)}. Tarihleri istersen
+                  {formatShortDate(startDate)} – {formatShortDate(endDate)}. Tarihleri istersen
                   yukarıdan değiştirebilirsin.
                 </p>
               ) : (
                 <p className="helper">
                   {startDate && endDate
-                    ? `${formatShortDate(startDate)} - ${formatShortDate(endDate)} · ${dayCount} gün`
+                    ? `${formatShortDate(startDate)} – ${formatShortDate(endDate)} · ${dayCount} gün`
                     : 'Başlangıç ve bitiş tarihini seç.'}
                 </p>
               )}

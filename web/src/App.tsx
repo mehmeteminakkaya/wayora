@@ -1,19 +1,45 @@
+import { lazy } from 'react'
 import { Route, Routes, useParams } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
-import { CityPage } from './pages/CityPage'
-import { ExperiencePage } from './pages/ExperiencePage'
-import { ExplorePage } from './pages/ExplorePage'
-import { HitchhikerPage } from './pages/HitchhikerPage'
 import { LandingPage } from './pages/LandingPage'
-import { LoginPage } from './pages/LoginPage'
-import { NewTripPage } from './pages/NewTripPage'
 import { NotFoundPage } from './pages/NotFoundPage'
-import { OnboardingPage } from './pages/OnboardingPage'
-import { ProfilePage } from './pages/ProfilePage'
-import { RegisterPage } from './pages/RegisterPage'
-import { TripDetailPage } from './pages/TripDetailPage'
-import { TripsPage } from './pages/TripsPage'
+
+// Sayfa gövdeleri rota bazında bölünür: ilk açılışta yalnızca landing ve kabuk
+// yüklenir; harita/Three.js gibi ağır bağımlılıklar ilgili sayfaya girildiğinde gelir.
+const CityPage = lazy(() =>
+  import('./pages/CityPage').then((module) => ({ default: module.CityPage })),
+)
+const ExperiencePage = lazy(() =>
+  import('./pages/ExperiencePage').then((module) => ({ default: module.ExperiencePage })),
+)
+const ExplorePage = lazy(() =>
+  import('./pages/ExplorePage').then((module) => ({ default: module.ExplorePage })),
+)
+const HitchhikerPage = lazy(() =>
+  import('./pages/HitchhikerPage').then((module) => ({ default: module.HitchhikerPage })),
+)
+const LoginPage = lazy(() =>
+  import('./pages/LoginPage').then((module) => ({ default: module.LoginPage })),
+)
+const NewTripPage = lazy(() =>
+  import('./pages/NewTripPage').then((module) => ({ default: module.NewTripPage })),
+)
+const OnboardingPage = lazy(() =>
+  import('./pages/OnboardingPage').then((module) => ({ default: module.OnboardingPage })),
+)
+const ProfilePage = lazy(() =>
+  import('./pages/ProfilePage').then((module) => ({ default: module.ProfilePage })),
+)
+const RegisterPage = lazy(() =>
+  import('./pages/RegisterPage').then((module) => ({ default: module.RegisterPage })),
+)
+const TripDetailPage = lazy(() =>
+  import('./pages/TripDetailPage').then((module) => ({ default: module.TripDetailPage })),
+)
+const TripsPage = lazy(() =>
+  import('./pages/TripsPage').then((module) => ({ default: module.TripsPage })),
+)
 
 function CityPageRoute() {
   const { slug } = useParams<{ slug: string }>()

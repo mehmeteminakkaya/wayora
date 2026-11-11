@@ -63,12 +63,12 @@ p {
 }
 
 .btn-primary:hover {
-  background: #292929;
+  background: var(--ink-hover);
 }
 
 .btn-secondary:hover {
   border-color: var(--ink);
-  background: #efefec;
+  background: var(--surface-sunken);
 }
 
 .btn-ghost {

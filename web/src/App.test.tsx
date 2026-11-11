@@ -155,4 +155,46 @@ describe('App', () => {
     expect(screen.getByRole('button', { name: /Ortak ilgi/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Daha fazla eşleşme/ })).toBeInTheDocument()
   })
+
+  it('durağı olmayan hazır rotayı "Plan boş" olarak işaretler', async () => {
+    mockApi((url) => {
+      if (url.endsWith('/api/auth/me')) {
+        return jsonResponse({ user: { id: 'u1', email: 'ada@example.com', name: 'Ada' } })
+      }
+      if (url.endsWith('/api/trips')) {
+        return jsonResponse({
+          trips: [
+            {
+              id: 't1',
+              title: 'Ada · Berlin',
+              destination: 'Berlin',
+              startDate: '2026-12-05',
+              endDate: '2026-12-07',
+              budget: 500,
+              currency: 'EUR',
+              status: 'planned',
+              tips: [],
+              notes: null,
+              createdAt: '2026-11-01T00:00:00.000Z',
+              updatedAt: '2026-11-01T00:00:00.000Z',
+              days: [
+                {
+                  id: 'd1',
+                  dayIndex: 1,
+                  date: '2026-12-05',
+                  notes: null,
+                  activities: [],
+                },
+              ],
+            },
+          ],
+        })
+      }
+      return jsonResponse({ error: { code: 'NOT_FOUND', message: 'yok' } }, 404)
+    })
+
+    renderAt('/trips')
+    expect(await screen.findByText('Plan boş')).toBeInTheDocument()
+    expect(screen.queryByText('Plan hazır')).not.toBeInTheDocument()
+  })
 })

@@ -149,16 +149,9 @@ export function OnboardingPage() {
           ))}
         </div>
         <Link
-          className="section-link"
+          className="section-link onboarding-skip"
           to={returnTo}
           aria-label="Tercihleri atlayıp devam et"
-          style={{
-            display: 'inline-flex',
-            minWidth: 44,
-            minHeight: 44,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
         >
           Atla
         </Link>

@@ -1,3 +1,4 @@
+import { MapPin } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -201,17 +202,26 @@ export function InteractiveMap({
   if (failed) {
     const [lat, lng] = center
     return (
-      <p className="notice" role="status">
-        Harita bu cihazda açılamadı.{' '}
-        <a
-          className="section-link"
-          href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=13/${lat}/${lng}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          OpenStreetMap&apos;te aç
-        </a>
-      </p>
+      <div className="map-fallback" role="status">
+        <span className="map-fallback-icon" aria-hidden="true">
+          <MapPin size={22} strokeWidth={1.75} />
+        </span>
+        <div>
+          <strong>Harita bu cihazda yüklenemedi.</strong>
+          <p>
+            Tarayıcı WebGL&apos;i kapatmış olabilir. Durakları listeden inceleyebilir veya
+            haritayı yeni sekmede açabilirsin.
+          </p>
+          <a
+            className="btn btn-secondary btn-sm"
+            href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=13/${lat}/${lng}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            OpenStreetMap&apos;te aç
+          </a>
+        </div>
+      </div>
     )
   }
 

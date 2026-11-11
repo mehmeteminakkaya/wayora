@@ -30,7 +30,7 @@
     min-height: 54px;
     gap: 2px;
     border-radius: 24px;
-    color: rgba(18, 18, 18, 0.55);
+    color: var(--ink-2);
     font-size: 10.5px;
     font-weight: 600;
     letter-spacing: 0.01em;
@@ -58,7 +58,7 @@
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.7) inset,
       0 0 0 0.5px rgba(18, 18, 18, 0.06);
-    color: #121212;
+    color: var(--ink);
   }
 
   .app-shell .bottom-nav a.is-active svg {
@@ -66,7 +66,7 @@
   }
 
   .app-shell .bottom-nav a:focus-visible {
-    outline: 2px solid #121212;
+    outline: 2px solid var(--ink);
     outline-offset: -2px;
   }
 
@@ -75,33 +75,11 @@
     padding-bottom: calc(104px + env(safe-area-inset-bottom));
   }
 
-  /* Sohbet butonu çubuğun üstünde durur. */
-  .has-bottom-nav .agent-fab,
-  .has-bottom-nav .agent-panel {
-    bottom: calc(92px + env(safe-area-inset-bottom));
-  }
-
   /* Üst bar da cam olur. */
   .app-shell .topbar {
     background: rgba(243, 243, 241, 0.72);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     backdrop-filter: blur(20px) saturate(180%);
-  }
-
-  .agent-fab {
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 24px;
-    background: rgba(18, 18, 18, 0.82);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    box-shadow: 0 8px 24px rgba(18, 18, 18, 0.28);
-  }
-
-  .agent-panel {
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.82);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    backdrop-filter: blur(28px) saturate(180%);
   }
 }
 

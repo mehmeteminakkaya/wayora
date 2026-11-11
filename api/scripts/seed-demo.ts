@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs'
 import { hashPassword } from '../src/lib/password.ts'
 import { createPrisma } from '../src/lib/prisma.ts'
+import { seedCityCatalog } from '../src/services/city-catalog.ts'
 
 const DEMO_EMAIL = 'demo@wayora.app'
 const DEMO_PASSWORD = 'demo1234'
@@ -31,6 +32,14 @@ function addDays(value: string, offset: number): string {
   const current = new Date(`${value}T00:00:00.000Z`)
   current.setUTCDate(current.getUTCDate() + offset)
   return current.toISOString().slice(0, 10)
+}
+
+function timeAfter(start: string, minutes: number): string {
+  const [hours, mins] = start.split(':').map(Number)
+  const total = (hours ?? 0) * 60 + (mins ?? 0) + minutes
+  const hh = String(Math.floor(total / 60) % 24).padStart(2, '0')
+  const mm = String(total % 60).padStart(2, '0')
+  return `${hh}:${mm}`
 }
 
 const firstNames = [
@@ -202,6 +211,8 @@ async function createTraveler(index: number, passwordHash: string) {
 }
 
 async function main() {
+  // Demo rotası gerçek katalog duraklarından üretilir; katalog yoksa seed edilir.
+  await seedCityCatalog(db)
   const passwordHash = await hashPassword(DEMO_PASSWORD)
   await db.user.deleteMany({
     where: {
@@ -256,6 +267,63 @@ async function main() {
       },
     },
   })
+
+  const berlin = await db.city.findUnique({
+    where: { slug: 'berlin' },
+    include: { experiences: { orderBy: { sortOrder: 'asc' } } },
+  })
+  const demoDays = await db.tripDay.findMany({
+    where: { tripId: demoTrip.id },
+    orderBy: { dayIndex: 'asc' },
+  })
+  const dinnerSpots = ['Mitte', 'Kreuzberg', 'Prenzlauer Berg', 'Neukölln', 'Charlottenburg']
+  const activities = []
+
+  if (berlin) {
+    for (const [index, day] of demoDays.entries()) {
+      const morning = berlin.experiences[index * 2]
+      const afternoon = berlin.experiences[index * 2 + 1]
+
+      if (morning) {
+        activities.push({
+          tripDayId: day.id,
+          order: 0,
+          title: morning.name,
+          category: morning.category,
+          startTime: '09:30',
+          endTime: timeAfter('09:30', morning.durationMinutes),
+          estimatedCost: morning.estimatedCost,
+          notes: morning.neighborhood,
+        })
+      }
+
+      if (afternoon) {
+        activities.push({
+          tripDayId: day.id,
+          order: 1,
+          title: afternoon.name,
+          category: afternoon.category,
+          startTime: '13:30',
+          endTime: timeAfter('13:30', afternoon.durationMinutes),
+          estimatedCost: afternoon.estimatedCost,
+          notes: afternoon.neighborhood,
+        })
+      }
+
+      activities.push({
+        tripDayId: day.id,
+        order: 2,
+        title: `Akşam yemeği · ${dinnerSpots[index]}`,
+        category: 'food',
+        startTime: '19:30',
+        endTime: '21:00',
+        estimatedCost: 22,
+        notes: null,
+      })
+    }
+
+    await db.activity.createMany({ data: activities })
+  }
 
   const travelers = []
   for (let index = 0; index < 75; index += 1) {
@@ -329,6 +397,7 @@ async function main() {
         demo: { email: DEMO_EMAIL, password: DEMO_PASSWORD },
         seededTravelers: travelers.length,
         demoRoute: `${DEMO_START} – ${DEMO_END} Berlin`,
+        demoActivities: activities.length,
         connections: { incoming: 3, accepted: 2, outgoing: 1 },
       },
       null,

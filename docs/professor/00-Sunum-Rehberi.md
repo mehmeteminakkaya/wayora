@@ -22,7 +22,7 @@ AI fallback, sosyal güvenlik ve test kanıtı var.”
 
 `docs/professor/01-Yapilanlar.pdf` dosyasını aç.
 
-- Tek bakışta metrikleri göster: 14/140, 76 test, 22/22 audit, canlı health.
+- Tek bakışta metrikleri göster: 14/140, 82 test, 22/22 audit, canlı health.
 - Alan alan yapılanlar tablosundan üç satır seç: AI, sosyal, mobil.
 - “Bilinçli sınırlar” bölümünü göster; gerçek rezervasyon/doğrulama olmadığını açıkça söyle.
 
@@ -107,7 +107,7 @@ Rota:    5–9 Aralık 2026, Berlin
 # Olası Sorulara Kısa Cevaplar
 
 **“Kaç test var?”**  
-70 API + 6 web = 76 otomatik test; lint/typecheck/build ayrıca geçiyor.
+74 API + 8 web = 82 otomatik test; lint/typecheck/build ayrıca geçiyor.
 
 **“AI olmadan çalışıyor mu?”**  
 Evet. Offline üretici anahtarsız çalışır; sağlayıcı hatasında fallback devreye girer.

@@ -128,10 +128,10 @@ süreleriyle birlikte görebileyim; beğendiğim şehirle hemen rota oluşturay�
 - Çoklu kullanıcı işbirliği, yorum ve genel sosyal akış. Yol Arkadaşları ayrı
   `docs/specs/003-hitchhiker-match/spec.md` kapsamındadır.
 - Mobil native uygulama.
-- Gerçek zamanlı harita (Google Maps anahtarı olmadan).
+- Canlı trafik, yol tarifi ve gerçek zamanlı harita verisi; harita yalnızca katalog koordinatlarını işaretler.
 
 ## Açık sorular
 
 - Ürün dili yalnızca Türkçe mi, İngilizce de olacak mı?
 - Gerçek LLM sağlayıcısı demo için Gemini mi OpenAI mi? (Varsayılan: offline)
-- Google Maps anahtarı Sprint 4'te sağlanacak mı?
+- Mapbox token'ı (`VITE_MAPBOX_TOKEN`) production ortamında tanımlanacak mı?

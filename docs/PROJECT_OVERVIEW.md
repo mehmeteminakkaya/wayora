@@ -34,8 +34,8 @@ planlama platformu. Hedef: seyahat planlamayı daha akıllı, kolay ve erişileb
 
 ## Teknoloji
 
-React.js · TypeScript · Node.js · Express.js · PostgreSQL · REST API · Google Maps API ·
-AI/LLM API · Git · GitHub
+React 19 · TypeScript · Vite · Node.js · Express 5 · PostgreSQL · Prisma · REST API ·
+Mapbox GL · DeepSeek / Gemini / OpenAI (opsiyonel) · Vitest · Git · GitHub
 
 ## Ekip
 

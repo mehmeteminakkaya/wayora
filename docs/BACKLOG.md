@@ -19,7 +19,7 @@ Etiketler: `FE` frontend · `BE` backend · `DB` veritabanı · `UX` tasarım ·
 | E1 Kurulum | Repo, CI, deploy, iskelet |
 | E2 Hesap | Kayıt, giriş, profil, tercihler |
 | E3 Gezi | Gezi oluşturma ve yönetme |
-| E4 Harita | Google Maps, yer arama |
+| E4 Harita | Mapbox GL, yer arama |
 | E5 AI | Gezi planı üretimi, öneriler |
 | E6 Bütçe | Maliyet tahmini ve takibi |
 | E7 Kalite | Test, performans, erişilebilirlik, demo |

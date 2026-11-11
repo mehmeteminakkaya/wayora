@@ -30,7 +30,7 @@ Bu sürümde:
 - AI plan üretimi DeepSeek ile çalışıyor; sağlayıcı yoksa offline fallback var.
 - Rotalar oluşturuluyor, düzenleniyor ve canlı etkinliklerle zenginleştiriliyor.
 - Yol Arkadaşları; profil, eşleşme, karşılıklı istek ve güvenli sohbet sunuyor.
-- 70 API + 6 web testi, lint/typecheck/build ve 22/22 frontend audit temiz.
+- 74 API + 8 web testi, lint/typecheck/build ve 22/22 frontend audit temiz.
 - Ürün Vercel + Neon PostgreSQL üzerinde canlı.
 
 # 2. Kapsam
@@ -59,7 +59,7 @@ Bu sürümde:
 | Hedef | Metrik | Sonuç |
 | :--- | :--- | :--- |
 | Hızlı plan üretimi | Offline < 1 sn; LLM timeout 20 sn | Sağlandı |
-| Güvenilir AI | Fallback + şema doğrulama | 76 test; fallback testleri var |
+| Güvenilir AI | Fallback + şema doğrulama | 82 test; fallback testleri var |
 | Keşfedilebilir katalog | 14 şehir / 140 deneyim | Canlıda doğrulandı |
 | Mobil kullanılabilirlik | 390px, taşma yok, 44px hedef | 22/22 audit temiz |
 | Güvenli sosyal akış | Karşılıklı kabul, engelleme, bildirim | Tamamlandı |
@@ -128,7 +128,7 @@ Bu sürümde:
 | UI audit | CDP + responsive | 390/1280, runtime/network/overflow/44px |
 | Deploy | Health + smoke | DB, web, API |
 
-**Sonuç:** 70 API + 6 web testi; 22/22 frontend kontrolü temiz.
+**Sonuç:** 74 API + 8 web testi; 22/22 frontend kontrolü temiz.
 
 # 7. Risk Yönetimi
 

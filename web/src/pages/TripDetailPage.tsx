@@ -582,7 +582,7 @@ export function TripDetailPage() {
         </p>
         <h1>{trip.title}</h1>
         <p className="trip-header-meta">
-          {formatShortDate(trip.startDate)} - {formatShortDate(trip.endDate)} · {trip.days.length}{' '}
+          {formatShortDate(trip.startDate)} – {formatShortDate(trip.endDate)} · {trip.days.length}{' '}
           gün ·{' '}
           {trip.budget === null
             ? 'Toplam bütçe belirtilmedi'

@@ -1,5 +1,5 @@
 import { Compass, Map, Plus, UserRound, Users } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigationType } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { useLang } from '../i18n.tsx'
@@ -10,6 +10,21 @@ const navClass = ({ isActive }: { isActive: boolean }) =>
   isActive ? 'topbar-link is-active' : 'topbar-link'
 
 const mobileClass = ({ isActive }: { isActive: boolean }) => (isActive ? 'is-active' : '')
+
+function pageTitle(pathname: string): string {
+  if (pathname === '/') return 'Wayora · Şehri hisset, gününü şekillendir'
+  if (pathname === '/kesfet') return 'Keşfet · Wayora'
+  if (pathname.startsWith('/kesfet/')) return 'Şehir rehberi · Wayora'
+  if (pathname === '/trips/new') return 'Yeni rota · Wayora'
+  if (pathname === '/trips') return 'Rotalarım · Wayora'
+  if (pathname.startsWith('/trips/')) return 'Rota detayı · Wayora'
+  if (pathname === '/yol-arkadaslari') return 'Yol Arkadaşları · Wayora'
+  if (pathname === '/profil') return 'Profil · Wayora'
+  if (pathname === '/onboarding') return 'Tercihler · Wayora'
+  if (pathname === '/login') return 'Giriş yap · Wayora'
+  if (pathname === '/register') return 'Hesap aç · Wayora'
+  return 'Sayfa bulunamadı · Wayora'
+}
 
 export function Layout() {
   const { user } = useAuth()
@@ -22,9 +37,18 @@ export function Layout() {
   const isTrips = location.pathname === '/trips'
   const isProfile = location.pathname === '/profil'
   const isSocial = location.pathname === '/yol-arkadaslari'
+  const isOnboarding = location.pathname === '/onboarding'
+  const isNewTrip = location.pathname === '/trips/new'
   const showBottomNav = !!user && !isAuthPage && (isExplore || isTrips || isProfile || isSocial)
+  // Agent bir seyahat aracı; hesap/ayar, ilk kurulum ve sihirbaz gibi odaklı
+  // ekranlarda ana eylemi örtmemesi için gösterilmez.
+  const showAgent = !!user && !isAuthPage && !isProfile && !isOnboarding && !isNewTrip
 
   const previousPathRef = useRef(location.pathname)
+
+  useEffect(() => {
+    document.title = pageTitle(location.pathname)
+  }, [location.pathname])
 
   useEffect(() => {
     // Yalnızca sayfa (pathname) değiştiğinde yukarı dön. Arama parametresi
@@ -44,7 +68,7 @@ export function Layout() {
   }, [location.pathname, navigationType])
 
   return (
-    <div className={`app-shell${showBottomNav ? ' has-bottom-nav' : ''}`}>
+    <div className={`app-shell${showBottomNav ? ' has-bottom-nav' : ''}${showAgent ? ' has-agent' : ''}`}>
       <a className="skip-link" href="#main">
         {t('nav.skip')}
       </a>
@@ -123,7 +147,16 @@ export function Layout() {
       </header>
 
       <main className="site-main" id="main">
-        <Outlet />
+        <Suspense
+          fallback={
+            <div className="route-fallback" role="status">
+              <span className="spinner" aria-hidden="true" />
+              <span>Sayfa yükleniyor…</span>
+            </div>
+          }
+        >
+          <Outlet />
+        </Suspense>
       </main>
 
       {isLanding && (
@@ -140,7 +173,7 @@ export function Layout() {
         </footer>
       )}
 
-      {user && !isAuthPage && <AgentChat />}
+      {showAgent && <AgentChat />}
 
       {showBottomNav && (
         <nav className="bottom-nav" aria-label="Mobile menu">

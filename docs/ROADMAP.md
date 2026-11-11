@@ -15,7 +15,7 @@
 | :--- | :--- | :--- | :--- |
 | 0. Kurulum | Sprint 0 | 14 – 26 Eki | Roller, repo, tasarım taslağı, iskelet uygulama deploy |
 | 1. Temel | Sprint 1 | 27 Eki – 9 Kas | Kayıt/giriş, tercihler, manuel gezi oluşturma |
-| 2. Harita | Sprint 2 | 10 – 23 Kas | Google Maps, yer arama, aktiviteye yer ekleme + **AI spike** |
+| 2. Harita | Sprint 2 | 10 – 23 Kas | Mapbox GL, yer arama, aktiviteye yer ekleme + **AI spike** |
 | 3. AI (MVP) | Sprint 3 | 24 Kas – 7 Ara | AI gezi planı üretimi uçtan uca → **MVP** |
 | 4. Zenginleştirme | Sprint 4 | 8 – 21 Ara | Plan düzenleme, bütçe takibi, destinasyon önerisi |
 | 5. Cilalama | Sprint 5 | 22 Ara – 4 Oca | Test, performans, erişilebilirlik, demo, rapor |
@@ -72,7 +72,7 @@ Eki        Kas              Ara              Oca
 
 **Hedef:** Gezi planı harita üzerinde görünüyor, yerler aranabiliyor.
 
-- Google Maps entegrasyonu; aktiviteler haritada pin olarak
+- Mapbox GL entegrasyonu; aktiviteler haritada pin olarak (token opsiyonel, yoksa OSM yedeği)
 - Places proxy endpoint'i + `Place` önbellek tablosu
 - Yer arama ve aktiviteye yer bağlama
 - **AI spike (zaman kutusu: 3 gün):** prompt + JSON şeması + doğrulama ile tek bir şehir için

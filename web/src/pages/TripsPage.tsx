@@ -25,6 +25,13 @@ const STATUS_LABELS: Record<TripStatus, string> = {
   failed: 'Plan eksik',
 }
 
+// "Plan hazır" yalnızca gerçekten durağı olan rotalar için doğru; boş plan
+// kullanıcıya hazır izlenimi vermemeli.
+function statusLabel(trip: Trip, stops: number): string {
+  if (trip.status === 'planned' && stops === 0) return 'Plan boş'
+  return STATUS_LABELS[trip.status] ?? trip.status
+}
+
 function groupTrips(trips: Trip[], today: string): Record<TripGroup, Trip[]> {
   const groups: Record<TripGroup, Trip[]> = {
     upcoming: [],
@@ -66,8 +73,8 @@ function countdownLabel(trip: Trip, today: string): string {
   return 'ROTA BAŞLADI'
 }
 
-function statusClass(status: TripStatus): string {
-  if (status === 'planned') return 'status go'
+function statusClass(status: TripStatus, stops: number): string {
+  if (status === 'planned') return stops > 0 ? 'status go' : 'status'
   if (status === 'failed') return 'status stop'
   return 'status'
 }
@@ -110,9 +117,7 @@ function TripCard({
           <h2>
             <Link to={`/trips/${trip.id}`}>{trip.destination}</Link>
           </h2>
-          <span className={statusClass(trip.status)}>
-            {STATUS_LABELS[trip.status] ?? trip.status}
-          </span>
+          <span className={statusClass(trip.status, stops)}>{statusLabel(trip, stops)}</span>
         </div>
 
         {trip.title !== trip.destination && trip.title !== `${trip.destination} rotası` && (
@@ -121,7 +126,7 @@ function TripCard({
 
         <p className="meta-line">
           <span>
-            {formatShortDate(trip.startDate)} - {formatShortDate(trip.endDate)}
+            {formatShortDate(trip.startDate)} – {formatShortDate(trip.endDate)}
           </span>
         </p>
 

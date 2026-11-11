@@ -82,6 +82,6 @@
 - [ ] Sürükle-bırak sıralama
 - [ ] "Bu günü yeniden üret" (kısmi AI)
 - [ ] Destinasyon önerisi
-- [ ] Google Maps pinleri
+- [x] Mapbox GL pinleri ve stil seçici
 - [ ] Paylaşılabilir salt-okunur link
 - [ ] PDF / `.ics` dışa aktarma

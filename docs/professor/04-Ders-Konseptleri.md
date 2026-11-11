@@ -38,7 +38,7 @@ için yalnızca teorik kapsamda kalıyor.
 
 | Konsept | Durum | Wayora kanıtı |
 | :--- | :--- | :--- |
-| Vibe coding vs engineering; verification farkı | ✅ | `AGENTS.md` test-first kuralı, CI, `docs/AI_REVIEW.md`, 76 test. |
+| Vibe coding vs engineering; verification farkı | ✅ | `AGENTS.md` test-first kuralı, CI, `docs/AI_REVIEW.md`, 82 test. |
 | Spectrum ve risk profili | ◐ | Pratikte structured/agentic akış var; spektrum tablosu ayrı yazılı değil. |
 | Implementer → orchestrator | ✅ | `docs/AI_NATIVE_TEAM.md`, `docs/ORCHESTRATION.md`. |
 | Human-in-the-loop | ✅ | Autonomy L0–L4, insan onayı; agent kendi işini onaylamıyor. |

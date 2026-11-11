@@ -90,6 +90,9 @@ tokenların ve bileşen kurallarının gerekçesidir. Ekran bazlı ayrıntılar 
   ana eylem 44 px altında kalır.
 - **Fotoğraf:** gerçek ve lisanslı; ilk kritik görsel `eager/high`, diğerleri
   lazy. Kırık görselde etiketli placeholder; kategori görseli olduğu belirtilir.
+- **Agent sohbeti:** 56 px siyah ikon FAB. Mobilde scrim'li bottom sheet, masaüstünde
+  380 px yüzen panel; `role=dialog`, odak tuzağı, Escape ve gövde kilidi. Profil,
+  onboarding ve rota sihirbazı gibi odaklı ekranlarda gizlenir.
 
 ## 7. Erişilebilirlik
 
@@ -113,10 +116,17 @@ tokenların ve bileşen kurallarının gerekçesidir. Ekran bazlı ayrıntılar 
 - **Auth/profil:** sade form, görünür etiket, eyleme dönük hata, okunabilir
   tercih özeti.
 
-## 9. Sınırlar
+## 9. Kod katmanları
 
-- Google OAuth, gerçek şifre sıfırlama, Mapbox/MapLibre ve canlı rezervasyon
-  sağlayıcısı bağlı değildir; arayüz sahte başarı üretmez.
-- OSM embed haritası şehir merkezini gösterir; marker senkronizasyonu varmış
-  gibi davranılmaz.
+CSS tek yönlü akar: `index.css` (temel + bileşenler) → `social.css` (sosyal akış) →
+`ui-polish.css` (ince ayar) → `app-feel.css` (yalnızca mobil kabuk). Bir üst katman
+alt katmanı ezebilir; temel dosyaya yeni özellik eklerken token kullanılır.
+
+## 10. Sınırlar
+
+- Google OAuth, gerçek şifre sıfırlama ve canlı rezervasyon sağlayıcısı bağlı
+  değildir; arayüz sahte başarı üretmez.
+- Mapbox GL yalnızca `VITE_MAPBOX_TOKEN` varsa yüklenir; yoksa OpenStreetMap
+  bağlantılı yedek gösterilir. Harita katalog koordinatlarını işaretler, yol
+  tarifi veya canlı trafik iddia etmez.
 - Kullanıcı yorumu, canlı açık/kapalı bilgisi ve kesin transfer süresi uydurulmaz.

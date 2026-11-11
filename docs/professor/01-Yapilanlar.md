@@ -21,7 +21,7 @@ Canlı ürün: **https://wayora-ten.vercel.app**
 | :--- | :--- |
 | Ürün | 14 şehir / 140 deneyim; AI plan; rota düzenleme; canlı keşif; Yol Arkadaşları |
 | Canlı ortam | Vercel Production + Neon PostgreSQL |
-| Test | 70 API + 6 web = **76 otomatik test** |
+| Test | 74 API + 8 web = **82 otomatik test** |
 | Frontend audit | 390px mobil + 1280px masaüstü, **22/22 kontrol temiz** |
 | Demo | 75 profil, 20 eşleşme, 3 istek, 2 sohbet |
 | Güvenlik | JWT httpOnly cookie, bcrypt, zod, rate limit, CI güvenlik taramaları |
@@ -50,7 +50,7 @@ Canlı ürün: **https://wayora-ten.vercel.app**
 | Tasarım ve mobil | V2 krem/sarı dil; 390px öncelikli düzen; 44px hedefler; bottom sheet; iskelet/boş/hata durumları | Demo ve gerçek kullanımda ürünün “ucuz form” gibi görünmemesi | `web/src/index.css`, `web/src/social.css`, `docs/DESIGN_V2.md` |
 | Erişilebilirlik | Etiketli formlar, klavye/odak, `aria-*`, alt metinler, reduced-motion, 44px hedefler | Ürünün daha geniş kitleye ulaşması | Frontend audit, `web/AGENTS.md`, `docs/DESIGN_SYSTEM.md` |
 | Güvenlik | httpOnly cookie, bcrypt cost 12, CORS allowlist, helmet, rate limit, zod, sahiplik filtresi, prompt injection sınırı | Gerçek kullanıcı verisi ve LLM çağrıları için temel güvenlik | `api/src/middleware`, `docs/SECURITY.md`, `.github/workflows` |
-| Test ve CI | 76 test; lint, typecheck, build, audit, CodeQL, Semgrep, gitleaks | “Çalışıyor gibi” değil, kanıtlı değişiklik | `.github/workflows`, test dosyaları |
+| Test ve CI | 82 test; lint, typecheck, build, audit, CodeQL, Semgrep, gitleaks | “Çalışıyor gibi” değil, kanıtlı değişiklik | `.github/workflows`, test dosyaları |
 | Deploy | Vercel Services + Neon; production migration; health kontrolü | Hocaya canlı link gösterilebilmesi | `vercel.json`, `api/app.mts`, live health |
 | Dokümantasyon | SDD spec/plan/tasks, AGENTS, skill’ler, orchestration, MCP, ders izlenebilirliği | Ekip ve agent’ların aynı bağlamla çalışması | `AGENTS.md`, `docs/specs`, `.agents/skills`, `mcp/wayora-context` |
 
@@ -69,7 +69,7 @@ Canlı ürün: **https://wayora-ten.vercel.app**
 | :--- | :--- |
 | `npm run lint` | Geçti |
 | `npm run typecheck` | Geçti |
-| `npm test` | 70 API + 6 web |
+| `npm test` | 74 API + 8 web |
 | `npm run build` | Geçti |
 | Frontend audit | 0 runtime, 0 network, 0 overflow, 0 kısa hedef |
 | Canlı health | `{"status":"ok","db":"ok"}` |

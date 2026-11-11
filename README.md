@@ -64,8 +64,8 @@ Mevcut sürümde kullanıcı:
 
 - 14 şehir ve 140 lisanslı deneyimden oluşan sürümlenmiş katalog.
 - Şehir/deneyim arama, kategori filtresi, sıralama ve boş sonuç durumu.
-- Deneyim detayında süre, tahmini kişi başı maliyet, katalog puanı, pratik bilgiler ve
-  OpenStreetMap bağlantısı.
+- Deneyim detayında süre, tahmini kişi başı maliyet, katalog puanı, pratik bilgiler, harita
+  ve OpenStreetMap bağlantısı.
 - Seçim özeti URL'de taşınır; giriş veya yeni kayıt sonrası seçimler kaybolmaz.
 - 3 adımlı yeni rota sihirbazı: şehir → tarih → bütçe/tempo.
 - Rota detayında gün sekmeleri, gün panosu, dikey rota çizgisi, liste/harita görünümü,
@@ -290,9 +290,9 @@ npm run demo:seed -w api
 │ Vite · React Router        │      HttpOnly cookie    │ zod · helmet · rate limit   │
 │ saf CSS · Lucide           │                         └───────────┬─────────────────┘
 └─────────────┬──────────────┘                                     │
-              │ OpenStreetMap embed                                │ Prisma 7
+              │ Mapbox GL (token) / OSM yedeği                     │ Prisma 7
               ▼                                                    ▼
-       Harita / dış bağlantı                              PostgreSQL
+       Harita · stil seçici · marker                      PostgreSQL
                                                           (yerel prisma dev)
                                                                    │
                                                                    ▼
@@ -310,7 +310,8 @@ npm run demo:seed -w api
 - **Backend:** Express 5 + zod; tüm hata yanıtları ortak biçimde.
 - **Veritabanı:** Prisma 7 + `@prisma/adapter-pg`; yerelde `prisma dev`.
 - **Auth:** JWT, HttpOnly cookie; token tarayıcıda localStorage'a yazılmaz.
-- **Harita:** anahtarsız OpenStreetMap embed; embed yüklenmezse dış bağlantı gösterilir.
+- **Harita:** Mapbox GL (`VITE_MAPBOX_TOKEN` varsa) — Standard stil, 3B bina, uydu ve karanlık
+  seçenekleri; token veya WebGL yoksa OpenStreetMap bağlantılı okunur yedek gösterilir.
 - **Canlı keşif:** Ticketmaster Discovery ve Duffel test token'ı opsiyonel; anahtar yoksa
   uygulama offline çalışır ve sahte veri üretmez.
 - **Tasarım:** saf CSS + merkezi tokenlar; Tailwind/UI kit yok.
@@ -643,7 +644,8 @@ Bu sürümde bilinçli olarak kapsam dışında bırakılanlar:
 - Duffel canlı uçuş/otel satışı; yalnızca test token'ı ile uçuş fikri gösterilir.
 - Otel arama; Booking.com Demand API partner başvurusu gerektirir.
 - Kullanıcı yorumu/puanı; katalog puanı editoryal veridir.
-- MapLibre/Mapbox marker senkronizasyonu; mevcut OSM embed şehir merkezini gösterir.
+- Canlı trafik, toplu taşıma ve rota geometrisi çizimi; harita katalog koordinatlarını
+  marker olarak gösterir, yol tarifi üretmez.
 - PWA/offline harita ve bulut deploy.
 - Fiziksel iOS/Android cihaz testi.
 - Her deneyim için tekil lisanslı fotoğraf; bazı küçük görseller kategori temsilidir.
@@ -654,7 +656,8 @@ Bu maddeler tamamlanmış gibi gösterilmez; arayüz gerekli yerlerde fallback v
 
 - [ ] Google OAuth ve e-posta doğrulamalı şifre sıfırlama.
 - [ ] Deneyim başına tekil lisanslı görsel seti.
-- [ ] MapLibre/Mapbox ile gerçek marker ve rota geometrisi.
+- [x] Mapbox GL ile katalog marker'ları, stil seçici ve WebGL yedeği.
+- [ ] Rota geometrisi ve adım adım yol tarifi.
 - [ ] Canlı fiyat/rezervasyon sağlayıcısı adaptörü.
 - [ ] PWA ve çevrimdışı rota görüntüleme.
 - [ ] Bulut deploy ve üretim veritabanı.

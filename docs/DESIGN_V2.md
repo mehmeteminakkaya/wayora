@@ -109,8 +109,8 @@ kurallar tek referanstır. Eski Rotasyon tasarımı geçersizdir.
 - Katalog puanı “Katalog puanı” olarak etiketlenir; kullanıcı yorumu gibi sunulmaz.
 - Fiyatlar tahmini kişi başı; rota bütçesi toplam gezi bütçesi olarak açıklanır. Canlı açık/kapalı
   durumu, kesin transfer süresi ve rezervasyon uygunluğu iddia edilmez.
-- Gerçek Google OAuth, e-posta sıfırlama ve Mapbox/MapLibre anahtarı bağlı değildir; sahte başarı
-  üretilmez.
+- Gerçek Google OAuth ve e-posta sıfırlama bağlı değildir; sahte başarı üretilmez. Mapbox GL
+  anahtarı opsiyoneldir; yoksa harita yerine OpenStreetMap bağlantılı yedek gösterilir.
 
 ## V2'de yasak
 

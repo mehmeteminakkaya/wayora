@@ -6,14 +6,20 @@ Bu dosya yalnızca `web/**` altında çalışırken geçerlidir. Kök `AGENTS.md
 
 ```
 web/src/
-  main.tsx            # BrowserRouter + AuthProvider
-  App.tsx             # Route tablosu
+  main.tsx            # CSS katman sırası + BrowserRouter + AuthProvider
+  App.tsx             # Route tablosu; sayfa gövdeleri lazy() ile kod bölünür
   api.ts              # Tek HTTP istemcisi + tipler + ApiError
   auth/AuthContext.tsx
-  components/         # Layout, ProtectedRoute
-  pages/              # Landing, Login, Register, Onboarding, Trips, NewTrip, TripDetail
+  i18n.tsx            # TR/EN sözlüğü + LanguageProvider
+  components/         # Layout, AgentChat, InteractiveMap, Photo, BottomSheet, EventFeed…
+  pages/              # Landing, Explore, City, Experience, Trips, NewTrip, TripDetail,
+                      # Hitchhiker, Profile, Onboarding, Login, Register, NotFound
   lib/format.ts       # tarih/para/kategori biçimleyicileri
-  index.css           # tasarım sistemi (değişkenler + bileşenler)
+  lib/photos.ts       # şehir/kategori görsel eşlemesi
+  index.css           # temel tasarım sistemi (değişkenler + bileşenler)
+  social.css          # sosyal akış katmanı
+  ui-polish.css       # ince ayar katmanı
+  app-feel.css        # yalnızca mobil kabuk (cam alt menü, safe area)
 ```
 
 ## Kurallar
@@ -22,6 +28,8 @@ web/src/
   Tüm istekler `credentials: 'include'` ile gider.
 - **Auth:** Korumalı sayfalar `ProtectedRoute` altında. `useAuth()` dışında oturum durumu tutma.
 - **Durum:** Sunucu verisi için yerel state + `useEffect` yeterli; global state ekleme.
+- **Kod bölme:** Yeni bir sayfa `App.tsx` içinde `lazy()` ile yüklenir; harita/Three.js gibi ağır
+  bağımlılıklar yalnızca kullanan sayfada import edilir. `Layout` içindeki `Suspense` fallback'i korunur.
 - **Tasarım dili:** `docs/DESIGN_SYSTEM.md`, `docs/DESIGN_V2.md` ve `index.css` tokenları tek kaynaktır.
   - Fontlar: Overpass (başlık/gövde), Overpass Mono (veri). Türkçe latin-ext doğrulanır.
   - Renkler: krem `#F3F3F1`, beyaz yüzey, mürekkep `#121212`, ikincil `#55575C`,

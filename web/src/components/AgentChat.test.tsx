@@ -61,6 +61,11 @@ describe('AgentChat', () => {
       role: 'user',
       content: 'Berlin için ne var?',
     })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Yeni sohbet başlat' }))
+    expect(screen.queryByText('Berlin için ne var?')).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Şehri aç/ })).not.toBeInTheDocument()
+    expect(screen.getByText(/Merhaba! Ben Wayora Agent/)).toBeInTheDocument()
   })
 
   it('API hatasını sohbet içinde eyleme dönük gösterir', async () => {

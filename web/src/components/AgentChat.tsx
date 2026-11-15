@@ -1,4 +1,4 @@
-import { MessageCircle, Send, X } from 'lucide-react'
+import { MessageCircle, RotateCcw, Send, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
@@ -79,6 +79,13 @@ export function AgentChat() {
     setOpen(false)
   }
 
+  function startNewChat() {
+    if (busy) return
+    setMessages([GREETING])
+    setText('')
+    inputRef.current?.focus()
+  }
+
   async function send(event: React.FormEvent) {
     event.preventDefault()
     const content = text.trim()
@@ -144,14 +151,25 @@ export function AgentChat() {
               <span className="agent-sub">Rota, bütçe ve yer önerileri</span>
             </div>
           </div>
-          <button
-            className="icon-btn"
-            type="button"
-            aria-label="Sohbeti kapat"
-            onClick={closePanel}
-          >
-            <X size={20} strokeWidth={1.75} />
-          </button>
+          <div className="agent-head-actions">
+            <button
+              className="icon-btn"
+              type="button"
+              aria-label="Yeni sohbet başlat"
+              onClick={startNewChat}
+              disabled={busy}
+            >
+              <RotateCcw size={18} strokeWidth={1.75} />
+            </button>
+            <button
+              className="icon-btn"
+              type="button"
+              aria-label="Sohbeti kapat"
+              onClick={closePanel}
+            >
+              <X size={20} strokeWidth={1.75} />
+            </button>
+          </div>
         </header>
 
         <div className="agent-log" ref={logRef} aria-live="polite">

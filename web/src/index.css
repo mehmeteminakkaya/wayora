@@ -3380,8 +3380,25 @@ p {
   line-height: 16px;
 }
 
+.agent-head-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 2px;
+}
+
 .agent-head .icon-btn {
   flex: 0 0 auto;
+}
+
+.agent-head .icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.agent-head .icon-btn:disabled:hover {
+  border-color: transparent;
+  background: transparent;
 }
 
 .agent-log {

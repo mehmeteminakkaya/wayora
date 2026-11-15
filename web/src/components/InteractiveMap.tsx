@@ -81,7 +81,7 @@ export function InteractiveMap({
   const host = useRef<HTMLDivElement>(null)
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const markers = useRef<mapboxgl.Marker[]>([])
-  const [failed, setFailed] = useState(false)
+  const [failure, setFailure] = useState<'token' | 'webgl' | null>(null)
   const [styleKey, setStyleKey] = useState<StyleKey>('map')
   const [tilted, setTilted] = useState(false)
   const appliedStyle = useRef<StyleKey>('map')
@@ -93,7 +93,10 @@ export function InteractiveMap({
     if (!host.current) return
     let map: mapboxgl.Map
     try {
-      if (!TOKEN) throw new Error('VITE_MAPBOX_TOKEN yok')
+      if (!TOKEN) {
+        setFailure('token')
+        return
+      }
       map = new mapboxgl.Map({
         container: host.current,
         style: STYLES.map,
@@ -104,7 +107,7 @@ export function InteractiveMap({
       } as mapboxgl.MapOptions)
     } catch {
       // WebGL yoksa (eski cihaz, test ortamı) harita yerine bağlantı gösterilir.
-      setFailed(true)
+      setFailure('webgl')
       return
     }
     map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right')
@@ -199,7 +202,7 @@ export function InteractiveMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pointsKey, selectedId, center[0], center[1], zoom])
 
-  if (failed) {
+  if (failure) {
     const [lat, lng] = center
     return (
       <div className="map-fallback" role="status">
@@ -207,10 +210,15 @@ export function InteractiveMap({
           <MapPin size={22} strokeWidth={1.75} />
         </span>
         <div>
-          <strong>Harita bu cihazda yüklenemedi.</strong>
+          <strong>
+            {failure === 'token'
+              ? 'Harita sağlayıcısı yapılandırılmamış.'
+              : 'Harita bu cihazda yüklenemedi.'}
+          </strong>
           <p>
-            Tarayıcı WebGL&apos;i kapatmış olabilir. Durakları listeden inceleyebilir veya
-            haritayı yeni sekmede açabilirsin.
+            {failure === 'token'
+              ? 'Harita anahtarı olmadan da durakları listeden inceleyebilir veya konumu OpenStreetMap’te açabilirsin.'
+              : 'Tarayıcı WebGL’i kapatmış olabilir. Durakları listeden inceleyebilir veya haritayı yeni sekmede açabilirsin.'}
           </p>
           <a
             className="btn btn-secondary btn-sm"
@@ -264,7 +272,9 @@ export function InteractiveMap({
 
 function mapButton(active: boolean): React.CSSProperties {
   return {
-    padding: '7px 12px',
+    minWidth: 44,
+    minHeight: 44,
+    padding: '0 12px',
     border: '1px solid rgba(255,255,255,.6)',
     borderRadius: 999,
     background: active ? '#121212' : 'rgba(255,255,255,.72)',

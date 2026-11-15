@@ -30,7 +30,13 @@
   sheet ve 56 px ikon FAB. Mobilde alt menü/FAB artık Çıkış yap ve kart eylemlerini örtmüyor.
 - Keşfet/rota listeleri, harita yedeği ve deneyim fiyat kartı mobilde yeniden hizalandı.
 - Rota bazlı kod bölme: ana JS paketi 2,28 MB → 247 kB (gzip 78 kB); harita ayrı yükleniyor.
-- 12 sayfa mobil + masaüstü axe (WCAG 2.1 AA) taraması temiz; toplam 82 otomatik test.
+- 12 sayfa mobil + masaüstü axe (WCAG 2.1 AA) taraması temiz; toplam 89 otomatik test.
+- Wayora Agent araç çağırma: katalog arama, site içi yönlendirme, Ticketmaster etkinlikleri ve
+  Duffel uçuş fikri. Uçuş test modu hem araç sonucunda hem yanıtta açıkça etiketlenir.
+- Agent maliyet koruması: 20 mesaj / 8.000 karakter bağlam sınırı, saatte 60 istek ve
+  `LLM_TIMEOUT_MS` ile uyumlu sağlayıcı zaman aşımı.
+- Harita yedeği dürüstleştirildi: eksik Mapbox token'ı ile WebGL hatası ayrı mesaj gösterir;
+  harita stil düğmeleri 44 px dokunma hedefine çıkarıldı.
 
 ## Next
 

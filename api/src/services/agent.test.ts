@@ -2,6 +2,27 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { chatWithAgent } from './agent.ts'
 import type { Db } from '../lib/prisma.ts'
 
+vi.mock('./duffel.ts', () => ({
+  resolveAirportCode: (value: string) => (value.includes('İstanbul') ? 'IST' : 'BER'),
+  searchDuffelFlights: async () => ({
+    mode: 'test',
+    offers: [
+      {
+        id: 'o1',
+        airline: 'Test Havayolu',
+        price: 120,
+        currency: 'EUR',
+        stops: 0,
+        duration: '2s 45dk',
+        departureAt: '2026-12-05T09:00:00',
+        arrivalAt: '2026-12-05T11:45:00',
+        from: 'IST',
+        to: 'BER',
+      },
+    ],
+  }),
+}))
+
 const config = {
   DEEPSEEK_API_KEY: 'test-key',
   DEEPSEEK_MODEL: 'deepseek-chat',
@@ -68,6 +89,46 @@ describe('chatWithAgent', () => {
     vi.stubGlobal('fetch', fetchMock)
     const result = await chatWithAgent([{ role: 'user', content: 'x' }], config, db)
     expect(result.actions).toEqual([])
+  })
+
+  it('uçuş test modunu yanıtta açıkça işaretler ve rotaya yönlendirir', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        reply({
+          role: 'assistant',
+          content: null,
+          tool_calls: [
+            {
+              id: 'f1',
+              function: {
+                name: 'find_flights',
+                arguments:
+                  '{"origin":"İstanbul","destination":"Berlin","departureDate":"2026-12-05"}',
+              },
+            },
+          ],
+        }),
+      )
+      .mockResolvedValueOnce(
+        reply({ role: 'assistant', content: 'Fiyatlar test verisidir; rota oluşturabiliriz.' }),
+      )
+    vi.stubGlobal('fetch', fetchMock)
+
+    const result = await chatWithAgent(
+      [{ role: 'user', content: 'Berlin uçuşu?' }],
+      { ...config, DUFFEL_ACCESS_TOKEN: 'duffel_test_token' },
+      db,
+    )
+
+    const toolMessage = JSON.parse(
+      JSON.parse(fetchMock.mock.calls[1][1].body as string).messages.at(-1).content as string,
+    )
+    expect(toolMessage.mode).toBe('test')
+    expect(toolMessage.note).toMatch(/test/i)
+    expect(result.actions).toEqual([
+      { kind: 'flight', label: 'Uçuş fikri için rota oluştur', path: '/trips/new?destination=Berlin' },
+    ])
   })
 
   it('anahtar yoksa hata verir', async () => {

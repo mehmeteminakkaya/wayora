@@ -80,6 +80,9 @@ Mevcut sürümde kullanıcı:
 - **Canlı keşif:** Ticketmaster Discovery ile şehir sayfasında ve rota detayında
   şehir etkinlikleri; Duffel test token'ı varsa uçuş fikri. Anahtar yoksa bölüm uydurma
   veri üretmez, yapılandırma notu gösterir. Otel/rezervasyon satışı bu sürümde yoktur.
+- **Wayora Agent:** DeepSeek destekli sohbet; katalog araması, site içi sayfa açma, etkinlik
+  ve uçuş fikri araçları. Yalnızca giriş yapmış kullanıcıya açılır, saatte 60 mesajla
+  sınırlıdır ve uçuş test verisini açıkça etiketler.
 
 ### Dayanıklılık
 
@@ -94,7 +97,7 @@ Mevcut sürümde kullanıcı:
 ### Tasarım
 
 - V2 kimliği: krem zemin, beyaz yüzey, güçlü Overpass tipografisi ve kontrollü sarı vurgu.
-- Mobilde 4 sekmeli alt navigasyon: **Keşfet, Rotalarım, Planla, Profil**.
+- Mobilde 5 sekmeli alt navigasyon: **Keşfet, Rotalarım, Yol, Planla, Profil**.
 - 320, 375, 390 ve 430 px genişliklerde yatay taşma ve kesilen ana eylem kontrolü.
 - 44 px dokunma hedefleri, görünür klavye odağı, dialog semantiği ve etiketli formlar.
 - Gerçek lisanslı fotoğraflar; kategori/şehir görseli olduğu açıkça belirtilir.
@@ -196,6 +199,17 @@ API'si gerektirir. Duffel test token'ı sahte fiyat üretir, gerçek rezervasyon
 Production'da en az `JWT_SECRET` değiştirilmeli ve HTTPS için `COOKIE_SECURE=true`
 kullanılmalıdır. Gemini/OpenAI/DeepSeek kullanmak için `LLM_PROVIDER` ve ilgili API anahtarı
 ayarlanır. Anahtar yoksa uygulama offline modda çalışmaya devam eder.
+
+Wayora Agent sohbeti `DEEPSEEK_API_KEY` varsa canlı yanıt verir; anahtar yoksa arayüz
+kullanıcıyı Keşfet ve Rotalarım ekranlarına yönlendirir. Harita için `web/.env` (veya Vercel
+web servisi) içine Mapbox **public** token'ı eklenir:
+
+```dotenv
+VITE_MAPBOX_TOKEN=pk.eyJ1...
+```
+
+Token yoksa harita yerine okunur bir yedek ve OpenStreetMap bağlantısı gösterilir; uygulamanın
+ana akışı bozulmaz.
 
 DeepSeek örneği:
 

@@ -4,7 +4,8 @@ Bu dosya yalnızca `api/src/services/**` altında geçerlidir.
 
 ## AI servisi sözleşmesi
 
-- `generateItinerary(input, candidates, config)` tek giriş noktasıdır.
+- `generateItinerary(input, candidates, config)` plan üretiminin tek giriş noktasıdır.
+  Tek istisna, ürün içi sohbet için `services/agent.ts` içindeki `chatWithAgent` akışıdır.
 - Dönüş: `{ plan, meta }`. `meta` şu alanları içerir: `provider`, `model`, `fallback`, `latencyMs`.
 - **Offline mod varsayılandır.** API anahtarı yokken uygulama çalışmak zorundadır.
 - Sağlayıcı hatası, timeout veya şema uyuşmazlığında **offline üreticiye düş**; hatayı kullanıcıya

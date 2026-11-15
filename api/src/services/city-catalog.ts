@@ -341,7 +341,7 @@ export function searchStaticCities(query: string): CitySearchResponse {
 }
 
 /**
- * Şehir ve deneyim araması. Katalog 10 şehir × 10 deneyimlik sabit bir küme olduğu için
+ * Şehir ve deneyim araması. Katalog 14 şehir × 10 deneyimlik sabit bir küme olduğu için
  * eşleştirme Türkçe katlama ile bellekte yapılır. DB boş veya erişilemezse statik katalog kullanılır.
  */
 export async function searchCityCatalog(db: Db, query: string): Promise<CitySearchResponse> {

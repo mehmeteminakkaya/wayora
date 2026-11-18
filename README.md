@@ -13,7 +13,7 @@ planı gün gün düzenler.
 > kimlik doğrulama, onboarding, rota oluşturma, gün planlama, bütçe özeti ve profil
 > akışları uçtan uca hazır. Uygulama **API anahtarı olmadan** çalışır.
 
-![Wayora V2 keşfet ekranı](docs/audit/v2-explore-desktop.png)
+![Wayora V2 keşfet ekranı](docs/audit/screenshots/v2-explore-desktop.png)
 
 ## İçindekiler
 
@@ -22,18 +22,16 @@ planı gün gün düzenler.
 - [Ekranlar](#ekranlar)
 - [Hızlı başlangıç](#hızlı-başlangıç)
 - [Demo akışı](#demo-akışı)
+- [Repo yapısı](#repo-yapısı)
 - [Mimari](#mimari)
-- [Frontend](#frontend)
-- [API](#api)
-- [Veri modeli](#veri-modeli)
-- [Şehir kataloğu](#şehir-kataloğu)
 - [AI plan üretimi](#ai-plan-üretimi)
-- [Tasarım sistemi](#tasarım-sistemi)
 - [Test ve doğrulama](#test-ve-doğrulama)
 - [Güvenlik](#güvenlik)
+- [Ders uyumu](#ders-uyumu)
 - [Bilinen sınırlar](#bilinen-sınırlar)
 - [Yol haritası](#yol-haritası)
 - [Dokümanlar](#dokümanlar)
+- [Komutlar](#komutlar)
 - [Ekip](#ekip)
 - [Katkı](#katkı)
 
@@ -109,19 +107,19 @@ Ekran görüntüleri yerel geliştirme ortamından alınmıştır. Tam boy görs
 
 | Landing | Keşfet | Şehir |
 | :---: | :---: | :---: |
-| <img src="docs/audit/polish-landing-375.png" width="240" alt="Wayora landing mobil"> | <img src="docs/audit/v2-explore-mobile.png" width="240" alt="Wayora keşfet mobil"> | <img src="docs/audit/v2-city-mobile.png" width="240" alt="Wayora şehir rehberi mobil"> |
+| <img src="docs/audit/screenshots/polish-landing-375.png" width="240" alt="Wayora landing mobil"> | <img src="docs/audit/screenshots/v2-explore-mobile.png" width="240" alt="Wayora keşfet mobil"> | <img src="docs/audit/screenshots/v2-city-mobile.png" width="240" alt="Wayora şehir rehberi mobil"> |
 
 | Deneyim | Seçim özeti | Yeni rota |
 | :---: | :---: | :---: |
-| <img src="docs/audit/v2-experience-mobile.png" width="240" alt="Wayora deneyim detayı mobil"> | <img src="docs/audit/polish-city-sheet-320.png" width="240" alt="Wayora seçim özeti bottom sheet"> | <img src="docs/audit/v2-new-trip-prefilled-mobile.png" width="240" alt="Wayora yeni rota adımı"> |
+| <img src="docs/audit/screenshots/v2-experience-mobile.png" width="240" alt="Wayora deneyim detayı mobil"> | <img src="docs/audit/screenshots/polish-city-sheet-320.png" width="240" alt="Wayora seçim özeti bottom sheet"> | <img src="docs/audit/screenshots/v2-new-trip-prefilled-mobile.png" width="240" alt="Wayora yeni rota adımı"> |
 
 | Rota detayı | Rotalarım | Profil |
 | :---: | :---: | :---: |
-| <img src="docs/audit/v2-trip-detail-mobile.png" width="240" alt="Wayora rota detayı mobil"> | <img src="docs/audit/v2-trips-mobile.png" width="240" alt="Wayora rotalarım mobil"> | <img src="docs/audit/v2-profile-mobile.png" width="240" alt="Wayora profil mobil"> |
+| <img src="docs/audit/screenshots/v2-trip-detail-mobile.png" width="240" alt="Wayora rota detayı mobil"> | <img src="docs/audit/screenshots/v2-trips-mobile.png" width="240" alt="Wayora rotalarım mobil"> | <img src="docs/audit/screenshots/v2-profile-mobile.png" width="240" alt="Wayora profil mobil"> |
 
 | Onboarding | Giriş |
 | :---: | :---: |
-| <img src="docs/audit/v2-onboarding-mobile.png" width="240" alt="Wayora onboarding mobil"> | <img src="docs/audit/v2-login-mobile.png" width="240" alt="Wayora giriş mobil"> |
+| <img src="docs/audit/screenshots/v2-onboarding-mobile.png" width="240" alt="Wayora onboarding mobil"> | <img src="docs/audit/screenshots/v2-login-mobile.png" width="240" alt="Wayora giriş mobil"> |
 
 > Not: Ekran görüntüleri gerçek API ve yerel PostgreSQL üzerinde çalışan uygulamadan alınmıştır.
 > Fiziksel cihaz testi yapılmamıştır.
@@ -163,110 +161,10 @@ curl http://localhost:4000/api/health
 # {"status":"ok","db":"ok"}
 ```
 
-### Ortam değişkenleri
+Ortam değişkenleri, opsiyonel sağlayıcılar (DeepSeek, Ticketmaster, Duffel, Mapbox), demo
+verisi ve canlı ortam: [`docs/engineering/SETUP.md`](docs/engineering/SETUP.md).
 
-`npm run setup`, `api/.env.example` dosyasını `api/.env` olarak kopyalar. `.env` commit'lenmez.
-Yerel geliştirme için varsayılanlar yeterlidir:
-
-```dotenv
-DATABASE_URL="postgres://postgres:postgres@localhost:51214/template1?sslmode=disable"
-API_PORT=4000
-CORS_ORIGIN="http://localhost:5180"
-
-JWT_SECRET="wayora-dev-only-secret-change-me-32-chars"
-JWT_EXPIRES_IN=7d
-COOKIE_NAME=wayora_session
-
-LLM_PROVIDER=offline
-# DEEPSEEK_API_KEY=...
-DEEPSEEK_MODEL=deepseek-chat
-DEEPSEEK_WEB_SEARCH=true
-LLM_MODEL_FAST=gemini-2.0-flash
-LLM_MODEL_SMART=gemini-2.5-pro
-LLM_TIMEOUT_MS=20000
-AI_DAILY_LIMIT=10
-
-# Opsiyonel ücretsiz keşif sağlayıcıları
-# TICKETMASTER_API_KEY=       # Discovery, günde 5.000 çağrı
-# DUFFEL_ACCESS_TOKEN=        # duffel_test_... ile test modu
-DISCOVERY_TIMEOUT_MS=10000
-```
-
-Canlı keşif sağlayıcıları opsiyoneldir; anahtar yoksa uygulamanın ana yolculuğu çalışmaya
-devam eder. Ticketmaster anahtarı yalnızca etkinlik keşfi içindir; bilet satın alma Partner
-API'si gerektirir. Duffel test token'ı sahte fiyat üretir, gerçek rezervasyon yapmaz.
-
-Production'da en az `JWT_SECRET` değiştirilmeli ve HTTPS için `COOKIE_SECURE=true`
-kullanılmalıdır. Gemini/OpenAI/DeepSeek kullanmak için `LLM_PROVIDER` ve ilgili API anahtarı
-ayarlanır. Anahtar yoksa uygulama offline modda çalışmaya devam eder.
-
-Wayora Agent sohbeti `DEEPSEEK_API_KEY` varsa canlı yanıt verir; anahtar yoksa arayüz
-kullanıcıyı Keşfet ve Rotalarım ekranlarına yönlendirir. Harita için `web/.env` (veya Vercel
-web servisi) içine Mapbox **public** token'ı eklenir:
-
-```dotenv
-VITE_MAPBOX_TOKEN=pk.eyJ1...
-```
-
-Token yoksa harita yerine okunur bir yedek ve OpenStreetMap bağlantısı gösterilir; uygulamanın
-ana akışı bozulmaz.
-
-DeepSeek örneği:
-
-```dotenv
-LLM_PROVIDER=deepseek
-DEEPSEEK_API_KEY=...
-DEEPSEEK_MODEL=deepseek-chat
-DEEPSEEK_WEB_SEARCH=true
-```
-
-`DEEPSEEK_WEB_SEARCH=true` olduğunda plan üretiminden önce DeepSeek Search API'den
-şehir/tarih/ilgi alanına uygun web sonuçları alınır. Sonuçlar modele **güvenilmeyen
-araştırma bağlamı** olarak verilir; katalog dışı yer üretilmesine izin verilmez. Arama
-başarısız olursa plan yine katalogla üretilir.
-
-### Ücretsiz canlı keşif (opsiyonel)
-
-Rota detayındaki ve şehir sayfasındaki “Canlı keşif” bölümü iki sağlayıcıyı destekler:
-
-- **Ticketmaster Discovery:** ücretsiz developer anahtarı; varsayılan kota günde 5.000 çağrı.
-  Etkinlik keşfi ve bilet sayfası bağlantısı sağlar, bilet satın almaz.
-- **Duffel test modu:** ücretsiz `duffel_test_...` token'ı; sahte uçuş fiyatları üretir.
-  Gerçek rezervasyon veya canlı fiyat değildir.
-
-```dotenv
-# api/.env
-TICKETMASTER_API_KEY=...
-DUFFEL_ACCESS_TOKEN=duffel_test_...
-DISCOVERY_TIMEOUT_MS=10000
-```
-
-Anahtarlar yoksa bölüm sahte veri üretmez; yapılandırma notu gösterir. Ticketmaster anahtarı:
-https://developer.ticketmaster.com · Duffel test hesabı: https://app.duffel.com/join
-
-Otel arama, canlı bilet satın alma ve ödeme bu sürümde yoktur. Bu özellikler partner
-sözleşmesi, ödeme ve iade süreçleri gerektirir; ayrı bir faz olarak planlanmıştır.
-
-## Canlı ortam
-
-- **Web + API:** https://wayora-ten.vercel.app
-- **Vercel projesi:** `bsyilmazs-projects/wayora`
-- **Veritabanı:** Neon Serverless PostgreSQL (Vercel Marketplace)
-- **Mimari:** Vercel Services; `web/` Vite servisi, `api/` Express servisi
-- **API sağlık:** https://wayora-ten.vercel.app/api/health
-
-Canlı ortamda Prisma migration'ları uygulanmış ve 14 şehir / 140 deneyim kataloğu
-seed edilmiştir. API anahtarları ve veritabanı URL'si Vercel Environment Variables
-üzerinden yönetilir; repoda tutulmaz.
-
-Yeniden deploy:
-
-```bash
-vercel deploy --prod
-```
-
-> Marketplace veritabanını değiştirirken migration'ları unutma:
-> `npm run db:deploy -w api` ve katalog seed'i.
+**Canlı ortam:** https://wayora-ten.vercel.app · sağlık: https://wayora-ten.vercel.app/api/health
 
 ## Demo akışı
 
@@ -280,20 +178,37 @@ vercel deploy --prod
 
 Yerel veritabanını sıfırlamadan tekrar denemek için yeni bir e-posta ile kayıt olabilirsin.
 
-### Yol Arkadaşları demo verisi
+Yol Arkadaşları için 75 örnek gezgin: `npm run demo:seed -w api` (ayrıntı
+[`SETUP.md`](docs/engineering/SETUP.md#yol-arkadaşları-demo-verisi)).
 
-Sunumda boş eşleşme ekranı göstermemek için local veritabanına 75 örnek gezgin eklenebilir:
+## Repo yapısı
 
-```bash
-npm run demo:seed -w api
+```text
+wayora/
+├── web/                 React 19 + Vite arayüzü
+├── api/                 Express 5 + Prisma API, LLM servisleri
+├── mcp/wayora-context/  Wayora Context MCP sunucusu (geliştirici aracı)
+├── scripts/
+│   ├── e2e/             tarayıcı ve API uçtan uca akışları
+│   ├── audit/           UI denetimleri, ürün laboratuvarı simülasyonları
+│   ├── capture/         ekran görüntüsü üretimi
+│   ├── docs/            rapor/sunum üreticileri (Python)
+│   └── dev/             db watchdog, worktree yardımcıları
+├── docs/
+│   ├── product/         kapsam, yol haritası, backlog, ekip, katalog
+│   ├── engineering/     mimari, API, frontend, kurulum, test, güvenlik, tasarım
+│   ├── agentic/         bağlam, orkestrasyon, AI review, software factory, handoff
+│   ├── course/          ders izlenebilirliği ve teslim listesi
+│   ├── specs/           spec-driven development artefaktları (001–003)
+│   ├── audit/           denetim raporları (reports/) ve ekran görüntüleri (screenshots/)
+│   ├── deliverables/    hoca teslimi, raporlar (docx/pdf), sunumlar (pptx)
+│   └── assets/          README ve belge görselleri
+├── .agents/skills/      agent skill'leri (feature, review, security)
+├── .github/             CI, CodeQL, Semgrep, gitleaks, PR şablonu, CODEOWNERS
+└── AGENTS.md            her agent için her zaman yüklü bağlam (+ api/, web/ alt kuralları)
 ```
 
-- Demo hesabı: `demo@wayora.app` / `demo1234`
-- Demo rota: 5-9 Aralık 2026, Berlin
-- İçerik: 75 görünür profil, 20 eşleşme, 3 gelen istek, 1 giden istek, 2 kabul edilmiş sohbet.
-- Komut varsayılan olarak yalnızca local `DATABASE_URL` ile çalışır; production demo için açıkça `DEMO_SEED_ALLOW_PRODUCTION=true` gerekir.
-- Bu profiller üretim seed'ine dahil değildir; yalnızca sunum/local demo verisidir.
-- Temizlik: `npm run demo:clear -w api`. Production temizliği için `DEMO_SEED_ALLOW_PRODUCTION=true` gerekir.
+Doküman haritası: [`docs/README.md`](docs/README.md).
 
 ## Mimari
 
@@ -331,199 +246,10 @@ npm run demo:seed -w api
 - **Tasarım:** saf CSS + merkezi tokenlar; Tailwind/UI kit yok.
 - **AI:** offline varsayılan; Gemini/OpenAI/DeepSeek adaptörleri opsiyonel.
 
-## Frontend
-
-### Sayfa yapısı
-
-| Rota | Ekran | Erişim |
-| :--- | :--- | :--- |
-| `/` | Landing | Herkese açık |
-| `/kesfet` | Şehir keşfi, arama ve filtreler | Herkese açık |
-| `/kesfet/:slug` | Şehir rehberi ve deneyim seçimi | Herkese açık |
-| `/kesfet/:slug/:experienceSlug` | Deneyim detayı | Herkese açık |
-| `/login` | Giriş | Herkese açık |
-| `/register` | Kayıt | Herkese açık |
-| `/onboarding` | 3 adımlı tercih akışı | Korumalı |
-| `/trips` | Rotalarım | Korumalı |
-| `/trips/new` | Yeni rota sihirbazı | Korumalı |
-| `/trips/:id` | Rota detayı ve gün düzenleme | Korumalı |
-| `/profil` | Profil ve tercihler | Korumalı |
-| `*` | 404 | Herkese açık |
-
-### Yapı
-
-```text
-web/src/
-  App.tsx                 route tablosu
-  api.ts                  tek HTTP istemcisi + tipler + ApiError
-  auth/AuthContext.tsx    oturum bağlamı
-  components/
-    Layout.tsx            header, 4 sekmeli mobil nav, footer, scroll davranışı
-    BottomSheet.tsx       odak tuzağı ve scroll kilidi olan dialog
-    Photo.tsx             lisanslı fotoğraf + etiketli fallback
-    Skeletons.tsx         içerik yerleşimine yakın yükleme durumları
-    ProtectedRoute.tsx    giriş sonrası dönüş adresi
-    ErrorBoundary.tsx     beklenmeyen render hataları
-  pages/                  Landing, Explore, City, Experience, Login, Register,
-                          Onboarding, Trips, NewTrip, TripDetail, Profile, NotFound
-  lib/format.ts           tarih, para, süre ve kategori biçimleyicileri
-  lib/photos.ts           şehir/kategori fotoğraf eşlemeleri
-  index.css               V2 tasarım tokenları ve tüm responsive stiller
-```
-
-### Üç imza etkileşim
-
-1. **Rota çizgisi**
-   Timeline durak satırları dikey çizgi ve noktalarla birleşir. Gün değiştiğinde içerik
-   `day-in` animasyonuyla yerleşir. Sıra değişikliği anında görünür; API'ye kaydedilir ve
-   kaydetme durumu kullanıcıya bildirilir.
-
-2. **Seçimden plana**
-   Şehir sayfasındaki seçimler URL'de `selected` parametresiyle tutulur. Sabit özet, seçilen
-   durak sayısını ve tahmini kişi başı toplamı gösterir. Özet bottom sheet'te açılır; seçim
-   kaldırılabilir. Hızlı tekrarlı dokunuşlar fonksiyonel state ile doğru sayılır. CTA
-   seçimleri `/trips/new` adresine taşır.
-
-3. **Gün şeridi**
-   Gün numarası, tarih ve durak sayısı birlikte gösterilir. Aktif gün sarı vurgu ve
-   `aria-pressed` ile belirtilir. Çok günlü rotalarda yatay kaydırma çalışır; seçili gün
-   otomatik olarak görünür tutulur. Liste/harita görünümü seçili günü korur.
-
-### Durum yönetimi
-
-- Sunucu verisi için yerel state + `useEffect`; global veri katmanı yok.
-- Arama/filtre/sıralama URL'de; geri dönüşte geri yüklenir.
-- Explore scroll konumu `sessionStorage` ile geri getirilir.
-- Giriş sonrası dönüş adresi `ProtectedRoute` state'inde taşınır.
-- Seçimler ve şehir filtresi URL'de; yenileme ve geri navigasyon dayanıklıdır.
-- API isteklerinde eski yanıtın yeni sonucu ezmesini engelleyen aktiflik kontrolü vardır.
-
-## API
-
-### Teknoloji
-
-- Express 5
-- TypeScript
-- Prisma 7 + PostgreSQL
-- zod doğrulama
-- JWT + bcryptjs
-- helmet, CORS, rate limit
-
-### Endpoint'ler
-
-| Metot | Yol | Açıklama |
-| :--- | :--- | :--- |
-| `GET` | `/api/health` | API ve veritabanı sağlığı |
-| `POST` | `/api/auth/register` | Kayıt |
-| `POST` | `/api/auth/login` | Giriş |
-| `POST` | `/api/auth/logout` | Çıkış |
-| `GET` | `/api/auth/me` | Oturumdaki kullanıcı |
-| `GET` / `PUT` | `/api/me/preferences` | Tercihleri getir / kaydet |
-| `GET` / `POST` | `/api/trips` | Rotaları listele / oluştur |
-| `GET` / `PATCH` / `DELETE` | `/api/trips/:id` | Rota detayı / güncelle / sil |
-| `POST` | `/api/trips/:id/generate` | Offline/LLM plan üret |
-| `POST` | `/api/trips/:id/experiences` | Seçilen katalog deneyimlerini rotaya aktar |
-| `POST` | `/api/trips/:tripId/days/:dayId/activities` | Güne aktivite ekle |
-| `PATCH` / `DELETE` | `/api/activities/:id` | Aktiviteyi güncelle / sil |
-| `GET` | `/api/cities` | 14 şehir özeti |
-| `GET` | `/api/cities/search?q=...` | Şehir/deneyim arama |
-| `GET` | `/api/cities/:slug` | Şehir ve deneyimleri |
-| `GET` | `/api/cities/:slug/experiences?category=...` | Kategoriye göre deneyimler |
-| `GET` | `/api/cities/_meta/count` | Katalog sayıları |
-| `GET` | `/api/places/search?q=&destination=` | Yer arama (opsiyonel Google Places proxy) |
-| `GET` | `/api/places/:googlePlaceId` | Yer detayı |
-| `GET` | `/api/discovery/status` | Ticketmaster/Duffel yapılandırma durumu |
-| `GET` | `/api/discovery/events?city=&startDate=&endDate=` | Ticketmaster etkinlik keşfi |
-| `GET` | `/api/discovery/flights?origin=&destination=&departureDate=&returnDate=` | Duffel uçuş araması (oturum gerekli) |
-| `GET` / `PUT` | `/api/social/profile` | Yol arkadaşı profilini getir / kaydet |
-| `GET` | `/api/social/matches` | Aynı şehir ve tarih kesişimine göre eşleşmeler |
-| `POST` | `/api/social/requests` | Karşılıklı bağlantı isteği |
-| `GET` | `/api/social/connections` | Gelen, giden ve kabul edilen bağlantılar |
-| `PATCH` | `/api/social/connections/:id` | İsteği kabul et / reddet / iptal et |
-| `GET` / `POST` | `/api/social/connections/:id/messages` | Kabul edilen bağlantıda mesajlar |
-| `POST` | `/api/social/connections/:id/report` | Güvenlik bildirimi ve engelleme |
-| `POST` | `/api/social/block` | Kullanıcıyı engelle |
-
-`/api/discovery/events` herkese açıktır; `/api/discovery/flights` oturum ister ve
-`DUFFEL_ACCESS_TOKEN` yoksa 503 `DUFFEL_NOT_CONFIGURED` döner. Anahtarlar hiçbir zaman
-frontend'e gönderilmez. Ticketmaster yanıtları 5 dakika, Duffel yanıtları 5 dakika
-bellekte cache'lenir; keşif endpoint'leri IP başına saatte 120 istekle sınırlıdır.
-
-Şehir endpoint'leri herkese açıktır. Kullanıcı verisi döndüren tüm endpoint'ler
-`requireAuth` ile korunur; başka kullanıcının kaynağı **404** döner.
-
-### Hata biçimi
-
-```json
-{
-  "error": {
-    "code": "TRIP_NOT_FOUND",
-    "message": "Rota bulunamadı."
-  }
-}
-```
-
-### Rate limit
-
-- Giriş/kayıt: 15 dakikada 30 başarısız deneme.
-- AI plan üretimi: kullanıcı başına `AI_DAILY_LIMIT` (varsayılan 10).
-- Test ortamında rate limit devre dışıdır.
-
-## Veri modeli
-
-```text
-User
- ├── Preference (1:1)
- └── Trip (1:N)
-      └── TripDay (1:N)
-           └── Activity (1:N)
-                └── Place (opsiyonel)
-
-City
- └── CityExperience (1:N)
-```
-
-- `User`: e-posta, hash'lenmiş şifre, ad.
-- `Preference`: ilgi alanları, bütçe seviyesi, seyahat tarzı, tempo.
-- `Trip`: destinasyon, tarih, toplam bütçe, para birimi, durum, ipuçları.
-- `TripDay`: gün indeksi, tarih, notlar.
-- `Activity`: sıra, başlık, kategori, saat, tahmini maliyet, yer, not.
-- `City` / `CityExperience`: keşif kataloğu; seed sırasında idempotent yazılır.
-- `Place`: Google Places/offline katalog için önbellek.
-
-Detaylı şema: [`api/prisma/schema.prisma`](api/prisma/schema.prisma).
-
-## Şehir kataloğu
-
-Kapsam: **14 şehir, 140 deneyim**.
-
-| Şehir | Ülke | Deneyim |
-| :--- | :--- | ---: |
-| İstanbul | Türkiye | 10 |
-| Paris | Fransa | 10 |
-| Roma | İtalya | 10 |
-| Barselona | İspanya | 10 |
-| Londra | Birleşik Krallık | 10 |
-| Amsterdam | Hollanda | 10 |
-| Berlin | Almanya | 10 |
-| Prag | Çekya | 10 |
-| Viyana | Avusturya | 10 |
-| Lizbon | Portekiz | 10 |
-
-Her deneyimde ad, kategori, mahalle/adres, süre, tahmini kişi başı fiyat, para birimi,
-fiyat notu, açıklama, etiketler, katalog puanı, açılış saati notu ve varsa resmî bağlantı
-bulunur.
-
-Katalog kaynağı: [`api/src/data/city-catalog.ts`](api/src/data/city-catalog.ts).
-Sunucu açılışında `City` ve `CityExperience` tablolarına idempotent seed edilir; veritabanı
-boşsa `/api/cities` statik katalogdan da cevap üretebilir.
-
-> Fiyatlar 2026 sonbaharı için yaklaşık değerlerdir. Canlı açık/kapalı durumu, kesin bilet
-> fiyatı, rezervasyon uygunluğu veya kullanıcı yorumu değildir; kullanıcı resmî bağlantıya
-> yönlendirilir. Katalog canlı scrape edilmez.
-
-Fotoğraf lisansları: [`docs/PHOTO_CREDITS.md`](docs/PHOTO_CREDITS.md) ·
-[`web/public/photo-credits.html`](web/public/photo-credits.html).
+Ayrıntı: [`ARCHITECTURE.md`](docs/engineering/ARCHITECTURE.md) ·
+[`API.md`](docs/engineering/API.md) · [`FRONTEND.md`](docs/engineering/FRONTEND.md) ·
+[`DESIGN_SYSTEM.md`](docs/engineering/DESIGN_SYSTEM.md) ·
+[`CITY_CATALOG.md`](docs/product/CITY_CATALOG.md).
 
 ## AI plan üretimi
 
@@ -553,86 +279,22 @@ zod doğrulaması + aday kimlik filtresi
 - Üretim uzun sürebileceği için arayüzde sahte yüzde yerine gerçek aşama metni gösterilir.
 - Sağlayıcı hatasında kullanıcı girdileri korunur; rota kaydı oluştuysa mevcut kayda dönüş sunulur.
 
-## Tasarım sistemi
-
-V2 yönü: **fotoğrafla merak, güçlü tipografi, sakin yüzey, ölçülü hareket**.
-
-| Rol | Değer |
-| :--- | :--- |
-| Zemin | `#F3F3F1` |
-| Yüzey | `#FFFFFF` |
-| Ana metin | `#121212` |
-| İkincil metin | `#55575C` |
-| Ayraç | `#DEDED9` |
-| Vurgu | `#FFC400` |
-| Başlık/gövde | Overpass |
-| Veri | Overpass Mono |
-| Kontrol radius | `4px` |
-| Yüzey radius | `8px` |
-| Sheet radius | `12px` |
-
-- Koyu tema, gradient, vinyet, gölge yığını, el yazısı ve damga yok.
-- Gölge yalnızca yükselen bottom sheet ve sürüklenen satırda.
-- Mobil alt navigasyon 64 px + safe area; sabit eylem çubuğu 72 px + safe area.
-- Hareket süreleri: 120 / 180 / 260 ms; `prefers-reduced-motion` desteklenir.
-- Seçili durumlar yalnızca renkle değil, alt çizgi/kalınlık ve `aria-pressed` ile belirtilir.
-- Fotoğraf üzerine metin bindirilmez; kategori görseli olduğu açıkça yazılır.
-
-Ayrıntı: [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) ·
-[`docs/DESIGN_V2.md`](docs/DESIGN_V2.md).
-
 ## Test ve doğrulama
 
-### Otomatik testler
-
 ```bash
-npm run lint
-npm run typecheck
-npm test
-npm run build
+npm run lint && npm run typecheck && npm test && npm run build
 ```
 
-Son doğrulanan sonuçlar:
-
-| Kontrol | Sonuç |
+| Kontrol | Sonuç (18 Kasım 2026) |
 | :--- | ---: |
-| API testleri | 61 / 61 |
-| Web testleri | 4 / 4 |
-| Toplam Vitest | 65 / 65 |
+| API testleri | 79 / 79 |
+| Web testleri | 10 / 10 |
 | Lint | geçti |
-| Typecheck | geçti |
-| Production build | geçti |
-| `npm audit` | temiz |
+| Web production build | geçti |
 
-### Tarayıcı E2E
-
-Dev sunucusu ve Chrome DevTools (`9224`) açıkken:
-
-```bash
-node scripts/e2e_api.mjs
-node scripts/e2e_v2.mjs
-node scripts/e2e_navigation.mjs
-node scripts/e2e_register_flow.mjs
-node scripts/audit_polish_mobile.mjs
-```
-
-Kapsanan akışlar:
-
-- API: kayıt, giriş, tercihler, katalog, rota oluşturma, offline plan, aktivite ekleme/silme,
-  sahiplik kontrolü, çıkış, silme.
-- Keşif: Ticketmaster etkinlik normalizasyonu, Duffel uçuş normalizasyonu, anahtarsız
-  sağlayıcı durumu ve uçuş aramasında oturum koruması.
-- V2: arama, deneyim seçimi, seçim özeti, giriş sonrası dönüş, rota oluşturma, gün değiştirme,
-  rotalarım, profil, çıkış, konsol hataları.
-- Navigasyon: keşif arama/filtre/sıralama ve scroll geri dönüşü, şehir filtresi ve deneyim
-  detayından geri dönüş.
-- Kayıt: yeni hesap → onboarding → seçimlerle yeni rota akışına dönüş.
-- Mobil audit: 320/430 px taşma, bottom sheet, sabit eylem çubuğu.
-
-Kanıtlar: [`docs/audit/`](docs/audit/).
-
-> Fiziksel cihaz testi yapılmamıştır. Mobil doğrulama Chrome DevTools viewport emülasyonuyla
-> 320, 375, 390 ve 430 px genişliklerde yapılmıştır.
+Tarayıcı E2E ve mobil denetim script'leri `scripts/e2e/` ve `scripts/audit/` altındadır;
+kanıtlar [`docs/audit/`](docs/audit/) içinde tutulur. Fiziksel cihaz testi yapılmamıştır.
+Ayrıntı: [`docs/engineering/TESTING.md`](docs/engineering/TESTING.md).
 
 ## Güvenlik
 
@@ -645,7 +307,28 @@ Kanıtlar: [`docs/audit/`](docs/audit/).
 - Gitleaks, CodeQL, Semgrep, Dependabot ve CodeRabbit yapılandırması repoda.
 - `.env` gitignore'dadır; yalnızca `.env.example` güncellenir.
 
-Ayrıntı: [`docs/SECURITY.md`](docs/SECURITY.md).
+Ayrıntı: [`docs/engineering/SECURITY.md`](docs/engineering/SECURITY.md).
+
+## Ders uyumu
+
+Proje, [`scottyUX/Software-engineering-in-the-age-of-ai`](https://github.com/scottyUX/Software-engineering-in-the-age-of-ai)
+dersindeki pratikleri uygular. Her dersin repodaki karşılığı:
+
+| Ders | Konu | Wayora'daki karşılığı |
+| :--- | :--- | :--- |
+| 1 | Setup Environments | `npm run setup`, `.nvmrc`, `.editorconfig`, `.githooks/` |
+| 2 | Specs-Driven Development | [`docs/specs/`](docs/specs/) (constitution, spec, plan, tasks) |
+| 3 | Anatomy of Coding Agents | Wayora Agent araç döngüsü: `api/src/services/agent.ts` |
+| 4 | Agentic Codebase Structure | `AGENTS.md` hiyerarşisi, [`.agents/skills/`](.agents/skills/), `.githooks/` |
+| 5 | Advanced Context Management | [`mcp/wayora-context/`](mcp/wayora-context/), [`CONTEXT.md`](docs/agentic/CONTEXT.md), [`PROGRESS.md`](docs/agentic/PROGRESS.md) |
+| 6 | Agentic Code Review and Testing | CI, `.coderabbit.yaml`, [`AI_REVIEW.md`](docs/agentic/AI_REVIEW.md), [`TESTING.md`](docs/engineering/TESTING.md) |
+| 7 | Agent Orchestration | [`ORCHESTRATION.md`](docs/agentic/ORCHESTRATION.md), `scripts/dev/new-worktree.mjs` |
+| 8 | Security in the Age of AI | CodeQL, Semgrep, gitleaks, Dependabot, [`SECURITY.md`](docs/engineering/SECURITY.md) |
+| 9 | Software Factory | [`SOFTWARE_FACTORY.md`](docs/agentic/SOFTWARE_FACTORY.md) |
+| 10 | AI-Native Engineering Teams | [`AI_NATIVE_TEAM.md`](docs/agentic/AI_NATIVE_TEAM.md), `LLM_PROVIDER` yönlendirmesi + offline fallback |
+
+Kavram düzeyinde durum, kanıt ve açık boşluklar:
+[`docs/course/COURSE_TRACEABILITY.md`](docs/course/COURSE_TRACEABILITY.md).
 
 ## Bilinen sınırlar
 
@@ -660,7 +343,7 @@ Bu sürümde bilinçli olarak kapsam dışında bırakılanlar:
 - Kullanıcı yorumu/puanı; katalog puanı editoryal veridir.
 - Canlı trafik, toplu taşıma ve rota geometrisi çizimi; harita katalog koordinatlarını
   marker olarak gösterir, yol tarifi üretmez.
-- PWA/offline harita ve bulut deploy.
+- PWA/offline harita.
 - Fiziksel iOS/Android cihaz testi.
 - Her deneyim için tekil lisanslı fotoğraf; bazı küçük görseller kategori temsilidir.
 
@@ -674,24 +357,22 @@ Bu maddeler tamamlanmış gibi gösterilmez; arayüz gerekli yerlerde fallback v
 - [ ] Rota geometrisi ve adım adım yol tarifi.
 - [ ] Canlı fiyat/rezervasyon sağlayıcısı adaptörü.
 - [ ] PWA ve çevrimdışı rota görüntüleme.
-- [ ] Bulut deploy ve üretim veritabanı.
+- [x] Bulut deploy ve üretim veritabanı (Vercel + Neon).
 - [ ] Fiziksel cihaz ve gerçek kullanıcı testi.
 
 ## Dokümanlar
 
+Tüm belgelerin haritası [`docs/README.md`](docs/README.md) içindedir. En sık gerekenler:
+
 | Konu | Dosya |
 | :--- | :--- |
-| Ürün kapsamı | [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md), [`docs/specs/001-mvp/spec.md`](docs/specs/001-mvp/spec.md) |
-| Canlı keşif kapsamı | [`docs/specs/002-live-discovery/spec.md`](docs/specs/002-live-discovery/spec.md) |
-| Mimari | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
-| Şehir kataloğu | [`docs/CITY_CATALOG.md`](docs/CITY_CATALOG.md) |
-| Tasarım | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md), [`docs/DESIGN_V2.md`](docs/DESIGN_V2.md) |
-| Fotoğraf lisansları | [`docs/PHOTO_CREDITS.md`](docs/PHOTO_CREDITS.md) |
-| Güvenlik | [`docs/SECURITY.md`](docs/SECURITY.md) |
-| Agent iş akışı | [`AGENTS.md`](AGENTS.md), [`docs/ORCHESTRATION.md`](docs/ORCHESTRATION.md) |
-| MCP | [`docs/CONTEXT.md`](docs/CONTEXT.md), [`mcp/wayora-context/`](mcp/wayora-context/) |
-| Audit | [`docs/audit/AUDIT_REPORT.md`](docs/audit/AUDIT_REPORT.md), [`docs/audit/v2-e2e.json`](docs/audit/v2-e2e.json) |
-| Sprint/backlog | [`docs/ROADMAP.md`](docs/ROADMAP.md), [`docs/BACKLOG.md`](docs/BACKLOG.md) |
+| Ürün kapsamı | [`PROJECT_OVERVIEW.md`](docs/product/PROJECT_OVERVIEW.md), [`specs/001-mvp/spec.md`](docs/specs/001-mvp/spec.md) |
+| Mimari ve API | [`ARCHITECTURE.md`](docs/engineering/ARCHITECTURE.md), [`API.md`](docs/engineering/API.md) |
+| Kurulum ve deploy | [`SETUP.md`](docs/engineering/SETUP.md) |
+| Güvenlik | [`SECURITY.md`](docs/engineering/SECURITY.md) |
+| Agent iş akışı | [`AGENTS.md`](AGENTS.md), [`ORCHESTRATION.md`](docs/agentic/ORCHESTRATION.md) |
+| Sprint/backlog | [`ROADMAP.md`](docs/product/ROADMAP.md), [`BACKLOG.md`](docs/product/BACKLOG.md) |
+| Ders teslimleri | [`TESLIMLER.md`](docs/course/TESLIMLER.md), [`deliverables/`](docs/deliverables/) |
 
 ## Komutlar
 
@@ -707,24 +388,7 @@ Bu maddeler tamamlanmış gibi gösterilmez; arayüz gerekli yerlerde fallback v
 | `npm run build` | Üretim derlemesi |
 | `npm run hooks:install` | pre-commit hook (lint + typecheck) |
 
-### API
-
-| Komut | Ne yapar |
-| :--- | :--- |
-| `npm run db:start -w api` | Yerel PostgreSQL'i başlatır |
-| `npm run db:stop -w api` | Yerel PostgreSQL'i durdurur (veriler kalır) |
-| `npm run db:migrate -w api` | Migration üretir/uygular |
-| `npm run db:deploy -w api` | Bekleyen migration'ları uygular |
-| `npm run db:studio -w api` | Prisma Studio |
-| `npm run db:generate -w api` | Prisma client üretir |
-
-### Web
-
-| Komut | Ne yapar |
-| :--- | :--- |
-| `npm run dev -w web` | Vite dev sunucusu (`:5180`) |
-| `npm run build -w web` | Web production build |
-| `npm test -w web` | Web testleri |
+API ve web çalışma alanı komutları: [`SETUP.md`](docs/engineering/SETUP.md#çalışma-alanı-komutları).
 
 ## Ekip
 
@@ -744,16 +408,16 @@ Bu maddeler tamamlanmış gibi gösterilmez; arayüz gerekli yerlerde fallback v
 4. `npm run lint && npm run typecheck && npm test && npm run build` çalıştır.
 5. PR aç; 1 onay + yeşil CI ile `main`e al.
 
-Agent'larla çalışırken [`AGENTS.md`](AGENTS.md), [`docs/ORCHESTRATION.md`](docs/ORCHESTRATION.md)
+Agent'larla çalışırken [`AGENTS.md`](AGENTS.md), [`docs/agentic/ORCHESTRATION.md`](docs/agentic/ORCHESTRATION.md)
 ve [`.agents/skills/`](.agents/skills/) izlenir.
 
 ## Lisans
 
 Bu repo bir ders projesidir. Üçüncü taraf fotoğrafların lisansları
-[`docs/PHOTO_CREDITS.md`](docs/PHOTO_CREDITS.md) içinde belirtilmiştir; kod için ayrı bir
+[`docs/product/PHOTO_CREDITS.md`](docs/product/PHOTO_CREDITS.md) içinde belirtilmiştir; kod için ayrı bir
 açık kaynak lisansı tanımlanmamıştır.
 
 ---
 
-> Bu repo, ders materyali reposundan (`scottyUX/AI-Augmented-Software-Engineering`)
+> Bu repo, ders materyali reposundan (`scottyUX/Software-engineering-in-the-age-of-ai`)
 > bağımsızdır. O repoya PR/commit gönderilmez.

@@ -178,7 +178,7 @@ V2:
 - Unit: skor, tarih kesişimi, kendi kendine eşleşme filtresi, engel filtresi.
 - API: profil güncelleme, eşleşme, istek, yetkisiz erişim, kabul, mesaj, engel.
 - UI: boş profil, eşleşme listesi, istek gönderme, gelen istek kabulü, mesaj gönderme.
-- Simülasyon: 50 developer personas + 100 user personas üzerinden 3 iterasyonlu ürün değerlendirmesi; çıktı `docs/audit/hitchhiker-product-lab.json`.
+- Simülasyon: 50 developer personas + 100 user personas üzerinden 3 iterasyonlu ürün değerlendirmesi; çıktı `docs/audit/reports/hitchhiker-product-lab.json`.
 - Gerçek 150 canlı kullanıcı/ajan yerine deterministic persona simülasyonu kullanılır; bulgular gerçek kullanıcı testi gibi sunulmaz.
 
 ## Definition of Done

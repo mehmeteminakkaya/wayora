@@ -22,5 +22,5 @@ Bu dosya yalnızca `api/src/services/**` altında geçerlidir.
 ## Model yönlendirme
 
 - `routeModel('itinerary')` → `LLM_MODEL_SMART`; `routeModel('quick_tip')` → `LLM_MODEL_FAST`.
-- Yeni görev eklerken maliyet/gecikme tradeoff'unu `docs/AI_NATIVE_TEAM.md`'ye yaz.
+- Yeni görev eklerken maliyet/gecikme tradeoff'unu `docs/agentic/AI_NATIVE_TEAM.md`'ye yaz.
 - Test: ağ çağrısı yok; `fetch` stub'lanır. En az bir başarı, bir fallback testi bulunmalı.

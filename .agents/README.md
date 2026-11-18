@@ -9,6 +9,10 @@ Amaç: her oturumda aynı talimatları yeniden yazmak yerine, kanıtlanmış bir
 │   ├── wayora-feature/     # plan → test → uygula → doğrula
 │   ├── wayora-review/      # bağımsız critic; ACCEPT / REVISE
 │   └── wayora-security/    # SAST, secret, prompt injection kontrolü
+├── subagents/
+│   ├── explorer.md         # salt okunur keşif; dosya haritası + riskler
+│   ├── planner.md          # adım ve test planı; kod yazmaz
+│   └── critic.md           # bağımsız review; ACCEPT / REVISE
 └── README.md
 ```
 

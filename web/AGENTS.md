@@ -30,7 +30,7 @@ web/src/
 - **Durum:** Sunucu verisi için yerel state + `useEffect` yeterli; global state ekleme.
 - **Kod bölme:** Yeni bir sayfa `App.tsx` içinde `lazy()` ile yüklenir; harita/Three.js gibi ağır
   bağımlılıklar yalnızca kullanan sayfada import edilir. `Layout` içindeki `Suspense` fallback'i korunur.
-- **Tasarım dili:** `docs/DESIGN_SYSTEM.md`, `docs/DESIGN_V2.md` ve `index.css` tokenları tek kaynaktır.
+- **Tasarım dili:** `docs/engineering/DESIGN_SYSTEM.md`, `docs/engineering/DESIGN_V2.md` ve `index.css` tokenları tek kaynaktır.
   - Fontlar: Overpass (başlık/gövde), Overpass Mono (veri). Türkçe latin-ext doğrulanır.
   - Renkler: krem `#F3F3F1`, beyaz yüzey, mürekkep `#121212`, ikincil `#55575C`,
     ayraç `#DEDED9`, vurgu `#FFC400`. Koyu tema, gradient ve vinyet yok.

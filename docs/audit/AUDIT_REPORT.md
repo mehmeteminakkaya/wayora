@@ -4,7 +4,7 @@ Tarih: 29 Ekim 2026
 Kapsam: ürün, frontend, API, veri, AI, güvenlik, erişilebilirlik, responsive, doküman ve teslim  
 Yöntem: 1000 kişilik uzman paneli çerçevesi + otomatik testler + 320/360/375/390/768/1024/1440 px UI taraması
 
-Master prompt: [docs/MASTER_AUDIT_PROMPT.md](../MASTER_AUDIT_PROMPT.md)
+Master prompt: [docs/agentic/MASTER_AUDIT_PROMPT.md](../agentic/MASTER_AUDIT_PROMPT.md)
 
 ## 1. Yönetici özeti
 
@@ -129,7 +129,7 @@ Otomatik kontroller:
 
 ## 3. Responsive audit
 
-Dosya: `docs/audit/ui-audit.json`
+Dosya: `docs/audit/reports/ui-audit.json`
 
 | Viewport | Yatay taşma | Bottom nav | Kırık görsel | Etiketsiz kontrol | Konsol hatası |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -142,11 +142,11 @@ Dosya: `docs/audit/ui-audit.json`
 | 1440x900 | Yok | Gizli | 0 | 0 | 0 |
 
 Korumalı sayfalar 320, 360, 375 ve 1440 px'te tarandı: `/trips`, `/trips/:id`, `/trips/new`, `/onboarding`.
-Dosya: `docs/audit/auth-audit.json`.
+Dosya: `docs/audit/reports/auth-audit.json`.
 
-Mobil uçtan uca test `scripts/e2e_mobile.mjs` ile Chrome 375x667 emülasyonunda çalıştırıldı:
+Mobil uçtan uca test `scripts/e2e/e2e_mobile.mjs` ile Chrome 375x667 emülasyonunda çalıştırıldı:
 kayıt, onboarding, yeni rota, offline plan üretimi, aktivite ekleme, onaylı silme ve yeniden hazırlama onayı.
-Dosya: `docs/audit/mobile-e2e.json`.
+Dosya: `docs/audit/reports/mobile-e2e.json`.
 
 ### Keşif kataloğu
 
@@ -165,8 +165,8 @@ Kanıt:
   `/trips/new?destination=Berlin`.
 - 320, 360, 768 ve 1440 px'te keşif listesi ve detayında yatay taşma yok.
 
-Dosyalar: `docs/audit/explore-audit.json`, `docs/audit/explore-mobile.png`,
-`docs/audit/explore-berlin-mobile.png`, `docs/CITY_CATALOG.md`.
+Dosyalar: `docs/audit/reports/explore-audit.json`, `docs/audit/screenshots/explore-mobile.png`,
+`docs/audit/screenshots/explore-berlin-mobile.png`, `docs/product/CITY_CATALOG.md`.
 
 ## 4. Erişilebilirlik kontrolü
 

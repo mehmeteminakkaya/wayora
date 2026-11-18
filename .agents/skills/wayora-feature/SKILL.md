@@ -11,7 +11,7 @@ Bu prosedürü **tek bir story** için uygula. Keşif ve uygulamayı aynı adım
 
 - `docs/specs/001-mvp/spec.md` ve ilgili `tasks.md` maddesi.
 - Kök `AGENTS.md`, sonra etkilenen alanın `AGENTS.md` dosyası (`api/`, `web/`, `api/src/services/`).
-- Varsa `docs/ARCHITECTURE.md` ve mevcut testler.
+- Varsa `docs/engineering/ARCHITECTURE.md` ve mevcut testler.
 
 ## 2. Plan (kod yazma)
 

@@ -32,7 +32,7 @@
 - Triage: <!-- hangileri kabul edildi, hangileri reddedildi ve neden -->
 - AI'ın kaçırdığı: <!-- en az bir şey -->
 
-## Kontrol listesi (Definition of Done: docs/TEAM.md)
+## Kontrol listesi (Definition of Done: docs/product/TEAM.md)
 
 - [ ] Kabul kriterleri sağlanıyor
 - [ ] PR küçük ve tek konuya odaklı (< ~400 satır)

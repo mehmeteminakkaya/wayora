@@ -13,7 +13,9 @@ planı** üreten bir web uygulamasıdır. İstinye Üniversitesi JOB-191 grup pr
 
 - `web/`: React 19 + TypeScript + Vite + React Router. Tasarım `web/src/index.css`.
 - `api/`: Express 5 + TypeScript + Prisma 7 + PostgreSQL. LLM servisi `api/src/services/itinerary.ts`.
-- `docs/`: ürün, mimari, sprint ve agent belgeleri. `docs/specs/001-mvp/` MVP spec'idir.
+- `docs/`: `product/`, `engineering/`, `agentic/`, `course/`, `specs/`, `audit/`, `deliverables/`.
+  Harita `docs/README.md`; `docs/specs/001-mvp/` MVP spec'idir.
+- `scripts/`: `e2e/`, `audit/`, `capture/`, `docs/`, `dev/`; repo kökünden çalıştırılır.
 - `mcp/`: Wayora Context MCP sunucusu (opsiyonel geliştirici aracı).
 
 ## Komutlar (kök)
@@ -50,26 +52,27 @@ npm run build          # üretim derlemesi
 5. `npm run lint && npm run typecheck && npm test && npm run build` çalıştır.
 6. Diff'i review et: güvenlik, hata yolları, erişilebilirlik, test boşlukları.
 7. PR açıklamasında problem, yaklaşım, test kanıtı ve riskleri yaz.
-8. Oturum sonunda `docs/PROGRESS.md` içindeki Decided / Done / Next listelerini güncelle.
+8. Oturum sonunda `docs/agentic/PROGRESS.md` içindeki Decided / Done / Next listelerini güncelle.
 
 ## Sınırlar
 
 - Kapsam dışı: ödeme, rezervasyon, gerçek uçuş/otel, çoklu kullanıcı işbirliği.
 - Google Maps/Places ve gerçek LLM anahtarları opsiyoneldir; uygulama anahtarsız çalışmalıdır.
 - `api/src/generated/**` elle düzenlenmez; `npm run db:generate -w api` ile üretilir.
-- Ders materyali reposuna (`scottyUX/AI-Augmented-Software-Engineering`) commit/PR gönderme.
+- Ders materyali reposuna (`scottyUX/Software-engineering-in-the-age-of-ai`) commit/PR gönderme.
 
 ## Nereye bakmalı
 
 | Konu | Dosya |
 | :--- | :--- |
-| Ürün kapsamı | `docs/PROJECT_OVERVIEW.md`, `docs/specs/001-mvp/spec.md` |
-| Mimari ve API | `docs/ARCHITECTURE.md`, `docs/specs/001-mvp/plan.md` |
-| Sprint/backlog | `docs/ROADMAP.md`, `docs/BACKLOG.md` |
-| Agent iş akışı | `.agents/skills/`, `docs/ORCHESTRATION.md` |
-| Güvenlik | `docs/SECURITY.md` |
-| AI review | `docs/AI_REVIEW.md`, `.coderabbit.yaml` |
-| Ders konsept izlenebilirliği | `docs/COURSE_TRACEABILITY.md` |
-| Oturum handoff | `docs/PROGRESS.md` |
-| MCP | `docs/CONTEXT.md`, `mcp/wayora-context/` |
-| Tasarım dili | `docs/DESIGN_SYSTEM.md`, `web/src/index.css` |
+| Ürün kapsamı | `docs/product/PROJECT_OVERVIEW.md`, `docs/specs/001-mvp/spec.md` |
+| Mimari ve API | `docs/engineering/ARCHITECTURE.md`, `docs/engineering/API.md`, `docs/specs/001-mvp/plan.md` |
+| Kurulum ve test | `docs/engineering/SETUP.md`, `docs/engineering/TESTING.md` |
+| Sprint/backlog | `docs/product/ROADMAP.md`, `docs/product/BACKLOG.md` |
+| Agent iş akışı | `.agents/skills/`, `.agents/subagents/`, `docs/agentic/ORCHESTRATION.md` |
+| Güvenlik | `docs/engineering/SECURITY.md` |
+| AI review | `docs/agentic/AI_REVIEW.md`, `.coderabbit.yaml` |
+| Ders konsept izlenebilirliği | `docs/course/COURSE_TRACEABILITY.md` |
+| Oturum handoff | `docs/agentic/PROGRESS.md` |
+| MCP | `docs/agentic/CONTEXT.md`, `mcp/wayora-context/` |
+| Tasarım dili | `docs/engineering/DESIGN_SYSTEM.md`, `web/src/index.css` |

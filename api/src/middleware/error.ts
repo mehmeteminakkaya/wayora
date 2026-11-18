@@ -1,7 +1,7 @@
 import type { ErrorRequestHandler, RequestHandler } from 'express'
 import { z } from 'zod'
 
-// Tüm API hataları aynı biçimde döner: { error: { code, message } } — bkz. docs/ARCHITECTURE.md
+// Tüm API hataları aynı biçimde döner: { error: { code, message } } — bkz. docs/engineering/ARCHITECTURE.md
 export class HttpError extends Error {
   status: number
   code: string

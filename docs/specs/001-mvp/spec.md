@@ -1,7 +1,7 @@
 # Wayora MVP: Ürün Spec'i
 
 > Durum: **uygulandı (Sprint 3 MVP)** · Son güncelleme: 2026-10-23
-> Bu spec, `docs/PROJECT_OVERVIEW.md` ve `docs/ARCHITECTURE.md` ile birlikte okunur.
+> Bu spec, `docs/product/PROJECT_OVERVIEW.md` ve `docs/engineering/ARCHITECTURE.md` ile birlikte okunur.
 
 ## Problem
 

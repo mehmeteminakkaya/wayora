@@ -27,7 +27,7 @@ function sessionFor(userId: string): string {
   return `${config.COOKIE_NAME}=${token}`
 }
 
-function appWithTripDb(options: { existingOrders?: number[] } = {}) {
+function appWithTripDb(options: Parameters<typeof createFakeTripDb>[0] = {}) {
   const fake = createFakeTripDb(options)
   const app = createApp({
     corsOrigin,
@@ -275,5 +275,76 @@ describe('aktivite sırası güncelleme', () => {
 
     expect(res.status).toBe(404)
     expect(res.body.error.code).toBe('NOT_FOUND')
+  })
+})
+
+describe('W-36-T-1 gezi takvim dışa aktarma', () => {
+  const calendarUrl = `/api/trips/${TRIP_ID}/calendar.ics`
+  const seeded = {
+    activities: [
+      { id: 'act-louvre', tripDayId: DAY_ONE_ID, order: 0, title: 'Louvre', startTime: '09:00', endTime: '11:30' },
+      { id: 'act-walk', tripDayId: DAY_ONE_ID, order: 1, title: 'Seine yürüyüşü' },
+      { id: 'act-dinner', tripDayId: DAY_TWO_ID, order: 0, title: 'Akşam yemeği; şarap, peynir\nve tatlı', startTime: '19:00' },
+    ],
+  }
+
+  function vevents(body: string): string[] {
+    return body.split('BEGIN:VEVENT').slice(1).map((chunk) => chunk.split('END:VEVENT')[0]!)
+  }
+
+  it('W-36-T-1 requires a session and hides other users trips', async () => {
+    const { app } = appWithTripDb(seeded)
+    const anonymous = await request(app).get(calendarUrl)
+    expect(anonymous.status).toBe(401)
+
+    const stranger = await request(app).get(calendarUrl).set('Cookie', sessionFor('someone-else'))
+    expect(stranger.status).toBe(404)
+    expect(stranger.body.error.code).toBe('NOT_FOUND')
+  })
+
+  it('W-36-T-1 returns a calendar attachment named after the trip', async () => {
+    const { app } = appWithTripDb(seeded)
+    const response = await request(app).get(calendarUrl).set('Cookie', sessionFor(TRIP_OWNER_ID))
+    expect(response.status).toBe(200)
+    expect(response.headers['content-type']).toBe('text/calendar; charset=utf-8')
+    expect(response.headers['content-disposition']).toBe(
+      'attachment; filename="wayora-paris-2026-11-10.ics"',
+    )
+    expect(response.text.startsWith('BEGIN:VCALENDAR\r\nVERSION:2.0\r\n')).toBe(true)
+    expect(response.text.trimEnd().endsWith('END:VCALENDAR')).toBe(true)
+  })
+
+  it('W-36-T-1 writes one timed VEVENT per activity on its day', async () => {
+    const { app } = appWithTripDb(seeded)
+    const response = await request(app).get(calendarUrl).set('Cookie', sessionFor(TRIP_OWNER_ID))
+    const events = vevents(response.text)
+    expect(events).toHaveLength(3)
+    expect(events[0]).toContain('UID:act-louvre@wayora')
+    expect(events[0]).toContain('SUMMARY:Louvre')
+    expect(events[0]).toContain('DTSTART:20261110T090000')
+    expect(events[0]).toContain('DTEND:20261110T113000')
+    // Start without an end time lasts one hour, on day two's date.
+    expect(events[2]).toContain('DTSTART:20261111T190000')
+    expect(events[2]).toContain('DTEND:20261111T200000')
+  })
+
+  it('W-36-T-1 turns an activity without a start time into an all-day event', async () => {
+    const { app } = appWithTripDb(seeded)
+    const response = await request(app).get(calendarUrl).set('Cookie', sessionFor(TRIP_OWNER_ID))
+    const walk = vevents(response.text)[1]!
+    expect(walk).toContain('DTSTART;VALUE=DATE:20261110')
+    expect(walk).toContain('DTEND;VALUE=DATE:20261111')
+    expect(walk).not.toMatch(/DTSTART:\d/)
+  })
+
+  it('W-36-T-1 escapes text and ends every line with CRLF', async () => {
+    const { app } = appWithTripDb(seeded)
+    const response = await request(app).get(calendarUrl).set('Cookie', sessionFor(TRIP_OWNER_ID))
+    // RFC 5545 escaping: "\;" "\," and a literal backslash-n for the line break.
+    expect(response.text).toContain('SUMMARY:Akşam yemeği\\; şarap\\, peynir\\nve tatlı')
+    const body = response.text
+    expect(body.endsWith('\r\n')).toBe(true)
+    // After removing every CRLF there must be no bare LF or CR left.
+    expect(/[\r\n]/.test(body.replace(/\r\n/g, ''))).toBe(false)
   })
 })

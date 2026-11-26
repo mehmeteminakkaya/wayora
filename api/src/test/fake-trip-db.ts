@@ -128,7 +128,18 @@ type FakeTripDb = {
  * Gezi günleri + deneyim importu + aktivite PATCH akışı için bellek içi Prisma taklidi.
  * Auth route'ları kullanılmaz; testler oturum çerezini doğrudan imzalar.
  */
-export function createFakeTripDb(options: { existingOrders?: number[] } = {}) {
+export type SeedActivity = {
+  id: string
+  tripDayId: string
+  order: number
+  title: string
+  startTime?: string | null
+  endTime?: string | null
+}
+
+export function createFakeTripDb(
+  options: { existingOrders?: number[]; activities?: SeedActivity[] } = {},
+) {
   const trip: StoredTrip = {
     id: TRIP_ID,
     userId: TRIP_OWNER_ID,
@@ -173,6 +184,18 @@ export function createFakeTripDb(options: { existingOrders?: number[] } = {}) {
     placeId: null,
     notes: null,
   }))
+
+  for (const seed of options.activities ?? []) {
+    activities.push({
+      category: 'other',
+      estimatedCost: null,
+      placeId: null,
+      notes: null,
+      ...seed,
+      startTime: seed.startTime ?? null,
+      endTime: seed.endTime ?? null,
+    })
+  }
 
   const places = new Map<string, StoredPlace>()
 

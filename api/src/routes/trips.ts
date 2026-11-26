@@ -4,6 +4,7 @@ import { z } from 'zod'
 import type { Config } from '../config.ts'
 import { findCandidates } from '../data/places.ts'
 import { ACTIVITY_CATEGORIES } from '../domain.ts'
+import { buildTripCalendar, icsFileName } from '../lib/ics.ts'
 import { toNumber } from '../lib/serialize.ts'
 import type { Db } from '../lib/prisma.ts'
 import { serializeTrip } from '../lib/trip-serializer.ts'
@@ -223,6 +224,19 @@ export function tripRouter({
     })
     if (!trip) throw new HttpError(404, 'NOT_FOUND', 'Gezi bulunamadı')
     res.json({ trip: serializeTrip(trip) })
+  })
+
+  router.get('/:id/calendar.ics', async (req, res) => {
+    const trip = await db.trip.findFirst({
+      where: { id: String(req.params.id), userId: req.userId! },
+      include: tripInclude,
+    })
+    if (!trip) throw new HttpError(404, 'NOT_FOUND', 'Gezi bulunamadı')
+    res
+      .status(200)
+      .set('Content-Type', 'text/calendar; charset=utf-8')
+      .set('Content-Disposition', `attachment; filename="${icsFileName(trip)}"`)
+      .send(buildTripCalendar(trip))
   })
 
   router.patch('/:id', async (req, res) => {

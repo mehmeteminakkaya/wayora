@@ -1,6 +1,10 @@
 # Product Backlog
 
-> **Güncel durum (23 Eki 2026):** Sprint 0 tamam. Sprint 1 (W-10–W-16) ve Sprint 3
+> **Güncel durum (27 Kas 2026):** Sprint 0–2 kapsamı ve Sprint 3–5'in büyük kısmı 30 Ekim'e kadar
+> merge edildi (bkz. [ROADMAP.md](ROADMAP.md#gerçekleşen)). Takvimdeki Sprint 3'ün (24 Kas – 7 Ara)
+> yeni story'leri aşağıda **Sprint 3 (takvim)** bölümünde.
+>
+> **Önceki durum (23 Eki 2026):** Sprint 0 tamam. Sprint 1 (W-10–W-16) ve Sprint 3
 > (W-30–W-34) tamamlandı. Sprint 2'de katalog + `Place` cache tamam; gerçek Google Places ve
 > harita açık. Sprint 4'te aktivite ekleme/silme ve bütçe özeti tamam; sürükle-bırak açık.
 > Sprint 5'te testler ve agent artefaktları tamam; deploy/demo sunumu açık.
@@ -83,6 +87,15 @@ ortalama süre, istek başı maliyet, uydurma mekân oranı.
 
 **W-30 kabul kriterleri:** plan, gezi gün sayısı kadar gün içerir · her aktivitenin saati ve tahmini
 maliyeti var · tercihlerdeki ilgi alanları plana yansıyor · 60 sn içinde sonuç ya da anlaşılır hata.
+
+## Sprint 3 (takvim, 24 Kas – 7 Ara): Yeni story'ler
+
+| No | Story | Etiket | Puan | Sorumlu | Görev |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| W-35 | Gezgin olarak yalnızca yaklaşan ya da süren rotalarla eşleşmek istiyorum; bitmiş geziler Yol Arkadaşları'nda görünmesin | BE | 3 | Mehmet | [W-35-T-1](tasks/sprint-3/W-35-T-1.md) |
+| W-36 | Kullanıcı olarak rotamı telefonumun/bilgisayarımın takvimine aktarmak istiyorum | BE | 3 | Mehmet | [W-36-T-1](tasks/sprint-3/W-36-T-1.md) |
+
+Diğer üyeler bu sprintteki iki görevini bu tabloya ekler (ID'ler `W-37` ve sonrası).
 
 ## Sprint 4: Zenginleştirme
 

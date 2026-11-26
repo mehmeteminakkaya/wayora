@@ -1,15 +1,39 @@
 # Yol Haritası
 
-> **Varsayım:** Dönem ~12 hafta sürüyor ve final teslimi Ocak 2027'nin ilk haftaları.
-> GrepThink'te şu an tek tarih var: **TSR 1, 14 Ekim 2026, 23:59**. Final Review ve diğer TSR
-> tarihleri açıklanınca aşağıdaki takvimi kaydırın.
+> **Güncel durum (27 Kasım 2026):** Plan, dönemi 14 Ekim – 4 Ocak arası altı sprinte bölüyordu.
+> Ürün planın önünde ilerledi: MVP (Sprint 3 hedefi) 23 Ekim'de uçtan uca çalıştı, Sprint 4–5
+> kapsamının çoğu 30 Ekim'e kadar merge edildi. Yol Arkadaşları, V2 tasarım ve Wayora Agent da
+> 30 Ekim'de eklendi; Kasım'da agent ve mobil cilalandı. Şu an takvimde **Sprint 3 (24 Kas – 7 Ara)** içindeyiz; bu sprintten
+> itibaren her üye sprint başına iki görevi `docs/tasks/sprint-N/` altında spec-first yazar
+> ([görev süreci](#sprint-görev-süreci-repo-metrics)).
 
-## Özet
+## Gerçekleşen
 
-> **Güncel durum (23 Ekim 2026):** Sprint 0–3 tamamlandı; MVP uçtan uca çalışıyor.
-> Sprint 4'te aktivite düzenleme ve bütçe özeti tamam, sürükle-bırak açık.
-> Sprint 5'te testler ve agent artefaktları tamam; deploy ve demo sunumu açık.
-> Ayrıntı: [specs/001-mvp/tasks.md](specs/001-mvp/tasks.md).
+| Sprint | Takvim | Gerçekte yapılan | Kanıt |
+| :--- | :--- | :--- | :--- |
+| Sprint 0 | 14 – 26 Eki | Roller, monorepo, CI (lint, test, Semgrep, gitleaks), yerel PostgreSQL | #1–#3, #18 |
+| Sprint 1 | 27 Eki – 9 Kas | MVP uçtan uca (kayıt/giriş, tercihler, gezi CRUD, AI plan, bütçe) + Rotasyon tasarımı; Mapbox harita, 14 şehir / 140 deneyim kataloğu, sürükle-bırak sıralama, TR/EN temeli, Yol Arkadaşları, Wayora Agent (DeepSeek), Ticketmaster/Duffel keşif, frontend tutarlılık turu (Sprint 2–5 kapsamının çoğu bu sprintte öne çekildi) | #11, #25–#52, 30 Eki commit'leri |
+| Sprint 2 | 10 – 23 Kas | Agent deneyimi cilası, mobil çakışmalar, kod bölme, agent guardrail'leri, harita fallback'i, yeni sohbet aksiyonu | #55, 15 Kas commit'leri |
+| **Sprint 3** | **24 Kas – 7 Ara** | **Devam ediyor:** biten gezilerin Yol Arkadaşları eşleşmesinden çıkarılması (W-35), rotayı takvime (.ics) aktarma (W-36) | `docs/tasks/sprint-3/` |
+| Sprint 4 | 8 – 21 Ara | Planlanan: bildirim/e-posta, AI üretiminde ilerleme ve tahmini süre, kullanılabilirlik testi | |
+| Sprint 5 | 22 Ara – 4 Oca | Planlanan: kod dondurma, demo verisi, final raporu ve sunum | |
+
+## Sprint görev süreci (Repo Metrics)
+
+JOB-191 sprint notu [Repo Metrics](https://job191.yeterly.ai/) üzerinden verilir. Her üye her sprintte
+**kendi iki görevini** teslim eder:
+
+1. Görev dosyası `docs/tasks/sprint-N/<görev id>.md` (front matter + Description, Specs,
+   Requirements, Acceptance criteria). Görev ID'si repoda bir kez kullanılır: `W-<story>-T-<n>`.
+2. `task/<id>` branch'inde görev dosyası **tek başına ve ilk** commit; `git tag <id>-base` + push.
+3. Uygulama ve her kabul kriteri için en az bir test (test adı görev ID'siyle başlar).
+4. PR başlığı `<id>: <başlık>`; `docs/tasks/` altında yalnızca bu görevin dosyası değişir.
+5. Merge commit'ine `git tag <id>-done` + push; PR linki Repo Metrics'te **Assignment N**'e eklenir.
+6. Kart GrepThink Scrum Board'a eklenir. Canvas'a yalnızca Repo Metrics yazısı (bir paragraf) gider.
+
+Ayrıntı: ders reposundaki `resources/cse115a-sprint-task-specifications.md`.
+
+## İlk plan (14 Ekim)
 
 | Faz | Sprint | Tarih | Çıktı |
 | :--- | :--- | :--- | :--- |

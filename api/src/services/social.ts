@@ -47,6 +47,11 @@ export function overlapDays(a: SocialTrip, b: SocialTrip): number {
   return Math.round((end - start) / 86_400_000) + 1
 }
 
+/** A trip is finished once its last day (UTC) is before today's UTC day. */
+export function isFinishedTrip(trip: SocialTrip, today: Date): boolean {
+  return dayValue(trip.endDate) < dayValue(today)
+}
+
 function isSameDestination(a: string, b: string): boolean {
   return normalizeCity(a) === normalizeCity(b)
 }
@@ -60,11 +65,14 @@ export function scoreCandidate(
   myTrips: SocialTrip[],
   candidate: SocialCandidate,
   context: SocialContext,
+  today: Date = new Date(),
 ): MatchResult | null {
   let best: MatchResult | null = null
 
   for (const myTrip of myTrips) {
+    if (isFinishedTrip(myTrip, today)) continue
     for (const theirTrip of candidate.trips) {
+      if (isFinishedTrip(theirTrip, today)) continue
       if (!isSameDestination(myTrip.destination, theirTrip.destination)) continue
       const overlap = overlapDays(myTrip, theirTrip)
       if (overlap === 0) continue

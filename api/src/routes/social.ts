@@ -282,9 +282,10 @@ export function socialRouter({ db, config }: { db: Db; config: Config }) {
       })
     }
 
+    const today = new Date()
     const rankedMatches = [...byUser.values()]
       .map((entry) =>
-        scoreCandidate(myTrips, { ...entry.candidate, trips: entry.trips }, context),
+        scoreCandidate(myTrips, { ...entry.candidate, trips: entry.trips }, context, today),
       )
       .filter((match): match is NonNullable<typeof match> => Boolean(match))
       .sort((a, b) => b.score - a.score)
